@@ -1,6 +1,6 @@
 package ua.com.dao.impl;
 
-import org.apache.log4j.Logger;
+
 import ua.com.dao.EmployeeDao;
 import ua.com.dao.Fields;
 import ua.com.model.Employee;
@@ -12,15 +12,14 @@ import java.util.List;
 
 public class EmployeeDaoDatababaseImpl implements EmployeeDao {
 
-    private static final Logger LOG = Logger.getLogger(EmployeeDaoDatababaseImpl.class);
     private DBConnector dbConnector = new DBConnector();
 
-    private final String GET_BY_EMPLOYEE_ID = "SELECT * FROM tbl_employees WHERE id_employee = ?";
-    private final String GET_BY_DEPARTMENT_ID = "SELECT * FROM tbl_employees WHERE id_department = ?";
-    private final String DELETE_EMPLOYEE = "DELETE FROM tbl_employees WHERE id_employee = ?";
-    private final String INSERT_EMPLOYEE = "INSERT INTO tbl_employees(name, surname, hire_date, email, salary, id_department) VALUES(?, ?, ?, ?, ?, ?)";
-    private final String UPDATE_EMPLOYEE = "UPDATE tbl_employees SET name=?, surname=?, hire_date=?, email=?, salary=?, id_department=? WHERE id_employee = ?";
-    private final String GET_BY_EMAIL = "SELECT * FROM tbl_employees WHERE BINARY email=?";
+    private String GET_BY_EMPLOYEE_ID = "SELECT * FROM tbl_employees WHERE id_employee = ?";
+    private String GET_BY_DEPARTMENT_ID = "SELECT * FROM tbl_employees WHERE id_department = ?";
+    private String DELETE_EMPLOYEE = "DELETE FROM tbl_employees WHERE id_employee = ?";
+    private String INSERT_EMPLOYEE = "INSERT INTO tbl_employees(name, surname, hire_date, email, salary, id_department) VALUES(?, ?, ?, ?, ?, ?)";
+    private String UPDATE_EMPLOYEE = "UPDATE tbl_employees SET name=?, surname=?, hire_date=?, email=?, salary=?, id_department=? WHERE id_employee = ?";
+    private String GET_BY_EMAIL = "SELECT * FROM tbl_employees WHERE BINARY email=?";
 
 
     public void save(Employee employee) throws SQLException {
@@ -28,7 +27,6 @@ public class EmployeeDaoDatababaseImpl implements EmployeeDao {
         Connection connection = null;
         try {
             connection = dbConnector.getConnection();
-            connection.setAutoCommit(false);
             if (employee.getId() == null) {
                 preparedStatement = connection.prepareStatement(INSERT_EMPLOYEE);
                 preparedStatement = setStatementToSave(preparedStatement, employee);
@@ -38,12 +36,7 @@ public class EmployeeDaoDatababaseImpl implements EmployeeDao {
                 preparedStatement.setLong(7, employee.getId());
             }
             preparedStatement.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            connection.rollback();
-            throw e;
-        } finally {
-            connection.setAutoCommit(true);
+        }finally {
             dbConnector.closeStatement(preparedStatement);
             dbConnector.closeConnection(connection);
         }
@@ -60,18 +53,10 @@ public class EmployeeDaoDatababaseImpl implements EmployeeDao {
     }
 
     public void delete(Employee employee) throws SQLException {
-        try (Connection connection = dbConnector.getConnection()) {
-            connection.setAutoCommit(false);
-            try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_EMPLOYEE)) {
-                preparedStatement.setLong(1, employee.getId());
-                preparedStatement.executeUpdate();
-                connection.commit();
-            } catch (SQLException e) {
-                connection.rollback();
-                throw e;
-            } finally {
-                connection.setAutoCommit(true);
-            }
+        try (Connection connection = dbConnector.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_EMPLOYEE)) {
+            preparedStatement.setLong(1, employee.getId());
+            preparedStatement.executeUpdate();
         }
     }
 
@@ -89,7 +74,7 @@ public class EmployeeDaoDatababaseImpl implements EmployeeDao {
     }
 
     public Employee getById(Long employeeId) throws SQLException {
-        Employee employee = new Employee();
+        Employee employee = null;
         try (Connection connection = dbConnector.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_EMPLOYEE_ID)) {
             preparedStatement.setLong(1, employeeId);
@@ -102,7 +87,7 @@ public class EmployeeDaoDatababaseImpl implements EmployeeDao {
     }
 
     public Employee isExistEmployeeByEmail(Employee employeeRequest) throws SQLException {
-        Employee employee = new Employee();
+        Employee employee = null;
         try (Connection connection = dbConnector.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_EMAIL)) {
             preparedStatement.setString(1, employeeRequest.getEmail());

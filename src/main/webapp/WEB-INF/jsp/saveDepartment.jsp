@@ -5,19 +5,19 @@
 <html>
 <head>
     <title>SaveDepartment</title>
-    <link href="/css/bootstrap.css" rel="stylesheet">
-    <link href="/css/main.css" rel="stylesheet">
+    <link href="<c:url value="/css/bootstrap.css"/>" rel="stylesheet">
 </head>
 <body>
 
 <c:import url="navPanel.jsp"/>
 
 <div class="container">
-    <h1 class="text-center">New Department</h1>
+    <h1 class="text-center">Create or Update Department</h1>
+
 
     <form id="defaultForm" method="post" class="form-horizontal col-lg-offset-2" action="/controller/saveDepartment">
         <input type="hidden" name="departmentId"
-               value="<c:out value="${param.departmentId}" default="${department.id}"/>">
+               value="<c:out value="${param.departmentId == null ? department.id : param.departmentId}"/>">
         <div class="form-group">
             <label class="col-lg-3 control-label">Name</label>
             <div class="col-lg-5">

@@ -13,11 +13,10 @@ import java.util.Map;
 public class ValidationOval {
 
     public static void fieldsValidation(Object object) throws ValidFieldException {
-
         Validator validator = new Validator();
         List<ConstraintViolation> violations = validator.validate(object);
         if (violations.size() > 0) {
-            Map<String, String> errorsMap = new HashMap();
+            Map<String, String> errorsMap;
             errorsMap = getFieldErrors(violations);
             throw new ValidFieldException(errorsMap);
         }

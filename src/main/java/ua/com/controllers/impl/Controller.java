@@ -1,6 +1,7 @@
 package ua.com.controllers.impl;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.com.controllers.Dispatcher;
 
 import javax.servlet.ServletException;
@@ -18,7 +19,7 @@ import java.sql.SQLException;
 @WebServlet("/")
 public class Controller extends HttpServlet {
 
-    private static final Logger LOG = Logger.getLogger(Controller.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Controller.class);
     Dispatcher dispatcher = new Dispatcher();
 
     @Override

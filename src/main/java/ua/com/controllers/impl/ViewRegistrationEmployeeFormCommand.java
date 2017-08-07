@@ -22,14 +22,12 @@ public class ViewRegistrationEmployeeFormCommand implements Controller {
     private DepartmentService departmentService = new DepartmentServiceImpl();
     private EmployeeService employeeService = new EmployeeServiceImpl();
 
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, SQLException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, SQLException, IOException {
         String employeeIdStr = request.getParameter("employeeId");
         Long employeeId = ParamUtils.StringToLong(employeeIdStr);
         if (employeeId != null) {
             Employee employee = employeeService.getEmployeeById(employeeId);
-            Department employeeDepartment = departmentService.getDepartmentById(employee.getDepartmentId());
             request.setAttribute("employee", employee);
-            request.setAttribute("employeeDepartment", employeeDepartment);
         }
         List<Department> departmentList = departmentService.viewAllDepartment();
         request.setAttribute("departmentList", departmentList);

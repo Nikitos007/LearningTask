@@ -5,8 +5,7 @@
 <html>
 <head>
     <title>SaveEmployee</title>
-    <link href="/css/bootstrap.css" rel="stylesheet">
-    <link href="/css/main.css" rel="stylesheet">
+    <link href="<c:url value="/css/bootstrap.css"/>" rel="stylesheet">
 </head>
 <body>
 
@@ -14,16 +13,16 @@
 
 <div class="container">
 
-    <h1 class="text-center">New Employee</h1>
+    <h1 class="text-center">Create or Update Employee</h1>
 
     <form id="defaultForm" method="post" class="form-horizontal col-lg-offset-2" action="/controller/saveEmployee">
         <input type="hidden" name="employeeId"
-               value="<c:out value="${param.employeeId == null ? employee.id : param.employeeId}"/>">
+               value="<c:out value="${employee.id}"/>">
         <div class="form-group">
             <label class="col-lg-3 control-label">Name</label>
             <div class="col-lg-5">
                 <input type="text" class="form-control" name="employeeName"
-                       value="<c:out value="${param.employeeName == null ? employee.name : param.employeeName}"/>">
+                       value="<c:out value="${employee.name}"/>">
                 <span name="employeeName" class="text-danger">${errorMessageMap.name}</span>
             </div>
         </div>
@@ -32,7 +31,7 @@
             <label class="col-lg-3 control-label">Surname</label>
             <div class="col-lg-5">
                 <input type="text" class="form-control" name="employeeSurname"
-                       value="<c:out value="${param.employeeSurname == null ? employee.surname : param.employeeSurname}"/>">
+                       value="<c:out value="${employee.surname}"/>">
                 <span name="employeeSurname" class="text-danger">${errorMessageMap.surname}</span>
             </div>
         </div>
@@ -41,7 +40,7 @@
             <label class="col-lg-3 control-label">Hire date</label>
             <div class="col-lg-5">
                 <input type="date" class="form-control" name="employeeHireDate"
-                       value="<c:out value="${param.employeeHireDate == null ? employee.hireDate : param.employeeHireDate}" />">
+                       value="<c:out value="${employee.hireDate}" />">
                 <span name="employeeHireDate" class="text-danger">${errorMessageMap.hireDate}</span>
             </div>
         </div>
@@ -51,7 +50,7 @@
             <label class="col-lg-3 control-label">Email</label>
             <div class="col-lg-5">
                 <input type="email" class="form-control" name="employeeEmail"
-                       value="<c:out value="${param.employeeEmail == null ? employee.email : param.employeeEmail}"/>">
+                       value="<c:out value="${employee.email}"/>">
                 <span name="employeeEmail" class="text-danger">${errorMessageMap.email}</span>
             </div>
         </div>
@@ -61,7 +60,7 @@
             <label class="col-lg-3 control-label">Salary</label>
             <div class="col-lg-5">
                 <input type="number" class="form-control" name="employeeSalary"
-                       value="<c:out value="${param.employeeSalary == null ? employee.salary : param.employeeSalary}"/>">
+                       value="<c:out value="${employee.salary}"/>">
                 <span name="employeeSalary" class="text-danger">${errorMessageMap.salary}</span>
             </div>
         </div>
@@ -70,21 +69,15 @@
             <label class="col-lg-3 control-label">Department</label>
             <div class="col-lg-5">
                 <select class="form-control" name="employeeDepartmentId">
-                    <c:forEach items="${departmentList}" var="department">
-                        <c:choose>
-                            <c:when test="${department.id == param.employeeDepartmentId}">
-                                <option selected
-                                        value="<c:out value="${param.employeeDepartmentId}"/>">${department.getName()}</option>
-                            </c:when>
-                            <c:when test="${department.id == employeeDepartment.id}">
-                                <option selected
-                                        value="<c:out value="${department.id}"/>">${department.getName()}</option>
-                            </c:when>
-                            <c:otherwise>
-                                <option value="<c:out value="${department.id}"/>">${department.getName()}</option>
-                            </c:otherwise>
-                        </c:choose>
-                    </c:forEach>
+                <c:forEach items="${departmentList}" var="department">
+                    <option
+                            <c:if test="${department.id == param.employeeDepartmentId or department.id == employee.departmentId}">
+                                selected
+                            </c:if>
+                            value="${department.id}">
+                            ${department.getName()}
+                    </option>
+                </c:forEach>
                 </select>
             </div>
             <span name="employeeDepartmentId" class="text-danger">${errorMessageMap.departmantId}</span>

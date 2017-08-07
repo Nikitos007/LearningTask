@@ -20,17 +20,11 @@ public class DeleteEmployeeCommand implements Controller {
     private EmployeeService employeeService = new EmployeeServiceImpl();
 
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, SQLException {
-        Long departmentId = Long.parseLong(request.getParameter("departmentId"));
-        Employee employee = getEmployeeFromRequest(request);
-        employeeService.deleteEmployee(employee);
-        response.sendRedirect("viewDepartment?departmentId=" + departmentId);
-    }
-
-    private Employee getEmployeeFromRequest(HttpServletRequest request) {
         String employeeIdStr = request.getParameter("employeeId");
         Long employeeId = ParamUtils.StringToLong(employeeIdStr);
-        Employee employee = new Employee();
-        employee.setId(employeeId);
-        return employee;
+        Employee employee = employeeService.getEmployeeById(employeeId);
+        employeeService.deleteEmployee(employee);
+        response.sendRedirect("viewDepartment?departmentId=" + employee.getDepartmentId());
     }
+
 }

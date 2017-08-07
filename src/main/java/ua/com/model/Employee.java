@@ -93,7 +93,35 @@ public class Employee {
         return departmentId;
     }
 
-    public void setDepartmentId(Long departmantId) {
-        this.departmentId = departmantId;
+    public void setDepartmentId(Long departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Employee employee = (Employee) o;
+
+        return id != null ? id.equals(employee.id) : employee.id == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", hireDate=" + hireDate +
+                ", email='" + email + '\'' +
+                ", salary=" + salary +
+                ", departmentId=" + departmentId +
+                '}';
     }
 }

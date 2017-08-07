@@ -12,9 +12,9 @@ public class ParamUtils {
         }
     }
 
-    public static Integer StringToInteger(String emplolyeeSalary) {
+    public static Integer StringToInteger(String employeeSalary) {
         try {
-            return Integer.valueOf(emplolyeeSalary.trim());
+            return Integer.valueOf(employeeSalary.trim());
         } catch (NumberFormatException e) {
             return null;
         }

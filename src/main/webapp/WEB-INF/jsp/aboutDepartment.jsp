@@ -5,8 +5,7 @@
 <html>
 <head>
     <title>About Department</title>
-    <link href="/css/bootstrap.css" rel="stylesheet">
-    <link href="/css/main.css" rel="stylesheet">
+    <link href="<c:url value="/css/bootstrap.css"/>" rel="stylesheet">
 </head>
 <body>
 
@@ -45,7 +44,7 @@
                                         <a href="/controller/viewRegistrationEmployeeForm?employeeId=${employee.getId()}">Update</a>
                                     </td>
                                     <td>
-                                        <a href="/controller/deleteEmployee?employeeId=${employee.getId()}&departmentId=${param.departmentId}">Delete</a>
+                                        <a href="/controller/deleteEmployee?employeeId=${employee.getId()}">Delete</a>
                                     </td>
                                 </tr>
                             </c:forEach>

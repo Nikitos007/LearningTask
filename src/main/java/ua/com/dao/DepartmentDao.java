@@ -11,7 +11,7 @@ import java.util.List;
 public interface DepartmentDao {
     void save(Department department) throws SQLException;
 
-    void delete(Department departmant) throws SQLException;
+    void delete(Department department) throws SQLException;
 
     List<Department> findAll() throws SQLException;
 

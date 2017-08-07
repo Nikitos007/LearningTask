@@ -11,13 +11,11 @@ public class Dispatcher {
 
     {
         commands = new HashMap<>();
-        // for department
         commands.put("/controller/viewAllDepartment", new ViewAllDepartmentCommand());
         commands.put("/controller/viewDepartment", new ViewDepartmentCommand());
         commands.put("/controller/viewRegistrationDepartmentForm", new ViewRegistrationDepartmentFormCommand());
         commands.put("/controller/saveDepartment", new SaveDepartmentCommand());
         commands.put("/controller/deleteDepartment", new DeleteDepartmentCommand());
-        // for emoloyee
         commands.put("/controller/viewRegistrationEmployeeForm", new ViewRegistrationEmployeeFormCommand());
         commands.put("/controller/saveEmployee", new SaveEmployeeCommand());
         commands.put("/controller/deleteEmployee", new DeleteEmployeeCommand());

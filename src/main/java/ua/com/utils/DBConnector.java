@@ -1,6 +1,8 @@
 package ua.com.utils;
 
-import org.apache.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -13,7 +15,7 @@ import java.sql.Statement;
 
 public class DBConnector {
 
-    private static final Logger LOG = Logger.getLogger(DBConnector.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DBConnector.class);
 
     private DataSource dataSource = null;
 

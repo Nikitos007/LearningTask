@@ -5,8 +5,7 @@
 <html>
 <head>
     <title>Departments</title>
-    <link rel="stylesheet" text="text/css" href="${pageContext.request.contextPath}/css/bootstrap.css"/>
-    <link rel="stylesheet" text="text/css" href="${pageContext.request.contextPath}/css/main.css"/>
+    <link href="<c:url value="/css/bootstrap.css"/>" rel="stylesheet">
 </head>
 <body>
 

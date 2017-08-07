@@ -1,6 +1,7 @@
 package ua.com.controllers.impl;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.com.controllers.Controller;
 import ua.com.exception.ValidFieldException;
 import ua.com.model.Department;
@@ -17,7 +18,7 @@ import java.sql.SQLException;
 
 public class SaveDepartmentCommand implements Controller {
 
-    private static final Logger LOG = Logger.getLogger(SaveDepartmentCommand.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SaveDepartmentCommand.class);
     private DepartmentService departmentService = new DepartmentServiceImpl();
 
 
@@ -27,7 +28,7 @@ public class SaveDepartmentCommand implements Controller {
             departmentService.saveDepartment(department);
             response.sendRedirect("viewAllDepartment");
         } catch (ValidFieldException e) {
-            LOG.debug("Not valid fields for save department");
+            LOG.debug("Not valid fields for save department: {}", department);
             request.setAttribute("errorMessageMap", e.getErrorsMap());
             request.getRequestDispatcher("/WEB-INF/jsp/saveDepartment.jsp").forward(request, response);
         }
