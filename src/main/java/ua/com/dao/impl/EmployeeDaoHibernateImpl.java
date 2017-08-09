@@ -1,0 +1,45 @@
+package ua.com.dao.impl;
+
+import org.hibernate.Criteria;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
+import ua.com.dao.EmployeeDao;
+import ua.com.model.Employee;
+import ua.com.utils.HibernateSessionFactory;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created on 07.08.17.
+ */
+public class EmployeeDaoHibernateImpl extends CRUDOperations<Employee, Long> implements EmployeeDao {
+
+    private SessionFactory sessionFactory = HibernateSessionFactory.getSessionFactory();
+
+
+    @Override
+    public List<Employee> getByDepartmentId(Long departmentId) {
+        List<Employee> employeeList = new ArrayList<>();
+        String hql = "FROM Employee WHERE id_department = :departmentId";
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery(hql);
+        query.setParameter("departmentId", departmentId);
+        employeeList = query.list();
+        session.close();
+        return employeeList;
+    }
+
+    @Override
+    public Employee getByEmail(Employee employee) {
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(Employee.class);
+        criteria.add(Restrictions.eq("email", employee.getEmail()));
+        Employee employeeResult = (Employee) criteria.uniqueResult();
+        session.close();
+        return employeeResult;
+    }
+}

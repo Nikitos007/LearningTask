@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.com.controllers.Controller;
 import ua.com.exception.ValidFieldException;
+import ua.com.model.Department;
 import ua.com.model.Employee;
 import ua.com.services.DepartmentService;
 import ua.com.services.EmployeeService;
@@ -29,9 +30,9 @@ public class SaveEmployeeCommand implements Controller {
         Employee employee = getEmployeeFromRequest(request);
         try {
             employeeService.saveEmployee(employee);
-            response.sendRedirect("viewDepartment?departmentId=" + employee.getDepartmentId());
+            response.sendRedirect("viewDepartment?departmentId=" + employee.getDepartment().getId());
         } catch (ValidFieldException e) {
-            LOG.debug("Not valid fields for save employee: {}" , employee);
+            LOG.debug("Not valid fields for save employee: {}", employee);
             request.setAttribute("errorMessageMap", e.getErrorsMap());
             request.setAttribute("employee", employee);
             request.setAttribute("departmentList", departmentService.viewAllDepartment());
@@ -54,7 +55,9 @@ public class SaveEmployeeCommand implements Controller {
         employee.setHireDate(employeeHireDate);
         employee.setEmail(employeeEmail);
         employee.setSalary(employeeSalary);
-        employee.setDepartmentId(employeeDepartmentId);
+        Department department = new Department();
+        department.setId(employeeDepartmentId);
+        employee.setDepartment(department);
         return employee;
     }
 }

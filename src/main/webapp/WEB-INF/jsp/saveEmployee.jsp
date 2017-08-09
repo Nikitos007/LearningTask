@@ -69,15 +69,15 @@
             <label class="col-lg-3 control-label">Department</label>
             <div class="col-lg-5">
                 <select class="form-control" name="employeeDepartmentId">
-                <c:forEach items="${departmentList}" var="department">
-                    <option
-                            <c:if test="${department.id == param.employeeDepartmentId or department.id == employee.departmentId}">
-                                selected
-                            </c:if>
-                            value="${department.id}">
-                            ${department.getName()}
-                    </option>
-                </c:forEach>
+                    <c:forEach items="${departmentList}" var="department">
+                        <option
+                                <c:if test="${department.id == param.employeeDepartmentId or department.id == employee.department.id}">
+                                    selected
+                                </c:if>
+                                value="${department.id}">
+                                ${department.getName()}
+                        </option>
+                    </c:forEach>
                 </select>
             </div>
             <span name="employeeDepartmentId" class="text-danger">${errorMessageMap.departmantId}</span>

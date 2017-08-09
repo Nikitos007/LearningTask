@@ -8,16 +8,8 @@ import java.util.List;
 /**
  * Created on 11.07.17.
  */
-public interface DepartmentDao {
-    void save(Department department) throws SQLException;
+public interface DepartmentDao extends CRUDOperationsDao<Department, Long>{
 
-    void delete(Department department) throws SQLException;
-
-    List<Department> findAll() throws SQLException;
-
-    Department getById(Long departmentId) throws SQLException;
-
-    Department isExistDepartmentByName(Department departmentRequest) throws SQLException;
-
+    Department getByName(Department department);
 
 }

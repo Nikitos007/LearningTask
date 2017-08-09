@@ -3,27 +3,37 @@ package ua.com.model;
 import net.sf.oval.constraint.*;
 import ua.com.utils.validation.ValidationUniqueEmployeeEmail;
 
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
+@Entity
+@Table(name = "tbl_employees")
+public class Employee implements Serializable {
 
-public class Employee {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id_employee")
     private Long id;
 
     @NotNull(message = "Can not be null")
     @NotEmpty(message = "Can not be empty")
     @Length(min = 2, max = 100, message = "Length should be between 2 and 100")
     @MatchPattern(pattern = "[\\p{L}]+", message = "Incorrect name")
+    @Column(name = "name", length = 100)
     private String name;
 
     @NotNull(message = "Can not be null")
     @NotEmpty(message = "Can not be empty")
     @Length(min = 2, max = 100, message = "Length should be between 2 and 100")
     @MatchPattern(pattern = "[\\p{L}]+", message = "Incorrect surname")
+    @Column(name = "surname", length = 100)
     private String surname;
 
     @NotNull(message = "Can not be null")
     @NotEmpty(message = "Can not be empty")
+    @Temporal(TemporalType.DATE)
+    @Column(name = "hire_date")
     private Date hireDate;
 
     @NotNull(message = "Can not be null")
@@ -31,15 +41,20 @@ public class Employee {
     @Length(min = 2, max = 100, message = "Length should be between 2 and 100")
     @CheckWith(value = ValidationUniqueEmployeeEmail.class, message = "This email has already exist")
     @MatchPattern(pattern = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}$", message = "Incorrect email")
+    @Column(name = "email", length = 100)
     private String email;
 
     @NotNull(message = "Can not be null")
     @NotEmpty(message = "Can not be empty")
+    @Column(name = "salary")
     private Integer salary;
 
     @NotNull(message = "Can not be null")
     @NotEmpty(message = "Can not be empty")
-    private Long departmentId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_department")
+    private Department department;
+
 
     public Long getId() {
         return id;
@@ -89,12 +104,12 @@ public class Employee {
         this.salary = salary;
     }
 
-    public Long getDepartmentId() {
-        return departmentId;
+    public Department getDepartment() {
+        return department;
     }
 
-    public void setDepartmentId(Long departmentId) {
-        this.departmentId = departmentId;
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 
     @Override
@@ -121,7 +136,7 @@ public class Employee {
                 ", hireDate=" + hireDate +
                 ", email='" + email + '\'' +
                 ", salary=" + salary +
-                ", departmentId=" + departmentId +
+                ", department=" + department +
                 '}';
     }
 }

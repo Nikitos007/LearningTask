@@ -1,7 +1,7 @@
 package ua.com.services.impl;
 
 import ua.com.dao.DepartmentDao;
-import ua.com.dao.impl.DepartmentDaoDatabaseImpl;
+import ua.com.dao.impl.DepartmentDaoHibernateImpl;
 import ua.com.exception.ValidFieldException;
 import ua.com.model.Department;
 import ua.com.services.DepartmentService;
@@ -12,7 +12,7 @@ import java.util.List;
 
 public class DepartmentServiceImpl implements DepartmentService {
 
-    private DepartmentDao departmentDao = new DepartmentDaoDatabaseImpl();
+    private DepartmentDao departmentDao = new DepartmentDaoHibernateImpl();
 
     public List<Department> viewAllDepartment() throws SQLException {
         return departmentDao.findAll();

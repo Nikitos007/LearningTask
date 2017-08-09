@@ -1,7 +1,7 @@
 package ua.com.services.impl;
 
 import ua.com.dao.EmployeeDao;
-import ua.com.dao.impl.EmployeeDaoDatababaseImpl;
+import ua.com.dao.impl.EmployeeDaoHibernateImpl;
 import ua.com.exception.ValidFieldException;
 import ua.com.model.Employee;
 import ua.com.services.EmployeeService;
@@ -12,7 +12,7 @@ import java.util.List;
 
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private EmployeeDao employeeDao = new EmployeeDaoDatababaseImpl();
+    private EmployeeDao employeeDao = new EmployeeDaoHibernateImpl();
 
     public List<Employee> viewEmployeeByDepartmentId(Long departmentId) throws SQLException {
         return employeeDao.getByDepartmentId(departmentId);

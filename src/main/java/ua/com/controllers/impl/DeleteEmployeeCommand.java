@@ -24,7 +24,7 @@ public class DeleteEmployeeCommand implements Controller {
         Long employeeId = ParamUtils.StringToLong(employeeIdStr);
         Employee employee = employeeService.getEmployeeById(employeeId);
         employeeService.deleteEmployee(employee);
-        response.sendRedirect("viewDepartment?departmentId=" + employee.getDepartmentId());
+        response.sendRedirect("viewDepartment?departmentId=" + employee.getDepartment().getId());
     }
 
 }
