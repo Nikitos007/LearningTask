@@ -1,25 +1,28 @@
 package ua.com.dao.impl;
 
-import org.hibernate.*;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import ua.com.dao.CRUDOperationsDao;
-import ua.com.utils.HibernateSessionFactory;
 
-import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created on 07.08.17.
  */
-public abstract class CRUDOperations<T, E extends Number> implements CRUDOperationsDao<T, E>{
+@Repository
+public abstract class CRUDOperations<T, E extends Number> implements CRUDOperationsDao<T, E> {
     private static final Logger LOG = LoggerFactory.getLogger(CRUDOperations.class);
     private Class<T> genericClass;
-    private SessionFactory sessionFactory = HibernateSessionFactory.getSessionFactory();
+    @Autowired
+    private SessionFactory sessionFactory;
 
     {
         Type mySuperclass = getClass().getGenericSuperclass();

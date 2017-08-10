@@ -1,7 +1,8 @@
 package ua.com.services.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ua.com.dao.EmployeeDao;
-import ua.com.dao.impl.EmployeeDaoHibernateImpl;
 import ua.com.exception.ValidFieldException;
 import ua.com.model.Employee;
 import ua.com.services.EmployeeService;
@@ -10,9 +11,11 @@ import ua.com.utils.validation.ValidationOval;
 import java.sql.SQLException;
 import java.util.List;
 
+@Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private EmployeeDao employeeDao = new EmployeeDaoHibernateImpl();
+    @Autowired
+    private EmployeeDao employeeDao;
 
     public List<Employee> viewEmployeeByDepartmentId(Long departmentId) throws SQLException {
         return employeeDao.getByDepartmentId(departmentId);

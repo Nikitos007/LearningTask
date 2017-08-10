@@ -1,9 +1,10 @@
 package ua.com.controllers.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ua.com.controllers.Controller;
 import ua.com.model.Employee;
 import ua.com.services.EmployeeService;
-import ua.com.services.impl.EmployeeServiceImpl;
 import ua.com.utils.ParamUtils;
 
 import javax.servlet.ServletException;
@@ -15,9 +16,11 @@ import java.sql.SQLException;
 /**
  * Created on 12.07.17.
  */
+@Component(value = "/controller/deleteEmployee")
 public class DeleteEmployeeCommand implements Controller {
 
-    private EmployeeService employeeService = new EmployeeServiceImpl();
+    @Autowired
+    private EmployeeService employeeService;
 
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, SQLException {
         String employeeIdStr = request.getParameter("employeeId");

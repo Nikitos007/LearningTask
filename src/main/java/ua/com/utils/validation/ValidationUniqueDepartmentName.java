@@ -1,17 +1,16 @@
 package ua.com.utils.validation;
 
 import net.sf.oval.constraint.CheckWithCheck;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ua.com.dao.DepartmentDao;
-import ua.com.dao.impl.DepartmentDaoHibernateImpl;
 import ua.com.model.Department;
 
-
+@Component
 public class ValidationUniqueDepartmentName implements CheckWithCheck.SimpleCheck {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ValidationUniqueDepartmentName.class);
-    private static DepartmentDao departmentDao = new DepartmentDaoHibernateImpl();
+    @Autowired
+    private DepartmentDao departmentDao;
 
     @Override
     public boolean isSatisfied(Object departmentObj, Object value) {

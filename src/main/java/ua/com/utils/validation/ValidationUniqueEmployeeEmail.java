@@ -1,17 +1,16 @@
 package ua.com.utils.validation;
 
 import net.sf.oval.constraint.CheckWithCheck;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ua.com.dao.EmployeeDao;
-import ua.com.dao.impl.EmployeeDaoHibernateImpl;
 import ua.com.model.Employee;
 
-
+@Component
 public class ValidationUniqueEmployeeEmail implements CheckWithCheck.SimpleCheck {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ValidationUniqueEmployeeEmail.class);
-    private static EmployeeDao employeeDao = new EmployeeDaoHibernateImpl();
+    @Autowired
+    private EmployeeDao employeeDao;
 
     @Override
     public boolean isSatisfied(Object employeeObj, Object value) {

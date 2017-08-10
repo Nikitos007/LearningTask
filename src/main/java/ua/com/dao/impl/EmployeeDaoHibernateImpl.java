@@ -5,20 +5,23 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import ua.com.dao.EmployeeDao;
 import ua.com.model.Employee;
-import ua.com.utils.HibernateSessionFactory;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created on 07.08.17.
  */
+
+@Repository
 public class EmployeeDaoHibernateImpl extends CRUDOperations<Employee, Long> implements EmployeeDao {
 
-    private SessionFactory sessionFactory = HibernateSessionFactory.getSessionFactory();
+    @Autowired
+    private SessionFactory sessionFactory;
 
 
     @Override

@@ -4,18 +4,19 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import ua.com.dao.DepartmentDao;
 import ua.com.model.Department;
-import ua.com.utils.HibernateSessionFactory;
-
-import java.sql.SQLException;
 
 /**
  * Created on 11.07.17.
  */
+@Repository
 public class DepartmentDaoHibernateImpl extends CRUDOperations<Department, Long> implements DepartmentDao {
 
-    private SessionFactory sessionFactory = HibernateSessionFactory.getSessionFactory();
+    @Autowired
+    private SessionFactory sessionFactory;
 
     @Override
     public Department getByName(Department department) {

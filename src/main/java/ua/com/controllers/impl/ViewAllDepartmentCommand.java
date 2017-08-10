@@ -1,9 +1,10 @@
 package ua.com.controllers.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ua.com.controllers.Controller;
 import ua.com.model.Department;
 import ua.com.services.DepartmentService;
-import ua.com.services.impl.DepartmentServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,9 +16,11 @@ import java.util.List;
 /**
  * Created on 12.07.17.
  */
+@Component(value = "/controller/viewAllDepartment")
 public class ViewAllDepartmentCommand implements Controller {
 
-    private DepartmentService departmentService = new DepartmentServiceImpl();
+    @Autowired
+    private DepartmentService departmentService;
 
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, SQLException {
         List<Department> departmentList = departmentService.viewAllDepartment();
