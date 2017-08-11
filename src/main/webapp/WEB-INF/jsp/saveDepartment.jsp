@@ -15,15 +15,15 @@
     <h1 class="text-center">Create or Update Department</h1>
 
 
-    <form id="defaultForm" method="post" class="form-horizontal col-lg-offset-2" action="/controller/saveDepartment">
+    <form id="defaultForm" method="post" class="form-horizontal col-lg-offset-2" action="/department/save">
         <input type="hidden" name="departmentId"
-               value="<c:out value="${param.departmentId == null ? department.id : param.departmentId}"/>">
+               value="<c:out value="${param.departmentId == null ? department.departmentId : param.departmentId}"/>">
         <div class="form-group">
             <label class="col-lg-3 control-label">Name</label>
             <div class="col-lg-5">
                 <input type="text" class="form-control" name="departmentName"
-                       value="<c:out value="${param.departmentName == null ? department.name : param.departmentName}"/>"/>
-                <span name="name" class="text-danger">${errorMessageMap.name}</span>
+                       value="<c:out value="${param.departmentName == null ? department.departmentName : param.departmentName}"/>"/>
+                <span name="departmentName" class="text-danger">${errorMessageMap.departmentName}</span>
             </div>
         </div>
         <div class="form-group">

@@ -10,11 +10,11 @@ import java.util.List;
  * Created on 13.07.17.
  */
 public interface DepartmentService {
-    List<Department> viewAllDepartment() throws SQLException;
+    List<Department> viewAllDepartment();
 
-    void delete(Department department) throws SQLException;
+    void delete(Department department);
 
-    Department getDepartmentById(Long departmentId) throws SQLException;
+    Department getDepartmentById(Long departmentId);
 
-    void saveDepartment(Department department) throws SQLException, ValidFieldException;
+    void saveDepartment(Department department) throws ValidFieldException;
 }

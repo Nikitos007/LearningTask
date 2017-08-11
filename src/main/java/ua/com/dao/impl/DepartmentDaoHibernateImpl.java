@@ -22,7 +22,7 @@ public class DepartmentDaoHibernateImpl extends CRUDOperations<Department, Long>
     public Department getByName(Department department) {
         Session session = sessionFactory.openSession();
         Criteria criteria = session.createCriteria(Department.class);
-        criteria.add(Restrictions.eq("name", department.getName()));
+        criteria.add(Restrictions.eq("departmentName", department.getDepartmentName()));
         Department departmentResult = (Department) criteria.uniqueResult();
         session.close();
         return departmentResult;

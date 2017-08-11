@@ -10,11 +10,11 @@ import java.util.List;
  * Created on 13.07.17.
  */
 public interface EmployeeService {
-    Employee getEmployeeById(Long employeeId) throws SQLException;
+    Employee getEmployeeById(Long employeeId);
 
-    void deleteEmployee(Employee employee) throws SQLException;
+    void deleteEmployee(Employee employee);
 
-    void saveEmployee(Employee employee) throws SQLException, ValidFieldException;
+    void saveEmployee(Employee employee) throws ValidFieldException;
 
-    List<Employee> viewEmployeeByDepartmentId(Long departmentId) throws SQLException;
+    List<Employee> viewEmployeeByDepartmentId(Long departmentId);
 }

@@ -1,6 +1,7 @@
 package ua.com.model;
 
 import net.sf.oval.constraint.*;
+import org.springframework.format.annotation.DateTimeFormat;
 import ua.com.utils.validation.ValidationUniqueEmployeeEmail;
 
 import javax.persistence.*;
@@ -14,7 +15,7 @@ public class Employee implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_employee")
-    private Long id;
+    private Long employeeId;
 
     @NotNull(message = "Can not be null")
     @NotEmpty(message = "Can not be empty")
@@ -33,6 +34,7 @@ public class Employee implements Serializable {
     @NotNull(message = "Can not be null")
     @NotEmpty(message = "Can not be empty")
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "hire_date")
     private Date hireDate;
 
@@ -55,13 +57,12 @@ public class Employee implements Serializable {
     @JoinColumn(name = "id_department")
     private Department department;
 
-
-    public Long getId() {
-        return id;
+    public Long getEmployeeId() {
+        return employeeId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setEmployeeId(Long employeeId) {
+        this.employeeId = employeeId;
     }
 
     public String getName() {
@@ -119,18 +120,18 @@ public class Employee implements Serializable {
 
         Employee employee = (Employee) o;
 
-        return id != null ? id.equals(employee.id) : employee.id == null;
+        return employeeId != null ? employeeId.equals(employee.employeeId) : employee.employeeId == null;
     }
 
     @Override
     public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+        return employeeId != null ? employeeId.hashCode() : 0;
     }
 
     @Override
     public String toString() {
         return "Employee{" +
-                "id=" + id +
+                "employeeId=" + employeeId +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", hireDate=" + hireDate +

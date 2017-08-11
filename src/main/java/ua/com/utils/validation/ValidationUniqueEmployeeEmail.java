@@ -19,6 +19,6 @@ public class ValidationUniqueEmployeeEmail implements CheckWithCheck.SimpleCheck
         if (employee == null) {
             return true;
         }
-        return employeeRequest.getId() != null && employee.getId() != null && employee.getId().equals(employeeRequest.getId());
+        return employeeRequest.getEmployeeId() != null && employee.getEmployeeId() != null && employee.getEmployeeId().equals(employeeRequest.getEmployeeId());
     }
 }

@@ -35,16 +35,16 @@
                             <c:forEach items="${employeeList}" var="employee">
                                 <tr>
                                     <td>${i = i + 1}</td>
-                                    <td>${employee.getName()}</td>
-                                    <td>${employee.getSurname()}</td>
-                                    <td>${employee.getHireDate()}</td>
-                                    <td>${employee.getEmail()}</td>
-                                    <td>${employee.getSalary()}</td>
+                                    <td>${employee.name}</td>
+                                    <td>${employee.surname}</td>
+                                    <td>${employee.hireDate}</td>
+                                    <td>${employee.email}</td>
+                                    <td>${employee.salary}</td>
                                     <td>
-                                        <a href="/controller/viewRegistrationEmployeeForm?employeeId=${employee.getId()}">Update</a>
+                                        <a href="/employee/viewForm?employeeId=${employee.employeeId}">Update</a>
                                     </td>
                                     <td>
-                                        <a href="/controller/deleteEmployee?employeeId=${employee.getId()}">Delete</a>
+                                        <a href="/employee/delete?employeeId=${employee.employeeId}&departmentId=${employee.department.departmentId}">Delete</a>
                                     </td>
                                 </tr>
                             </c:forEach>

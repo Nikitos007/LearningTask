@@ -17,20 +17,20 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private EmployeeDao employeeDao;
 
-    public List<Employee> viewEmployeeByDepartmentId(Long departmentId) throws SQLException {
+    public List<Employee> viewEmployeeByDepartmentId(Long departmentId) {
         return employeeDao.getByDepartmentId(departmentId);
     }
 
-    public void saveEmployee(Employee employee) throws SQLException, ValidFieldException {
+    public void saveEmployee(Employee employee) throws ValidFieldException {
         ValidationOval.fieldsValidation(employee);
         employeeDao.save(employee);
     }
 
-    public void deleteEmployee(Employee employee) throws SQLException {
+    public void deleteEmployee(Employee employee) {
         employeeDao.delete(employee);
     }
 
-    public Employee getEmployeeById(Long employeeId) throws SQLException {
+    public Employee getEmployeeById(Long employeeId) {
         return employeeDao.getById(employeeId);
     }
 

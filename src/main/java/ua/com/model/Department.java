@@ -15,7 +15,7 @@ public class Department implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_department")
-    private Long id;
+    private Long departmentId;
 
     @NotNull(message = "Can not be null")
     @NotEmpty(message = "Can not be empty")
@@ -23,25 +23,25 @@ public class Department implements Serializable {
     @CheckWith(value = ValidationUniqueDepartmentName.class, message = "This name has already exist")
     @MatchPattern(pattern = "[\\p{L}]+", message = "Incorrect name")
     @Column(name = "name", length = 100)
-    private String name;
+    private String departmentName;
 
     @OneToMany(mappedBy = "department", cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
     List<Employee> employeeList = new ArrayList<>();
 
-    public Long getId() {
-        return id;
+    public Long getDepartmentId() {
+        return departmentId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setDepartmentId(Long departmentId) {
+        this.departmentId = departmentId;
     }
 
-    public String getName() {
-        return name;
+    public String getDepartmentName() {
+        return departmentName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDepartmentName(String name) {
+        this.departmentName = name;
     }
 
     public List<Employee> getEmployeeList() {
@@ -59,19 +59,19 @@ public class Department implements Serializable {
 
         Department that = (Department) o;
 
-        return id != null ? id.equals(that.id) : that.id == null;
+        return departmentId != null ? departmentId.equals(that.departmentId) : that.departmentId == null;
     }
 
     @Override
     public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+        return departmentId != null ? departmentId.hashCode() : 0;
     }
 
     @Override
     public String toString() {
         return "Department{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
+                "departmentId=" + departmentId +
+                ", departmentName='" + departmentName + '\'' +
                 ", employeeList=" + employeeList +
                 '}';
     }

@@ -19,7 +19,7 @@ public class ValidationUniqueDepartmentName implements CheckWithCheck.SimpleChec
         if (department == null) {
             return true;
         }
-        return departmentRequest.getId() != null && department.getId() != null && department.getId().equals(departmentRequest.getId());
+        return departmentRequest.getDepartmentId() != null && department.getDepartmentId() != null && department.getDepartmentId().equals(departmentRequest.getDepartmentId());
     }
 }
 

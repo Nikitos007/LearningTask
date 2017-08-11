@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface EmployeeDao extends CRUDOperationsDao<Employee, Long> {
 
-    List<Employee> getByDepartmentId(Long departmentId) throws SQLException;
+    List<Employee> getByDepartmentId(Long departmentId);
 
     Employee getByEmail(Employee employee);
 }

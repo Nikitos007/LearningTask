@@ -32,13 +32,13 @@
                             <c:forEach items="${departmentList}" var="department">
                                 <tr>
                                     <td>${i = i + 1}</td>
-                                    <td>${department.name}</td>
+                                    <td>${department.departmentName}</td>
                                     <td>
-                                        <a href="/controller/viewRegistrationDepartmentForm?departmentId=${department.id}">Update</a>
+                                        <a href="/department/viewForm?departmentId=${department.departmentId}">Update</a>
                                     </td>
-                                    <td><a href="/controller/deleteDepartment?departmentId=${department.id}">Delete</a>
+                                    <td><a href="/department/delete?departmentId=${department.departmentId}">Delete</a>
                                     </td>
-                                    <td><a href="/controller/viewDepartment?departmentId=${department.id}">Employees</a>
+                                    <td><a href="/employee/viewEmployee?departmentId=${department.departmentId}">Employees</a>
                                     </td>
                                 </tr>
                             </c:forEach>
