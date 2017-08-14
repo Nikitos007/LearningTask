@@ -11,7 +11,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 
 /**
  * Created on 12.07.17.
@@ -19,10 +18,14 @@ import java.sql.SQLException;
 @Component(value = "/controller/deleteEmployee")
 public class DeleteEmployeeCommand implements Controller {
 
-    @Autowired
-    private EmployeeService employeeService;
+    private final EmployeeService employeeService;
 
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, SQLException {
+    @Autowired
+    public DeleteEmployeeCommand(EmployeeService employeeService) {
+        this.employeeService = employeeService;
+    }
+
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String employeeIdStr = request.getParameter("employeeId");
         Long employeeId = ParamUtils.StringToLong(employeeIdStr);
         Employee employee = employeeService.getEmployeeById(employeeId);

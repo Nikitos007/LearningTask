@@ -10,7 +10,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -19,10 +18,14 @@ import java.util.List;
 @Component(value = "/controller/viewAllDepartment")
 public class ViewAllDepartmentCommand implements Controller {
 
-    @Autowired
-    private DepartmentService departmentService;
+    private final DepartmentService departmentService;
 
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, SQLException {
+    @Autowired
+    public ViewAllDepartmentCommand(DepartmentService departmentService) {
+        this.departmentService = departmentService;
+    }
+
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         List<Department> departmentList = departmentService.viewAllDepartment();
         request.setAttribute("departmentList", departmentList);
         request.getRequestDispatcher("/WEB-INF/jsp/viewAllDepartment.jsp").forward(request, response);

@@ -14,17 +14,21 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 
 @Component(value = "/controller/saveDepartment")
 public class SaveDepartmentCommand implements Controller {
 
     private static final Logger LOG = LoggerFactory.getLogger(SaveDepartmentCommand.class);
+
+    private final DepartmentService departmentService;
+
     @Autowired
-    private DepartmentService departmentService;
+    public SaveDepartmentCommand(DepartmentService departmentService) {
+        this.departmentService = departmentService;
+    }
 
 
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, SQLException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         Department department = getDepartmentFromRequest(request);
         try {
             departmentService.saveDepartment(department);

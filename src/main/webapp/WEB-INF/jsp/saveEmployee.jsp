@@ -40,7 +40,7 @@
             <label class="col-lg-3 control-label">Hire date</label>
             <div class="col-lg-5">
                 <input type="date" class="form-control" name="employeeHireDate"
-                       value="<c:out value="${employee.hireDate}" />">
+                       value="<c:out value="${param.hireDate}" default="${employee.hireDate}"/>">
                 <span name="employeeHireDate" class="text-danger">${errorMessageMap.hireDate}</span>
             </div>
         </div>

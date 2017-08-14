@@ -11,7 +11,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 
 /**
  * Created on 13.07.17.
@@ -19,10 +18,14 @@ import java.sql.SQLException;
 @Component(value = "/controller/viewRegistrationDepartmentForm")
 public class ViewRegistrationDepartmentFormCommand implements Controller {
 
-    @Autowired
-    private DepartmentService departmentService;
+    private final DepartmentService departmentService;
 
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, SQLException {
+    @Autowired
+    public ViewRegistrationDepartmentFormCommand(DepartmentService departmentService) {
+        this.departmentService = departmentService;
+    }
+
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         Long departmentId = ParamUtils.StringToLong(request.getParameter("departmentId"));
         if (departmentId != null) {
             Department department = departmentService.getDepartmentById(departmentId);

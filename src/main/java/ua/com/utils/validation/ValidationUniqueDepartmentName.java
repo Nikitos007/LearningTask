@@ -15,7 +15,7 @@ public class ValidationUniqueDepartmentName implements CheckWithCheck.SimpleChec
     @Override
     public boolean isSatisfied(Object departmentObj, Object value) {
         Department departmentRequest = (Department) departmentObj;
-        Department department = departmentDao.getByName(departmentRequest);
+        Department department = departmentDao.getByName(departmentRequest.getName());
         if (department == null) {
             return true;
         }

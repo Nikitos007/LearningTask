@@ -16,20 +16,25 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Date;
 
 @Component(value = "/controller/saveEmployee")
 public class SaveEmployeeCommand implements Controller {
 
     private static final Logger LOG = LoggerFactory.getLogger(SaveEmployeeCommand.class);
+
+    private final EmployeeService employeeService;
+
+    private final DepartmentService departmentService;
+
     @Autowired
-    private EmployeeService employeeService;
-    @Autowired
-    private DepartmentService departmentService;
+    public SaveEmployeeCommand(DepartmentService departmentService, EmployeeService employeeService) {
+        this.departmentService = departmentService;
+        this.employeeService = employeeService;
+    }
 
 
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, SQLException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         Employee employee = getEmployeeFromRequest(request);
         try {
             employeeService.saveEmployee(employee);

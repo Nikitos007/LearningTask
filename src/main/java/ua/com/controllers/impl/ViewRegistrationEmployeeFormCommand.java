@@ -13,18 +13,22 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 
 @Component(value = "/controller/viewRegistrationEmployeeForm")
 public class ViewRegistrationEmployeeFormCommand implements Controller {
 
-    @Autowired
-    private DepartmentService departmentService;
-    @Autowired
-    private EmployeeService employeeService;
+    private final DepartmentService departmentService;
 
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, SQLException, IOException {
+    private final EmployeeService employeeService;
+
+    @Autowired
+    public ViewRegistrationEmployeeFormCommand(DepartmentService departmentService, EmployeeService employeeService) {
+        this.departmentService = departmentService;
+        this.employeeService = employeeService;
+    }
+
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String employeeIdStr = request.getParameter("employeeId");
         Long employeeId = ParamUtils.StringToLong(employeeIdStr);
         if (employeeId != null) {

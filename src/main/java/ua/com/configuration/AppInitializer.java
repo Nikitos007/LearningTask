@@ -1,7 +1,5 @@
-package ua.com.utils;
+package ua.com.configuration;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -14,13 +12,10 @@ import javax.servlet.ServletException;
  */
 public class AppInitializer implements WebApplicationInitializer {
 
-    private static Logger LOG = LoggerFactory.getLogger(AppInitializer.class);
-
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         AnnotationConfigWebApplicationContext appWebContext = new AnnotationConfigWebApplicationContext();
         appWebContext.register(AppBeenContext.class);
-        appWebContext.refresh();
         ContextLoaderListener contextLoaderListener = new ContextLoaderListener(appWebContext);
         servletContext.addListener(contextLoaderListener);
     }
