@@ -7,6 +7,6 @@ import ua.com.model.Department;
  */
 public interface DepartmentDao extends CRUDOperationsDao<Department, Long> {
 
-    Department getByName(Department department);
+    Department getByName(String name);
 
 }

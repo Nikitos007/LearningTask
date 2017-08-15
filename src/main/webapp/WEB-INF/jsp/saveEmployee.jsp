@@ -42,7 +42,7 @@
             <div class="col-lg-5">
                 <input type="date" class="form-control" name="hireDate"
                        value="<c:out value="${param.hireDate}" default="${employee.hireDate}"/>">
-                    <span name="hireDate" class="text-danger">${errorMessageMap.hireDate}</span>
+                <span name="hireDate" class="text-danger">${errorMessageMap.hireDate}</span>
             </div>
         </div>
 

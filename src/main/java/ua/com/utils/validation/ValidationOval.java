@@ -29,7 +29,7 @@ public class ValidationOval {
         if (violations.size() > 0) {
             Map<String, String> errorsMap;
             errorsMap = getFieldErrors(violations);
-            throw new ValidFieldException(errorsMap);
+            throw new ValidFieldException(errorsMap, object);
         }
     }
 

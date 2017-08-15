@@ -20,8 +20,12 @@ import java.util.List;
 public class DepartmentController {
 
     private static final Logger LOG = LoggerFactory.getLogger(DepartmentController.class);
+    private final DepartmentService departmentService;
+
     @Autowired
-    private DepartmentService departmentService;
+    public DepartmentController(DepartmentService departmentService) {
+        this.departmentService = departmentService;
+    }
 
     @RequestMapping("/delete")
     public String delete(Department department) {
@@ -30,23 +34,16 @@ public class DepartmentController {
     }
 
     @RequestMapping("/save")
-    public ModelAndView save(Department department) {
-        ModelAndView modelAndView = new ModelAndView();
-        try {
-            departmentService.saveDepartment(department);
-            modelAndView.setViewName("redirect:/");
-        } catch (ValidFieldException e) {
-            LOG.debug("Not valid fields for save department: {}", department);
-            modelAndView.addObject("errorMessageMap", e.getErrorsMap());
-            modelAndView.setViewName("saveDepartment");
-        }
+    public ModelAndView save(Department department) throws ValidFieldException {
+        departmentService.saveDepartment(department);
+        ModelAndView modelAndView = new ModelAndView("redirect:/");
         return modelAndView;
     }
 
     @RequestMapping
     public ModelAndView viewAll() {
-        ModelAndView modelAndView = new ModelAndView();
         List<Department> departmentList = departmentService.viewAllDepartment();
+        ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("departmentList", departmentList);
         modelAndView.setViewName("viewAllDepartment");
         return modelAndView;

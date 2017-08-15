@@ -3,7 +3,6 @@ package ua.com.services;
 import ua.com.exception.ValidFieldException;
 import ua.com.model.Employee;
 
-import java.sql.SQLException;
 import java.util.List;
 
 /**

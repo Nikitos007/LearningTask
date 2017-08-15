@@ -1,7 +1,5 @@
-package ua.com.utils;
+package ua.com.configuration;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
@@ -18,19 +16,15 @@ import javax.servlet.ServletRegistration;
 @Component
 public class AppInitializer implements WebApplicationInitializer {
 
-    private static Logger LOG = LoggerFactory.getLogger(AppInitializer.class);
-
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         AnnotationConfigWebApplicationContext appWebContext = new AnnotationConfigWebApplicationContext();
-        appWebContext.register(AppBeenContext.class);
+        appWebContext.register(ua.com.configuration.AppBeenContext.class);
         ContextLoaderListener contextLoaderListener = new ContextLoaderListener(appWebContext);
         servletContext.addListener(contextLoaderListener);
 
         ServletRegistration.Dynamic dispatcherServlet = servletContext.addServlet("dispatcher", new DispatcherServlet(appWebContext));
         dispatcherServlet.setLoadOnStartup(1);
         dispatcherServlet.addMapping("/");
-
-//        ServletRegistration.Dynamic s = servletContext.a
     }
 }

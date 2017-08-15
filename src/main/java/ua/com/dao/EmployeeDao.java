@@ -2,7 +2,6 @@ package ua.com.dao;
 
 import ua.com.model.Employee;
 
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -12,5 +11,5 @@ public interface EmployeeDao extends CRUDOperationsDao<Employee, Long> {
 
     List<Employee> getByDepartmentId(Long departmentId);
 
-    Employee getByEmail(Employee employee);
+    Employee getByEmail(String email);
 }

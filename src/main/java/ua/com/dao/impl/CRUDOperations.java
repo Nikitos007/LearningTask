@@ -3,11 +3,11 @@ package ua.com.dao.impl;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ua.com.dao.CRUDOperationsDao;
 
 import java.lang.reflect.ParameterizedType;
@@ -19,8 +19,11 @@ import java.util.List;
  */
 @Repository
 public abstract class CRUDOperations<T, E extends Number> implements CRUDOperationsDao<T, E> {
+
     private static final Logger LOG = LoggerFactory.getLogger(CRUDOperations.class);
+
     private Class<T> genericClass;
+
     @Autowired
     private SessionFactory sessionFactory;
 
@@ -37,6 +40,7 @@ public abstract class CRUDOperations<T, E extends Number> implements CRUDOperati
 
 
     @Override
+    @Transactional(readOnly = true)
     public List<T> findAll() {
         String hql = "FROM " + genericClass.getSimpleName();
         Session session = sessionFactory.openSession();
@@ -47,6 +51,7 @@ public abstract class CRUDOperations<T, E extends Number> implements CRUDOperati
     }
 
     @Override
+    @Transactional(readOnly = true)
     public T getById(E id) {
         Session session = sessionFactory.openSession();
         T value = (T) session.get(genericClass, id);
@@ -55,21 +60,17 @@ public abstract class CRUDOperations<T, E extends Number> implements CRUDOperati
     }
 
     @Override
+    @Transactional
     public void save(T entity) {
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
+        Session session = sessionFactory.getCurrentSession();
         session.saveOrUpdate(entity);
-        transaction.commit();
-        session.close();
     }
 
     @Override
+    @Transactional
     public void delete(T entity) {
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
+        Session session = sessionFactory.getCurrentSession();
         session.delete(entity);
-        transaction.commit();
-        session.close();
     }
 
 }

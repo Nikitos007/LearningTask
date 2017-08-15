@@ -15,7 +15,7 @@ public class ValidationUniqueEmployeeEmail implements CheckWithCheck.SimpleCheck
     @Override
     public boolean isSatisfied(Object employeeObj, Object value) {
         Employee employeeRequest = (Employee) employeeObj;
-        Employee employee = employeeDao.getByEmail(employeeRequest);
+        Employee employee = employeeDao.getByEmail(employeeRequest.getEmail());
         if (employee == null) {
             return true;
         }

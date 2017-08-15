@@ -7,6 +7,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ua.com.dao.EmployeeDao;
 import ua.com.model.Employee;
 
@@ -25,6 +26,7 @@ public class EmployeeDaoHibernateImpl extends CRUDOperations<Employee, Long> imp
 
 
     @Override
+    @Transactional(readOnly = true)
     public List<Employee> getByDepartmentId(Long departmentId) {
         List<Employee> employeeList = new ArrayList<>();
         String hql = "FROM Employee WHERE id_department = :departmentId";
@@ -37,10 +39,11 @@ public class EmployeeDaoHibernateImpl extends CRUDOperations<Employee, Long> imp
     }
 
     @Override
-    public Employee getByEmail(Employee employee) {
+    @Transactional(readOnly = true)
+    public Employee getByEmail(String email) {
         Session session = sessionFactory.openSession();
         Criteria criteria = session.createCriteria(Employee.class);
-        criteria.add(Restrictions.eq("email", employee.getEmail()));
+        criteria.add(Restrictions.eq("email", email));
         Employee employeeResult = (Employee) criteria.uniqueResult();
         session.close();
         return employeeResult;

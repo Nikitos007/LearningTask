@@ -23,10 +23,14 @@ import java.util.List;
 public class EmployeeController {
 
     private static final Logger LOG = LoggerFactory.getLogger(EmployeeController.class);
+    private final EmployeeService employeeService;
+    private final DepartmentService departmentService;
+
     @Autowired
-    private EmployeeService employeeService;
-    @Autowired
-    private DepartmentService departmentService;
+    public EmployeeController(EmployeeService employeeService, DepartmentService departmentService) {
+        this.employeeService = employeeService;
+        this.departmentService = departmentService;
+    }
 
     @RequestMapping("/delete")
     public String delete(Employee employee, @RequestParam(value = "departmentId") Long departmentId) {
@@ -35,20 +39,12 @@ public class EmployeeController {
     }
 
     @RequestMapping("/save")
-    public String save(Model model, Employee employee, @RequestParam(value = "departmentId") Long departmentId) {
+    public String save(Model model, Employee employee, @RequestParam(value = "departmentId") Long departmentId) throws ValidFieldException {
         Department department = new Department();
         department.setDepartmentId(departmentId);
         employee.setDepartment(department);
-        try {
-            employeeService.saveEmployee(employee);
-            return "redirect:/employee/viewEmployee?departmentId=" + employee.getDepartment().getDepartmentId();
-        } catch (ValidFieldException e) {
-            LOG.debug("Not valid fields for save employee");
-            model.addAttribute("errorMessageMap", e.getErrorsMap());
-            model.addAttribute("employee", employee);
-            model.addAttribute("departmentList", departmentService.viewAllDepartment());
-            return "saveEmployee";
-        }
+        employeeService.saveEmployee(employee);
+        return "redirect:/employee/viewEmployee?departmentId=" + employee.getDepartment().getDepartmentId();
     }
 
     @RequestMapping("/viewEmployee")
@@ -61,7 +57,6 @@ public class EmployeeController {
     public String viewForm(Model model, Employee employeeRequest) {
         if (employeeRequest.getEmployeeId() != null) {
             Employee employee = employeeService.getEmployeeById(employeeRequest.getEmployeeId());
-            Department employeeDepartment = departmentService.getDepartmentById(employee.getDepartment().getDepartmentId());
             model.addAttribute("employee", employee);
         }
         List<Department> departmentList = departmentService.viewAllDepartment();

@@ -8,7 +8,6 @@ import ua.com.model.Department;
 import ua.com.services.DepartmentService;
 import ua.com.utils.validation.ValidationOval;
 
-import java.sql.SQLException;
 import java.util.List;
 
 @Service
