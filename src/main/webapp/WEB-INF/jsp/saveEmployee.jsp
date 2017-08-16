@@ -69,7 +69,7 @@
         <div class="form-group">
             <label class="col-lg-3 control-label">Department</label>
             <div class="col-lg-5">
-                <select class="form-control" name="departmentId">
+                <select class="form-control" name="department.departmentId">
                     <c:forEach items="${departmentList}" var="department">
                         <option
                                 <c:if test="${department.departmentId == param.departmentId or department.departmentId == employee.department.departmentId}">

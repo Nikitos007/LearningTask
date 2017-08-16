@@ -1,10 +1,9 @@
 package ua.com.controllers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.exception.ValidFieldException;
 import ua.com.model.Department;
@@ -19,7 +18,6 @@ import java.util.List;
 @RequestMapping({"/", "/department"})
 public class DepartmentController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DepartmentController.class);
     private final DepartmentService departmentService;
 
     @Autowired
@@ -27,20 +25,19 @@ public class DepartmentController {
         this.departmentService = departmentService;
     }
 
-    @RequestMapping("/delete")
+    @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public String delete(Department department) {
         departmentService.delete(department);
         return "redirect:/";
     }
 
-    @RequestMapping("/save")
-    public ModelAndView save(Department department) throws ValidFieldException {
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    public String save(Department department) throws ValidFieldException {
         departmentService.saveDepartment(department);
-        ModelAndView modelAndView = new ModelAndView("redirect:/");
-        return modelAndView;
+        return "redirect:/";
     }
 
-    @RequestMapping
+    @RequestMapping(method = RequestMethod.GET)
     public ModelAndView viewAll() {
         List<Department> departmentList = departmentService.viewAllDepartment();
         ModelAndView modelAndView = new ModelAndView();
@@ -49,7 +46,7 @@ public class DepartmentController {
         return modelAndView;
     }
 
-    @RequestMapping("/viewForm")
+    @RequestMapping(value = "/viewForm", method = RequestMethod.GET)
     public ModelAndView viewForm(Department department) {
         ModelAndView modelAndView = new ModelAndView();
         if (department.getDepartmentId() != null) {

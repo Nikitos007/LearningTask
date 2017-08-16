@@ -21,6 +21,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     public List<Department> viewAllDepartment() {
         return departmentDao.findAll();
     }
+
     @Transactional
     public void delete(Department department) {
         departmentDao.delete(department);

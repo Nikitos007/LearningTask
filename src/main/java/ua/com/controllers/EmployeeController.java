@@ -1,11 +1,10 @@
 package ua.com.controllers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.com.exception.ValidFieldException;
 import ua.com.model.Department;
@@ -22,7 +21,6 @@ import java.util.List;
 @RequestMapping("/employee")
 public class EmployeeController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(EmployeeController.class);
     private final EmployeeService employeeService;
     private final DepartmentService departmentService;
 
@@ -32,28 +30,25 @@ public class EmployeeController {
         this.departmentService = departmentService;
     }
 
-    @RequestMapping("/delete")
+    @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public String delete(Employee employee, @RequestParam(value = "departmentId") Long departmentId) {
         employeeService.deleteEmployee(employee);
         return "redirect:/employee/viewEmployee?departmentId=" + departmentId;
     }
 
-    @RequestMapping("/save")
-    public String save(Model model, Employee employee, @RequestParam(value = "departmentId") Long departmentId) throws ValidFieldException {
-        Department department = new Department();
-        department.setDepartmentId(departmentId);
-        employee.setDepartment(department);
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    public String save(Employee employee) throws ValidFieldException {
         employeeService.saveEmployee(employee);
         return "redirect:/employee/viewEmployee?departmentId=" + employee.getDepartment().getDepartmentId();
     }
 
-    @RequestMapping("/viewEmployee")
+    @RequestMapping(value = "/viewEmployee", method = RequestMethod.GET)
     public String viewEmployee(Model model, @RequestParam(value = "departmentId") Long departmentId) {
         model.addAttribute("employeeList", employeeService.viewEmployeeByDepartmentId(departmentId));
         return "employeeByDepartment";
     }
 
-    @RequestMapping("/viewForm")
+    @RequestMapping(value = "/viewForm", method = RequestMethod.GET)
     public String viewForm(Model model, Employee employeeRequest) {
         if (employeeRequest.getEmployeeId() != null) {
             Employee employee = employeeService.getEmployeeById(employeeRequest.getEmployeeId());
