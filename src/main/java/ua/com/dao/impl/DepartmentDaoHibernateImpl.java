@@ -6,7 +6,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import ua.com.dao.DepartmentDao;
 import ua.com.model.Department;
 
@@ -24,7 +23,6 @@ public class DepartmentDaoHibernateImpl extends CRUDOperationsDaoHibernateImpl<D
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Department getByName(String name) {
         Session session = sessionFactory.openSession();
         Criteria criteria = session.createCriteria(Department.class);

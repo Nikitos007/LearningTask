@@ -7,7 +7,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import ua.com.dao.EmployeeDao;
 import ua.com.model.Employee;
 
@@ -30,7 +29,6 @@ public class EmployeeDaoHibernateImpl extends CRUDOperationsDaoHibernateImpl<Emp
 
 
     @Override
-    @Transactional(readOnly = true)
     public List<Employee> getByDepartmentId(Long departmentId) {
         List<Employee> employeeList = new ArrayList<>();
         String hql = "FROM Employee WHERE id_department = :departmentId";
@@ -43,7 +41,6 @@ public class EmployeeDaoHibernateImpl extends CRUDOperationsDaoHibernateImpl<Emp
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Employee getByEmail(String email) {
         Session session = sessionFactory.openSession();
         Criteria criteria = session.createCriteria(Employee.class);
