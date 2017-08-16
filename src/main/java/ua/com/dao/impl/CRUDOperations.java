@@ -40,7 +40,6 @@ public abstract class CRUDOperations<T, E extends Number> implements CRUDOperati
 
 
     @Override
-    @Transactional(readOnly = true)
     public List<T> findAll() {
         String hql = "FROM " + genericClass.getSimpleName();
         Session session = sessionFactory.openSession();
@@ -51,7 +50,6 @@ public abstract class CRUDOperations<T, E extends Number> implements CRUDOperati
     }
 
     @Override
-    @Transactional(readOnly = true)
     public T getById(E id) {
         Session session = sessionFactory.openSession();
         T value = (T) session.get(genericClass, id);
@@ -60,14 +58,12 @@ public abstract class CRUDOperations<T, E extends Number> implements CRUDOperati
     }
 
     @Override
-    @Transactional
     public void save(T entity) {
         Session session = sessionFactory.getCurrentSession();
         session.saveOrUpdate(entity);
     }
 
     @Override
-    @Transactional
     public void delete(T entity) {
         Session session = sessionFactory.getCurrentSession();
         session.delete(entity);
