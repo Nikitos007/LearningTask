@@ -1,38 +1,15 @@
-<web-app>
-
-    <display-name>Archetype Created Web Application</display-name>
-
-    <jsp-config>
-        <jsp-property-group>
-            <url-pattern>*.jsp</url-pattern>
-            <page-encoding>UTF-8</page-encoding>
-        </jsp-property-group>
-    </jsp-config>
-    <servlet-mapping>
-        <servlet-name>default</servlet-name>
-        <url-pattern>/css/*</url-pattern>
-        <url-pattern>/img/*</url-pattern>
-    </servlet-mapping>
-
+<?xml version="1.0"?>
+<!--suppress WebProperties, WebProperties, ServletWithoutMappingInspection -->
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
     <servlet>
-        <servlet-name>controller</servlet-name>
-        <servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
+        <servlet-name>MainPortlet</servlet-name>
+        <servlet-class>ua.com.controllers.impl.MainPortlet</servlet-class>
     </servlet>
+
     <servlet-mapping>
-        <servlet-name>controller</servlet-name>
-        <url-pattern>/</url-pattern>
+        <servlet-name>MainPortlet</servlet-name>
+        <url-pattern>/WEB-INF/jsp</url-pattern>
     </servlet-mapping>
-
-    <error-page>
-        <error-code>400</error-code>
-        <location>/WEB-INF/jsp/error.jsp</location>
-    </error-page>
-
-    <error-page>
-        <error-code>500</error-code>
-        <location>/WEB-INF/jsp/error.jsp</location>
-    </error-page>
-
 </web-app>
-
