@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>MainPortlet</groupId>
-    <artifactId>MainPortlet</artifactId>
+    <groupId>Portlet</groupId>
+    <artifactId>Portlet</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>task Maven Webapp</name>
@@ -10,7 +10,7 @@
 
     <properties>
         <hibernate-version>5.0.1.Final</hibernate-version>
-        <spring-version>3.0.7.RELEASE</spring-version>
+        <spring-version>4.3.9.RELEASE</spring-version>
         <jackson-version>2.0.0</jackson-version>
         <liferay.maven.plugin.version>6.2.10.16</liferay.maven.plugin.version>
         <maven-war-plugin-version>2.7</maven-war-plugin-version>
@@ -26,30 +26,35 @@
 
 
     <dependencies>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.6</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>3.0.1</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>jstl</groupId>
             <artifactId>jstl</artifactId>
             <version>1.2</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>net.sf.oval</groupId>
             <artifactId>oval</artifactId>
@@ -61,42 +66,48 @@
             <artifactId>slf4j-api</artifactId>
             <version>1.7.25</version>
         </dependency>
+
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>4.3.11.Final</version>
+            <version>${hibernate-version}</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>4.3.9.RELEASE</version>
+            <version>${spring.version}</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
-            <version>4.3.9.RELEASE</version>
+            <version>${spring.version}</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
-            <version>4.3.9.RELEASE</version>
+            <version>${spring.version}</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
-            <version>4.3.9.RELEASE</version>
+            <version>${spring.version}</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-dbcp2</artifactId>
             <version>2.1</version>
         </dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
@@ -110,7 +121,6 @@
             <version>3.0.0</version>
             <scope>provided</scope>
         </dependency>
-
 
         <dependency>
             <groupId>com.liferay.portal</groupId>
@@ -155,12 +165,18 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc-portlet</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
 
     </dependencies>
 
 
     <build>
-        <finalName>MainPortlet</finalName>
+        <finalName>Portlet</finalName>
 
 
         <plugins>
@@ -185,7 +201,7 @@
                     <appServerLibGlobalDir>${liferay.app.server.lib.global.dir}</appServerLibGlobalDir>
                     <appServerPortalDir>${liferay.app.server.portal.dir}</appServerPortalDir>
                     <liferayVersion>${liferay.version}</liferayVersion>
-                    <pluginName>MainPortlet</pluginName>
+                    <pluginName>Portlet</pluginName>
                     <pluginType>portlet</pluginType>
                 </configuration>
             </plugin>
