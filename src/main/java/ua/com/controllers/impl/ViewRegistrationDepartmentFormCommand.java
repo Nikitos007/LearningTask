@@ -7,6 +7,7 @@ import ua.com.model.Department;
 import ua.com.services.DepartmentService;
 import ua.com.utils.ParamUtils;
 
+import javax.portlet.*;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,13 +26,16 @@ public class ViewRegistrationDepartmentFormCommand implements Controller {
         this.departmentService = departmentService;
     }
 
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        Long departmentId = ParamUtils.StringToLong(request.getParameter("departmentId"));
+    @Override
+    public void execute(PortletRequest request, PortletResponse response, PortletContext portletContext) throws IOException, PortletException {
+        String departmentIdStr = request.getParameter("departmentId");
+        Long departmentId = ParamUtils.StringToLong(departmentIdStr);
         if (departmentId != null) {
             Department department = departmentService.getDepartmentById(departmentId);
             department.setName(department.getName());
             request.setAttribute("department", department);
         }
-        request.getRequestDispatcher("/WEB-INF/jsp/saveDepartment.jsp").forward(request, response);
+        PortletRequestDispatcher requestDispatcher = portletContext.getRequestDispatcher("/WEB-INF/jsp/saveDepartment.jsp");
+        requestDispatcher.include(request, response);
     }
 }

@@ -1,6 +1,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="portlet" uri="http://liferay.com/tld/portlet" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page isELIgnored="false" %>
+
+
 
 <html>
 <head>
@@ -9,7 +12,7 @@
 </head>
 <body>
 
-<c:import url="navPanel.jsp"/>
+<c:import url="/WEB-INF/jsp/navPanel.jsp"/>
 
 <div class="container">
     <h1 class="text-center">Departments</h1>
@@ -21,25 +24,36 @@
                         <tbody>
                         <thead>
                         <tr>
-                            <td>#</td>
                             <td>Department</td>
                             <td>Update</td>
                             <td>Delete</td>
                             <td>List of Employees</td>
                         </tr>
                         </thead>
-                        <c:if test="${departmentList != null}" var="i=1">
+                        <c:if test="${departmentList != null}">
                             <c:forEach items="${departmentList}" var="department">
+
+
+                                <portlet:renderURL var="updateDepartment">
+                                    <portlet:param name="uri" value="/controller/viewRegistrationDepartmentForm"></portlet:param>
+                                    <portlet:param name="departmentId" value="${department.id}"/>
+                                </portlet:renderURL>
+
+                                <portlet:renderURL var="deleteDepartment">
+                                    <portlet:param name="uri" value="/controller/deleteDepartment"></portlet:param>
+                                    <portlet:param name="departmentId" value="${department.id}"/>
+                                </portlet:renderURL>
+
+                                <portlet:renderURL var="viewEmployee">
+                                    <portlet:param name="uri" value="/controller/viewDepartment"></portlet:param>
+                                    <portlet:param name="departmentId" value="${department.id}"/>
+                                </portlet:renderURL>
+
                                 <tr>
-                                    <td>${i = i + 1}</td>
                                     <td>${department.name}</td>
-                                    <td>
-                                        <a href="/controller/viewRegistrationDepartmentForm?departmentId=${department.id}">Update</a>
-                                    </td>
-                                    <td><a href="/controller/deleteDepartment?departmentId=${department.id}">Delete</a>
-                                    </td>
-                                    <td><a href="/controller/viewDepartment?departmentId=${department.id}">Employees</a>
-                                    </td>
+                                    <td><a href="${updateDepartment}">Update</a></td>
+                                    <td><a href="${deleteDepartment}">Delete</a></td>
+                                    <td><a href="${viewEmployee}">Employees</a></td>
                                 </tr>
                             </c:forEach>
                         </c:if>
@@ -50,5 +64,6 @@
         </div>
     </div>
 </div>
+
 </body>
 </html>

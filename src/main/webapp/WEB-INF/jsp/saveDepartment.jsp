@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<c:import url="navPanel.jsp"/>
+<c:import url="/WEB-INF/jsp/navPanel.jsp"/>
 
 <div class="container">
     <h1 class="text-center">Create or Update Department</h1>

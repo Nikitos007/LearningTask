@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.dao.EmployeeDao;
 import ua.com.model.Employee;
+import ua.com.utils.HibernateSessionFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +22,12 @@ import java.util.List;
 @Repository
 public class EmployeeDaoHibernateImpl extends CRUDOperationsDaoHibernateImpl<Employee, Long> implements EmployeeDao {
 
-    private final SessionFactory sessionFactory;
+    private SessionFactory sessionFactory;
 
     @Autowired
-    public EmployeeDaoHibernateImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    public EmployeeDaoHibernateImpl(HibernateSessionFactory hibernateSessionFactory) {
+        super(hibernateSessionFactory);
+        sessionFactory = hibernateSessionFactory.getSessionFactory();
     }
 
 

@@ -6,6 +6,7 @@ import ua.com.controllers.Controller;
 import ua.com.model.Department;
 import ua.com.services.DepartmentService;
 
+import javax.portlet.*;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,9 +26,10 @@ public class ViewAllDepartmentCommand implements Controller {
         this.departmentService = departmentService;
     }
 
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    public void execute(PortletRequest request, PortletResponse response, PortletContext portletContext) throws IOException, PortletException {
         List<Department> departmentList = departmentService.viewAllDepartment();
         request.setAttribute("departmentList", departmentList);
-        request.getRequestDispatcher("/WEB-INF/jsp/viewAllDepartment.jsp").forward(request, response);
+        PortletRequestDispatcher requestDispatcher = portletContext.getRequestDispatcher("/WEB-INF/jsp/viewAllDepartment.jsp");
+        requestDispatcher.include(request, response);
     }
 }

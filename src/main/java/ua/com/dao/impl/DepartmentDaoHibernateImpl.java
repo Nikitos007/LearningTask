@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.dao.DepartmentDao;
 import ua.com.model.Department;
+import ua.com.utils.HibernateSessionFactory;
 
 /**
  * Created on 11.07.17.
@@ -16,11 +17,12 @@ import ua.com.model.Department;
 @Repository
 public class DepartmentDaoHibernateImpl extends CRUDOperationsDaoHibernateImpl<Department, Long> implements DepartmentDao {
 
-    private final SessionFactory sessionFactory;
+    private SessionFactory sessionFactory;
 
     @Autowired
-    public DepartmentDaoHibernateImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    public DepartmentDaoHibernateImpl(HibernateSessionFactory hibernateSessionFactory) {
+        super(hibernateSessionFactory);
+        sessionFactory = hibernateSessionFactory.getSessionFactory();
     }
 
     @Override

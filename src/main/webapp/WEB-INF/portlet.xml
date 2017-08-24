@@ -12,7 +12,7 @@
         <expiration-cache>0</expiration-cache>
         <supports>
             <mime-type>text/html</mime-type>
-            <portlet-mode>view</portlet-mode>
+            <portlet-mode>VIEW</portlet-mode>
         </supports>
         <portlet-info>
             <title>Portlet</title>

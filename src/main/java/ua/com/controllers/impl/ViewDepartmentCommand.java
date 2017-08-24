@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import ua.com.controllers.Controller;
 import ua.com.services.EmployeeService;
 
+import javax.portlet.*;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,9 +24,11 @@ public class ViewDepartmentCommand implements Controller {
         this.employeeService = employeeService;
     }
 
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    @Override
+    public void execute(PortletRequest request, PortletResponse response, PortletContext portletContext) throws IOException, PortletException {
         Long departmentId = Long.parseLong(request.getParameter("departmentId"));
         request.setAttribute("employeeList", employeeService.viewEmployeeByDepartmentId(departmentId));
-        request.getRequestDispatcher("/WEB-INF/jsp/aboutDepartment.jsp").forward(request, response);
+        PortletRequestDispatcher requestDispatcher = portletContext.getRequestDispatcher("/WEB-INF/jsp/aboutDepartment.jsp");
+        requestDispatcher.include(request, response);
     }
 }

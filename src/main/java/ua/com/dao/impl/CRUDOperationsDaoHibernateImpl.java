@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.dao.CRUDOperationsDao;
+import ua.com.utils.HibernateSessionFactory;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -23,9 +24,12 @@ public abstract class CRUDOperationsDaoHibernateImpl<T, E extends Number> implem
     private static final Logger LOG = LoggerFactory.getLogger(CRUDOperationsDaoHibernateImpl.class);
 
     private Class<T> genericClass;
+    private SessionFactory sessionFactory;
 
     @Autowired
-    private SessionFactory sessionFactory;
+    public CRUDOperationsDaoHibernateImpl(HibernateSessionFactory hibernateSessionFactory) {
+        sessionFactory = hibernateSessionFactory.getSessionFactory();
+    }
 
     {
         Type mySuperclass = getClass().getGenericSuperclass();
@@ -62,15 +66,19 @@ public abstract class CRUDOperationsDaoHibernateImpl<T, E extends Number> implem
     @Override
     @Transactional
     public void save(T entity) {
-        Session session = sessionFactory.getCurrentSession();
+        Session session = sessionFactory.openSession();
         session.saveOrUpdate(entity);
+        session.close();
     }
 
     @Override
     @Transactional
     public void delete(T entity) {
-        Session session = sessionFactory.getCurrentSession();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
         session.delete(entity);
+        session.getTransaction().commit();
+        session.close();
     }
 
 }

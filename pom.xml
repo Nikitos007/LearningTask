@@ -10,7 +10,6 @@
 
     <properties>
         <hibernate-version>5.0.1.Final</hibernate-version>
-        <spring-version>4.3.9.RELEASE</spring-version>
         <jackson-version>2.0.0</jackson-version>
         <liferay.maven.plugin.version>6.2.10.16</liferay.maven.plugin.version>
         <maven-war-plugin-version>2.7</maven-war-plugin-version>
@@ -59,8 +58,8 @@
             <groupId>net.sf.oval</groupId>
             <artifactId>oval</artifactId>
             <version>1.86</version>
-
         </dependency>
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -71,7 +70,7 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>${hibernate-version}</version>
-            <scope>provided</scope>
+            <!--<scope>provided</scope>-->
         </dependency>
 
         <dependency>
@@ -111,7 +110,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
-            <version>4.3.9.RELEASE</version>
+            <version>${spring.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -128,6 +127,7 @@
             <version>${liferay.version}</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>com.liferay.portal</groupId>
             <artifactId>portal-impl</artifactId>
