@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 public interface Controller extends Serializable {
 
-    void execute(PortletRequest request, PortletResponse response, PortletContext portletContext) throws IOException, PortletException;
+    <T extends PortletRequest, E extends PortletResponse> void execute(T request, E response, PortletContext portletContext) throws IOException, PortletException;
 
 }
 

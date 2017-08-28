@@ -25,7 +25,7 @@ public class ViewDepartmentCommand implements Controller {
     }
 
     @Override
-    public void execute(PortletRequest request, PortletResponse response, PortletContext portletContext) throws IOException, PortletException {
+    public <T extends PortletRequest, E extends PortletResponse> void execute(T request, E response, PortletContext portletContext) throws IOException, PortletException {
         Long departmentId = Long.parseLong(request.getParameter("departmentId"));
         request.setAttribute("employeeList", employeeService.viewEmployeeByDepartmentId(departmentId));
         PortletRequestDispatcher requestDispatcher = portletContext.getRequestDispatcher("/WEB-INF/jsp/aboutDepartment.jsp");

@@ -67,7 +67,9 @@ public abstract class CRUDOperationsDaoHibernateImpl<T, E extends Number> implem
     @Transactional
     public void save(T entity) {
         Session session = sessionFactory.openSession();
+        session.beginTransaction();
         session.saveOrUpdate(entity);
+        session.getTransaction().commit();
         session.close();
     }
 

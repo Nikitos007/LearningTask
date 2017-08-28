@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page isELIgnored="false" %>
 
@@ -9,7 +10,7 @@
 </head>
 <body>
 
-<c:import url="navPanel.jsp"/>
+<c:import url="/WEB-INF/jsp/navPanel.jsp"/>
 
 <div class="container">
     <h1 class="text-center">About Department</h1>
@@ -31,20 +32,28 @@
                             <td>Delete</td>
                         </tr>
                         </thead>
-                        <c:if test="${employeeList != null}" var="i=1">
+                        <c:if test="${employeeList != null}">
                             <c:forEach items="${employeeList}" var="employee">
                                 <tr>
-                                    <td>${i = i + 1}</td>
+                                    <td>${employee.id}</td>
                                     <td>${employee.getName()}</td>
                                     <td>${employee.getSurname()}</td>
                                     <td>${employee.getHireDate()}</td>
                                     <td>${employee.getEmail()}</td>
                                     <td>${employee.getSalary()}</td>
                                     <td>
-                                        <a href="/controller/viewRegistrationEmployeeForm?employeeId=${employee.getId()}">Update</a>
+                                        <portlet:renderURL var="updateEmployee">
+                                            <portlet:param name="uri" value="/controller/viewRegistrationEmployeeForm"></portlet:param>
+                                            <portlet:param name="employeeId" value="${employee.getId()}"/>
+                                        </portlet:renderURL>
+                                        <a href="${updateEmployee}">Update</a>
                                     </td>
                                     <td>
-                                        <a href="/controller/deleteEmployee?employeeId=${employee.getId()}">Delete</a>
+                                        <portlet:actionURL var="deleteDepartment">
+                                            <portlet:param name="uri" value="/controller/deleteEmployee"></portlet:param>
+                                            <portlet:param name="employeeId" value="${employee.getId()}"/>
+                                        </portlet:actionURL>
+                                        <a href="${deleteDepartment}">Delete</a>
                                     </td>
                                 </tr>
                             </c:forEach>

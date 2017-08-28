@@ -33,16 +33,15 @@
                         <c:if test="${departmentList != null}">
                             <c:forEach items="${departmentList}" var="department">
 
-
                                 <portlet:renderURL var="updateDepartment">
                                     <portlet:param name="uri" value="/controller/viewRegistrationDepartmentForm"></portlet:param>
                                     <portlet:param name="departmentId" value="${department.id}"/>
                                 </portlet:renderURL>
 
-                                <portlet:renderURL var="deleteDepartment">
+                                <portlet:actionURL var="deleteDepartment">
                                     <portlet:param name="uri" value="/controller/deleteDepartment"></portlet:param>
                                     <portlet:param name="departmentId" value="${department.id}"/>
-                                </portlet:renderURL>
+                                </portlet:actionURL>
 
                                 <portlet:renderURL var="viewEmployee">
                                     <portlet:param name="uri" value="/controller/viewDepartment"></portlet:param>

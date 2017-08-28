@@ -27,7 +27,7 @@ public class ViewRegistrationDepartmentFormCommand implements Controller {
     }
 
     @Override
-    public void execute(PortletRequest request, PortletResponse response, PortletContext portletContext) throws IOException, PortletException {
+    public <T extends PortletRequest, E extends PortletResponse> void execute(T request, E response, PortletContext portletContext) throws IOException, PortletException {
         String departmentIdStr = request.getParameter("departmentId");
         Long departmentId = ParamUtils.StringToLong(departmentIdStr);
         if (departmentId != null) {

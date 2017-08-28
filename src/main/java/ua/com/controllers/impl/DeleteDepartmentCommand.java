@@ -25,17 +25,16 @@ public class DeleteDepartmentCommand implements Controller {
     }
 
     @Override
-    public void execute(PortletRequest request, PortletResponse response, PortletContext portletContext) throws IOException, PortletException {
+    public <T extends PortletRequest, E extends PortletResponse> void execute(T request, E response, PortletContext portletContext) throws IOException, PortletException {
         Long departmentId = ParamUtils.StringToLong(request.getParameter("departmentId"));
         Department department = new Department();
         department.setId(departmentId);
         departmentService.delete(department);
-
-
-        request.setAttribute("uri", "/controller/viewAllDepartment");
-        PortletRequestDispatcher requestDispatcher = portletContext.getRequestDispatcher("/Portlet");
-        requestDispatcher.include(request, response);
-
-        //TODO in this place should be action - sendRedirect()...
+        if (response instanceof ActionResponse) {
+            ActionResponse actionResponse = (ActionResponse)response;
+            actionResponse.sendRedirect("/WEB-INF/jsp/saveDepartment.jsp");
+        }
+        PortletSession session = request.getPortletSession();
+        session.setAttribute("doView","false", PortletSession.APPLICATION_SCOPE);
     }
 }
