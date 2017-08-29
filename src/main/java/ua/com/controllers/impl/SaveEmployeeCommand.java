@@ -11,6 +11,7 @@ import ua.com.model.Employee;
 import ua.com.services.DepartmentService;
 import ua.com.services.EmployeeService;
 import ua.com.utils.ParamUtils;
+import ua.com.utils.RedirectUtil;
 
 import javax.portlet.*;
 import javax.servlet.ServletException;
@@ -39,14 +40,27 @@ public class SaveEmployeeCommand implements Controller {
         Employee employee = getEmployeeFromRequest(request);
         try {
             employeeService.saveEmployee(employee);
-            ((ActionResponse)response).sendRedirect("/");
+            if (response instanceof ActionResponse) {
+                RedirectUtil.redirect(request, (ActionResponse) response, "/controller/viewAllDepartment");
+            }
+
+//            ((ActionResponse)response).sendRedirect("/");
 //            response.sendRedirect("viewDepartment?departmentId=" + employee.getDepartment().getId());
+
+
         } catch (ValidFieldException e) {
             LOG.debug("Not valid fields for save employee: {}", employee);
-            request.setAttribute("errorMessageMap", e.getErrorsMap());
-            request.setAttribute("employee", employee);
-            request.setAttribute("departmentList", departmentService.viewAllDepartment());
-            portletContext.getRequestDispatcher("/WEB-INF/jsp/saveEmployee.jsp").include(request, response);
+
+//            request.setAttribute("errorMessageMap", e.getErrorsMap());
+//            request.setAttribute("employee", employee);
+//            request.setAttribute("departmentList", departmentService.viewAllDepartment());
+//            portletContext.getRequestDispatcher("/WEB-INF/jsp/saveEmployee.jsp").include(request, response);
+
+            PortletSession session = request.getPortletSession();
+            session.setAttribute("sessionUri", "/WEB-INF/jsp/saveEmployee.jsp", PortletSession.APPLICATION_SCOPE);
+            session.setAttribute("errorMessageMap", e.getErrorsMap(), PortletSession.APPLICATION_SCOPE);
+            session.setAttribute("employee", employee, PortletSession.APPLICATION_SCOPE);
+            session.setAttribute("departmentList", departmentService.viewAllDepartment(), PortletSession.APPLICATION_SCOPE);
         }
     }
 

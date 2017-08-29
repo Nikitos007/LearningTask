@@ -6,6 +6,7 @@ import ua.com.controllers.Controller;
 import ua.com.model.Employee;
 import ua.com.services.EmployeeService;
 import ua.com.utils.ParamUtils;
+import ua.com.utils.RedirectUtil;
 
 import javax.portlet.*;
 import javax.servlet.ServletException;
@@ -32,7 +33,11 @@ public class DeleteEmployeeCommand implements Controller {
         Long employeeId = ParamUtils.StringToLong(employeeIdStr);
         Employee employee = employeeService.getEmployeeById(employeeId);
         employeeService.deleteEmployee(employee);
-        ((ActionResponse)response).sendRedirect("/");
+        if (response instanceof ActionResponse) {
+            RedirectUtil.redirect(request, (ActionResponse) response, "/controller/viewAllDepartment");
+        }
+
+//        ((ActionResponse)response).sendRedirect("/");
 //        response.sendRedirect("viewDepartment?departmentId=" + employee.getDepartment().getId());
     }
 }

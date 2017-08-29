@@ -1,6 +1,7 @@
 package ua.com.controllers.impl;
 
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.util.PortalUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +11,9 @@ import ua.com.exception.ValidFieldException;
 import ua.com.model.Department;
 import ua.com.services.DepartmentService;
 import ua.com.utils.ParamUtils;
+import ua.com.utils.RedirectUtil;
 
 import javax.portlet.*;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component(value = "/controller/saveDepartment")
@@ -34,12 +33,17 @@ public class SaveDepartmentCommand implements Controller {
         Department department = getDepartmentFromRequest(request);
         try {
             departmentService.saveDepartment(department);
-            ((ActionResponse)response).sendRedirect("/");
+            if (response instanceof ActionResponse) {
+                RedirectUtil.redirect(request, (ActionResponse) response, "/controller/viewAllDepartment");
+            }
         } catch (ValidFieldException e) {
             LOG.debug("Not valid fields for save department: {}", department);
-            request.setAttribute("errorMessageMap", e.getErrorsMap());
-            request.setAttribute("uri", "/controller/viewRegistrationDepartmentForm");
-//            portletContext.getRequestDispatcher("/WEB-INF/jsp/saveDepartment.jsp").include(request, response);
+//            RedirectUtil.forwardValidException(request, "/WEB-INF/jsp/saveDepartment.jsp", e.getErrorsMap());
+
+//            PortletSession session = request.getPortletSession();
+//            session.setAttribute("sessionUri", "/WEB-INF/jsp/saveDepartment.jsp", PortletSession.APPLICATION_SCOPE);
+//            session.setAttribute("errorMessageMap", e.getErrorsMap(), PortletSession.APPLICATION_SCOPE);
+//            session.setAttribute("department", department, PortletSession.APPLICATION_SCOPE);
         }
     }
 
@@ -53,11 +57,3 @@ public class SaveDepartmentCommand implements Controller {
     }
 
 }
-
-// TODO portletResponse instanceof ActionResponse
-// if (portletResponse instanceof ActionResponse)
-//         {
-//         ActionResponse actionResponse = (ActionResponse)portletResponse;
-//         String redirectURL = actionResponse.encodeURL(url.toString());
-//         actionResponse.sendRedirect( redirectURL );
-//         }

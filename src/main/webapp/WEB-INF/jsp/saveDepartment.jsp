@@ -22,13 +22,13 @@
 
     <form id="defaultForm" method="post" class="form-horizontal col-lg-offset-2" action="${saveDepartment}">
         <input type="hidden" name="<portlet:namespace/>departmentId"
-               value="<c:out value="${param.departmentId == null ? department.id : param.departmentId}"/>">
+               value="<c:out value="${department.id}"/>">
 
         <div class="form-group">
             <label class="col-lg-3 control-label">Name</label>
             <div class="col-lg-5">
                 <input type="text" class="form-control" name="<portlet:namespace/>departmentName"
-                       value="<c:out value="${param.departmentName == null ? department.name : param.departmentName}"/>"/>
+                       value="<c:out value="${department.name}"/>"/>
                 <span name="name" class="text-danger">${errorMessageMap.name}</span>
             </div>
         </div>

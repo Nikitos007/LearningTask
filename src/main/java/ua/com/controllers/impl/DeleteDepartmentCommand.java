@@ -3,10 +3,13 @@ package ua.com.controllers.impl;
 import com.liferay.portal.util.PortalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.portlet.bind.PortletRequestUtils;
+import org.springframework.web.portlet.util.PortletUtils;
 import ua.com.controllers.Controller;
 import ua.com.model.Department;
 import ua.com.services.DepartmentService;
 import ua.com.utils.ParamUtils;
+import ua.com.utils.RedirectUtil;
 
 import javax.portlet.*;
 import javax.servlet.ServletException;
@@ -29,12 +32,12 @@ public class DeleteDepartmentCommand implements Controller {
         Long departmentId = ParamUtils.StringToLong(request.getParameter("departmentId"));
         Department department = new Department();
         department.setId(departmentId);
-        departmentService.delete(department);
+//        departmentService.delete(department);
+
         if (response instanceof ActionResponse) {
-            ActionResponse actionResponse = (ActionResponse)response;
-            actionResponse.sendRedirect("/WEB-INF/jsp/saveDepartment.jsp");
+            ActionResponse actionResponse = (ActionResponse) response;
+            actionResponse.setRenderParameter("uri", "/controller/viewAllDepartment");
+            actionResponse.sendRedirect("/");
         }
-        PortletSession session = request.getPortletSession();
-        session.setAttribute("doView","false", PortletSession.APPLICATION_SCOPE);
     }
 }
