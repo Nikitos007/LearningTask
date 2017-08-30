@@ -10,9 +10,6 @@ import ua.com.services.EmployeeService;
 import ua.com.utils.ParamUtils;
 
 import javax.portlet.*;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 

@@ -5,7 +5,6 @@ import ua.com.utils.validation.ValidationUniqueEmployeeEmail;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 
 @Entity
 @Table(name = "tbl_employees")
@@ -32,9 +31,10 @@ public class Employee implements Serializable {
 
     @NotNull(message = "Can not be null")
     @NotEmpty(message = "Can not be empty")
-    @Temporal(TemporalType.DATE)
+//    @Temporal(TemporalType.DATE)
+    @MatchPattern(pattern = "[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])", message = "Incorrect date (yyyy-MM-dd)")
     @Column(name = "hire_date")
-    private Date hireDate;
+    private String hireDate;
 
     @NotNull(message = "Can not be null")
     @NotEmpty(message = "Can not be empty")
@@ -80,11 +80,11 @@ public class Employee implements Serializable {
         this.surname = surname;
     }
 
-    public Date getHireDate() {
+    public String getHireDate() {
         return hireDate;
     }
 
-    public void setHireDate(Date hireDate) {
+    public void setHireDate(String hireDate) {
         this.hireDate = hireDate;
     }
 

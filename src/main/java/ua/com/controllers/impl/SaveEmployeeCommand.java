@@ -11,14 +11,9 @@ import ua.com.model.Employee;
 import ua.com.services.DepartmentService;
 import ua.com.services.EmployeeService;
 import ua.com.utils.ParamUtils;
-import ua.com.utils.RedirectUtil;
 
 import javax.portlet.*;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
 
 @Component(value = "/controller/saveEmployee")
 public class SaveEmployeeCommand implements Controller {
@@ -41,26 +36,18 @@ public class SaveEmployeeCommand implements Controller {
         try {
             employeeService.saveEmployee(employee);
             if (response instanceof ActionResponse) {
-                RedirectUtil.redirect(request, (ActionResponse) response, "/controller/viewAllDepartment");
+                ActionResponse actionResponse = (ActionResponse) response;
+                portletContext.setAttribute("uri", "/controller/viewDepartment");
+                portletContext.setAttribute("departmentId", employee.getDepartment().getId());
+                actionResponse.sendRedirect("/");
             }
-
-//            ((ActionResponse)response).sendRedirect("/");
-//            response.sendRedirect("viewDepartment?departmentId=" + employee.getDepartment().getId());
-
-
         } catch (ValidFieldException e) {
             LOG.debug("Not valid fields for save employee: {}", employee);
-
-//            request.setAttribute("errorMessageMap", e.getErrorsMap());
-//            request.setAttribute("employee", employee);
-//            request.setAttribute("departmentList", departmentService.viewAllDepartment());
-//            portletContext.getRequestDispatcher("/WEB-INF/jsp/saveEmployee.jsp").include(request, response);
-
-            PortletSession session = request.getPortletSession();
-            session.setAttribute("sessionUri", "/WEB-INF/jsp/saveEmployee.jsp", PortletSession.APPLICATION_SCOPE);
-            session.setAttribute("errorMessageMap", e.getErrorsMap(), PortletSession.APPLICATION_SCOPE);
-            session.setAttribute("employee", employee, PortletSession.APPLICATION_SCOPE);
-            session.setAttribute("departmentList", departmentService.viewAllDepartment(), PortletSession.APPLICATION_SCOPE);
+            portletContext.setAttribute("ValidFieldException", "employee");
+            portletContext.setAttribute("uri", "/WEB-INF/jsp/saveEmployee.jsp");
+            portletContext.setAttribute("errorMessageMap", e.getErrorsMap());
+            portletContext.setAttribute("employee", employee);
+            portletContext.setAttribute("departmentList", departmentService.viewAllDepartment());
         }
     }
 
@@ -68,7 +55,7 @@ public class SaveEmployeeCommand implements Controller {
         Long employeeId = ParamUtils.StringToLong(request.getParameter("employeeId"));
         String employeeName = ParamUtils.verifyString(request.getParameter("employeeName"));
         String employeeSurname = ParamUtils.verifyString(request.getParameter("employeeSurname"));
-        Date employeeHireDate = ParamUtils.verifyDate(request.getParameter("employeeHireDate"));
+        String employeeHireDate = ParamUtils.verifyString(request.getParameter("employeeHireDate"));
         String employeeEmail = ParamUtils.verifyString(request.getParameter("employeeEmail"));
         Integer employeeSalary = ParamUtils.StringToInteger(request.getParameter("employeeSalary"));
         Long employeeDepartmentId = ParamUtils.StringToLong(request.getParameter("employeeDepartmentId"));

@@ -32,7 +32,6 @@ public class EmployeeDaoHibernateImpl extends CRUDOperationsDaoHibernateImpl<Emp
 
 
     @Override
-    @Transactional(readOnly = true)
     public List<Employee> getByDepartmentId(Long departmentId) {
         List<Employee> employeeList = new ArrayList<>();
         String hql = "FROM Employee WHERE id_department = :departmentId";
@@ -45,7 +44,6 @@ public class EmployeeDaoHibernateImpl extends CRUDOperationsDaoHibernateImpl<Emp
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Employee getByEmail(String email) {
         Session session = sessionFactory.openSession();
         Criteria criteria = session.createCriteria(Employee.class);

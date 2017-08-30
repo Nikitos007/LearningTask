@@ -4,7 +4,6 @@
 <%@ page isELIgnored="false" %>
 
 
-
 <html>
 <head>
     <title>Departments</title>
@@ -34,7 +33,8 @@
                             <c:forEach items="${departmentList}" var="department">
 
                                 <portlet:renderURL var="updateDepartment">
-                                    <portlet:param name="uri" value="/controller/viewRegistrationDepartmentForm"></portlet:param>
+                                    <portlet:param name="uri"
+                                                   value="/controller/viewRegistrationDepartmentForm"></portlet:param>
                                     <portlet:param name="departmentId" value="${department.id}"/>
                                 </portlet:renderURL>
 

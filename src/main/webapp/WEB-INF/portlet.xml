@@ -9,7 +9,7 @@
         <portlet-name>Portlet</portlet-name>
         <display-name>Portlet</display-name>
         <portlet-class>ua.com.controllers.impl.MainPortlet</portlet-class>
-        <expiration-cache>0</expiration-cache>
+        <expiration-cache>1</expiration-cache>
         <supports>
             <mime-type>text/html</mime-type>
             <portlet-mode>VIEW</portlet-mode>

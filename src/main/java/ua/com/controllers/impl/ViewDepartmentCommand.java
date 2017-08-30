@@ -6,9 +6,6 @@ import ua.com.controllers.Controller;
 import ua.com.services.EmployeeService;
 
 import javax.portlet.*;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -26,7 +23,11 @@ public class ViewDepartmentCommand implements Controller {
 
     @Override
     public <T extends PortletRequest, E extends PortletResponse> void execute(T request, E response, PortletContext portletContext) throws IOException, PortletException {
-        Long departmentId = Long.parseLong(request.getParameter("departmentId"));
+        Long departmentId = (Long) request.getAttribute("departmentId");
+        if (departmentId == null) {
+            String departmentIdStr = request.getParameter("departmentId");
+            departmentId = Long.parseLong(departmentIdStr);
+        }
         request.setAttribute("employeeList", employeeService.viewEmployeeByDepartmentId(departmentId));
         PortletRequestDispatcher requestDispatcher = portletContext.getRequestDispatcher("/WEB-INF/jsp/aboutDepartment.jsp");
         requestDispatcher.include(request, response);

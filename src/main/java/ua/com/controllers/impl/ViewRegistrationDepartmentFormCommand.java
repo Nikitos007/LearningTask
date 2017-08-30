@@ -8,14 +8,8 @@ import ua.com.services.DepartmentService;
 import ua.com.utils.ParamUtils;
 
 import javax.portlet.*;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/**
- * Created on 13.07.17.
- */
 @Component(value = "/controller/viewRegistrationDepartmentForm")
 public class ViewRegistrationDepartmentFormCommand implements Controller {
 

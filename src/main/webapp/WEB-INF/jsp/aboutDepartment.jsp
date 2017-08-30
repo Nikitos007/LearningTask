@@ -43,15 +43,21 @@
                                     <td>${employee.getSalary()}</td>
                                     <td>
                                         <portlet:renderURL var="updateEmployee">
-                                            <portlet:param name="uri" value="/controller/viewRegistrationEmployeeForm"></portlet:param>
+                                            <portlet:param name="uri"
+                                                           value="/controller/viewRegistrationEmployeeForm"></portlet:param>
                                             <portlet:param name="employeeId" value="${employee.getId()}"/>
+                                            <portlet:param name="departmentId"
+                                                           value="${employee.getDepartment().getId()}"/>
                                         </portlet:renderURL>
                                         <a href="${updateEmployee}">Update</a>
                                     </td>
                                     <td>
                                         <portlet:actionURL var="deleteDepartment">
-                                            <portlet:param name="uri" value="/controller/deleteEmployee"></portlet:param>
+                                            <portlet:param name="uri"
+                                                           value="/controller/deleteEmployee"></portlet:param>
                                             <portlet:param name="employeeId" value="${employee.getId()}"/>
+                                            <portlet:param name="departmentId"
+                                                           value="${employee.getDepartment().getId()}"/>
                                         </portlet:actionURL>
                                         <a href="${deleteDepartment}">Delete</a>
                                     </td>

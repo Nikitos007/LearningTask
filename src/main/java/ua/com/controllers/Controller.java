@@ -1,9 +1,9 @@
 package ua.com.controllers;
 
-import javax.portlet.*;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.portlet.PortletContext;
+import javax.portlet.PortletException;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
 import java.io.IOException;
 import java.io.Serializable;
 

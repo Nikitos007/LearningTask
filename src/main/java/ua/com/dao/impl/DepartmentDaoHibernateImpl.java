@@ -26,7 +26,6 @@ public class DepartmentDaoHibernateImpl extends CRUDOperationsDaoHibernateImpl<D
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Department getByName(String name) {
         Session session = sessionFactory.openSession();
         Criteria criteria = session.createCriteria(Department.class);

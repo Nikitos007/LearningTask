@@ -1,7 +1,5 @@
 package ua.com.controllers.impl;
 
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.util.bridges.mvc.MVCPortlet;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -9,16 +7,12 @@ import org.springframework.web.portlet.context.PortletApplicationContextUtils;
 import ua.com.controllers.Controller;
 import ua.com.model.Department;
 import ua.com.model.Employee;
-import ua.com.utils.ParamUtils;
 
 import javax.portlet.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
-/**
- * Created on 17.08.17.
- */
 @Component
 public class MainPortlet extends GenericPortlet {
 
@@ -35,76 +29,71 @@ public class MainPortlet extends GenericPortlet {
     @Override
     public void processAction(ActionRequest request, ActionResponse response) throws PortletException, IOException {
         include(request, response);
-//        request.setAttribute("Attribute", "true");
-//        response.setRenderParameter("RenderParameter", "true");
-
     }
 
     @Override
     public void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {
-        chooseAction(request, response);
-//        String Attribute = (String) request.getAttribute("Attribute");
-//        String RenderParameter = request.getParameter("RenderParameter");
-    }
-
-    private void chooseAction(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+        String validException = (String) getPortletContext().getAttribute("ValidFieldException");
+        removeAttributeFromContext("ValidFieldException");
+        request.setAttribute("departmentId", getPortletContext().getAttribute("departmentId"));
+        removeAttributeFromContext("departmentId");
+        if (validException != null) {
+            handleValidException(request, response, validException);
+            return;
+        }
         include(request, response);
-
-//        String sessionUri = (String)session.getAttribute("sessionUri", PortletSession.APPLICATION_SCOPE);
-//        Map<String, String> errorMessageMap = (Map<String, String>)session.getAttribute("errorMessageMap", PortletSession.APPLICATION_SCOPE);
-//
-//        if (errorMessageMap != null && errorMessageMap.size() > 0) {
-//            Department department = (Department) session.getAttribute("department", PortletSession.APPLICATION_SCOPE);
-//            Employee employee = (Employee) session.getAttribute("employee", PortletSession.APPLICATION_SCOPE);
-//            ArrayList<Department> departmentList = (ArrayList<Department>) session.getAttribute("departmentList", PortletSession.APPLICATION_SCOPE);
-//            if(department != null) {
-//                handlDepartmentValidException(request, errorMessageMap, department);
-//            } else {
-//                handlEmployeeValidException(request, errorMessageMap, employee, departmentList);
-//            }
-//            getPortletContext().getRequestDispatcher(sessionUri).include(request, response);
-//            removeSession();
-//        } else {
-//            include(request, response, sessionUri);
-//        }
     }
 
-
+    private void handleValidException(RenderRequest request, RenderResponse response, String validException) throws PortletException, IOException {
+        switch (validException) {
+            case "department": {
+                String uri = (String) getPortletContext().getAttribute("uri");
+                Map<String, String> errorMessageMap = (Map<String, String>) getPortletContext().getAttribute("errorMessageMap");
+                Department department = (Department) getPortletContext().getAttribute("department");
+                removeAttributeFromContext("uri");
+                removeAttributeFromContext("errorMessageMap");
+                removeAttributeFromContext("department");
+                request.setAttribute("errorMessageMap", errorMessageMap);
+                request.setAttribute("department", department);
+                getPortletContext().getRequestDispatcher(uri).include(request, response);
+                break;
+            }
+            case "employee": {
+                String uri = (String) getPortletContext().getAttribute("uri");
+                Map<String, String> errorMessageMap = (Map<String, String>) getPortletContext().getAttribute("errorMessageMap");
+                Employee employee = (Employee) getPortletContext().getAttribute("employee");
+                ArrayList<Department> departmentList = (ArrayList<Department>) getPortletContext().getAttribute("departmentList");
+                removeAttributeFromContext("uri");
+                removeAttributeFromContext("errorMessageMap");
+                removeAttributeFromContext("employee");
+                removeAttributeFromContext("departmentList");
+                request.setAttribute("errorMessageMap", errorMessageMap);
+                request.setAttribute("employee", employee);
+                request.setAttribute("departmentList", departmentList);
+                getPortletContext().getRequestDispatcher(uri).include(request, response);
+                break;
+            }
+        }
+    }
 
     private <T extends PortletRequest, E extends PortletResponse> void include(T request, E response) throws IOException, PortletException {
+
+        PortletSession portletSession = request.getPortletSession();
+
         try {
-            String action = ParamUtil.getString(request, "uri");
+            String action = request.getParameter("uri");
+            if (action == null) {
+                action = (String) getPortletContext().getAttribute("uri");
+                removeAttributeFromContext("uri");
+            }
             controller = (Controller) applicationContext.getBean(action);
-        } catch (NullPointerException | BeansException e) {
+        } catch (IllegalArgumentException | BeansException e) {
             controller = (Controller) applicationContext.getBean("/controller/viewAllDepartment");
         }
         controller.execute(request, response, getPortletContext());
     }
 
-
-
-
-//    private void handlDepartmentValidException(RenderRequest request, Map<String, String> errorMessageMap, Department department) {
-//        request.setAttribute("errorMessageMap", errorMessageMap);
-//        request.setAttribute("department", department);
-//    }
-//
-//    private void handlEmployeeValidException(RenderRequest request, Map<String, String> errorMessageMap, Employee employee, ArrayList<Department> departmentList) {
-//        request.setAttribute("errorMessageMap", errorMessageMap);
-//        request.setAttribute("employee", employee);
-//        request.setAttribute("departmentList", departmentList);
-//    }
-//
-//    private void removeSession() {
-//        session.removeAttribute("sessionUri", PortletSession.APPLICATION_SCOPE);
-//        session.removeAttribute("errorMessageMap", PortletSession.APPLICATION_SCOPE);
-//        session.removeAttribute("department", PortletSession.APPLICATION_SCOPE);
-//        session.removeAttribute("employee", PortletSession.APPLICATION_SCOPE);
-//        session.removeAttribute("departmentList", PortletSession.APPLICATION_SCOPE);
-//    }
-
-
+    private void removeAttributeFromContext(String name) {
+        getPortletContext().removeAttribute(name);
+    }
 }
-
-
-// TODO <aui:input type="text" name="industry" value="<%= industryFilter %>" />

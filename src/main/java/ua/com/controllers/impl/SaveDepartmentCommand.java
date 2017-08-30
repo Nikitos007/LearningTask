@@ -1,7 +1,5 @@
 package ua.com.controllers.impl;
 
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.util.PortalUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +9,6 @@ import ua.com.exception.ValidFieldException;
 import ua.com.model.Department;
 import ua.com.services.DepartmentService;
 import ua.com.utils.ParamUtils;
-import ua.com.utils.RedirectUtil;
 
 import javax.portlet.*;
 import java.io.IOException;
@@ -34,22 +31,22 @@ public class SaveDepartmentCommand implements Controller {
         try {
             departmentService.saveDepartment(department);
             if (response instanceof ActionResponse) {
-                RedirectUtil.redirect(request, (ActionResponse) response, "/controller/viewAllDepartment");
+                ActionResponse actionResponse = (ActionResponse) response;
+                portletContext.setAttribute("uri", "/controller/viewAllDepartment");
+                actionResponse.sendRedirect("/");
             }
         } catch (ValidFieldException e) {
             LOG.debug("Not valid fields for save department: {}", department);
-//            RedirectUtil.forwardValidException(request, "/WEB-INF/jsp/saveDepartment.jsp", e.getErrorsMap());
-
-//            PortletSession session = request.getPortletSession();
-//            session.setAttribute("sessionUri", "/WEB-INF/jsp/saveDepartment.jsp", PortletSession.APPLICATION_SCOPE);
-//            session.setAttribute("errorMessageMap", e.getErrorsMap(), PortletSession.APPLICATION_SCOPE);
-//            session.setAttribute("department", department, PortletSession.APPLICATION_SCOPE);
+            portletContext.setAttribute("ValidFieldException", "department");
+            portletContext.setAttribute("uri", "/WEB-INF/jsp/saveDepartment.jsp");
+            portletContext.setAttribute("errorMessageMap", e.getErrorsMap());
+            portletContext.setAttribute("department", department);
         }
     }
 
     private <T extends PortletRequest> Department getDepartmentFromRequest(T request) {
-        String departmentIdStr = ParamUtil.getString(request, "departmentId");
-        String departmentName = ParamUtil.getString(request, "departmentName");
+        String departmentIdStr = request.getParameter("departmentId");
+        String departmentName = request.getParameter("departmentName");
         Department department = new Department();
         department.setId(ParamUtils.StringToLong(departmentIdStr));
         department.setName(ParamUtils.verifyString(departmentName));
