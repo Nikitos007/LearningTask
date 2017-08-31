@@ -43,11 +43,10 @@ public class SaveEmployeeCommand implements Controller {
             }
         } catch (ValidFieldException e) {
             LOG.debug("Not valid fields for save employee: {}", employee);
-            portletContext.setAttribute("ValidFieldException", "employee");
-            portletContext.setAttribute("uri", "/WEB-INF/jsp/saveEmployee.jsp");
-            portletContext.setAttribute("errorMessageMap", e.getErrorsMap());
-            portletContext.setAttribute("employee", employee);
-            portletContext.setAttribute("departmentList", departmentService.viewAllDepartment());
+            request.setAttribute("errorMessageMap", e.getErrorsMap());
+            request.setAttribute("employee", employee);
+            request.setAttribute("departmentList", departmentService.viewAllDepartment());
+            request.setAttribute("jspView", "/WEB-INF/jsp/saveEmployee.jsp");
         }
     }
 

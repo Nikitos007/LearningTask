@@ -31,6 +31,7 @@ public class DeleteEmployeeCommand implements Controller {
         employeeService.deleteEmployee(employee);
         if (response instanceof ActionResponse) {
             ActionResponse actionResponse = (ActionResponse) response;
+
             portletContext.setAttribute("uri", "/controller/viewDepartment");
             portletContext.setAttribute("departmentId", departmentId);
             actionResponse.sendRedirect("/");

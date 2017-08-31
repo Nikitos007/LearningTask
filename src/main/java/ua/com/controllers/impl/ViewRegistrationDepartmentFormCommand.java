@@ -29,7 +29,6 @@ public class ViewRegistrationDepartmentFormCommand implements Controller {
             department.setName(department.getName());
             request.setAttribute("department", department);
         }
-        PortletRequestDispatcher requestDispatcher = portletContext.getRequestDispatcher("/WEB-INF/jsp/saveDepartment.jsp");
-        requestDispatcher.include(request, response);
+        request.setAttribute("jspView", "/WEB-INF/jsp/saveDepartment.jsp");
     }
 }

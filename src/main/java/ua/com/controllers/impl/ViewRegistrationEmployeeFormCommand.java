@@ -36,7 +36,6 @@ public class ViewRegistrationEmployeeFormCommand implements Controller {
         }
         List<Department> departmentList = departmentService.viewAllDepartment();
         request.setAttribute("departmentList", departmentList);
-        PortletRequestDispatcher requestDispatcher = portletContext.getRequestDispatcher("/WEB-INF/jsp/saveEmployee.jsp");
-        requestDispatcher.include(request, response);
+        request.setAttribute("jspView", "/WEB-INF/jsp/saveEmployee.jsp");
     }
 }

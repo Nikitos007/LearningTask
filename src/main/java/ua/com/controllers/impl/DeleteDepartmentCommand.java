@@ -28,7 +28,6 @@ public class DeleteDepartmentCommand implements Controller {
         departmentService.delete(department);
         if (response instanceof ActionResponse) {
             ActionResponse actionResponse = (ActionResponse) response;
-            portletContext.setAttribute("uri", "/controller/viewAllDepartment");
             actionResponse.sendRedirect("/");
         }
     }

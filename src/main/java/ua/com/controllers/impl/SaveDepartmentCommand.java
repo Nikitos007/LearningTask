@@ -32,15 +32,13 @@ public class SaveDepartmentCommand implements Controller {
             departmentService.saveDepartment(department);
             if (response instanceof ActionResponse) {
                 ActionResponse actionResponse = (ActionResponse) response;
-                portletContext.setAttribute("uri", "/controller/viewAllDepartment");
                 actionResponse.sendRedirect("/");
             }
         } catch (ValidFieldException e) {
             LOG.debug("Not valid fields for save department: {}", department);
-            portletContext.setAttribute("ValidFieldException", "department");
-            portletContext.setAttribute("uri", "/WEB-INF/jsp/saveDepartment.jsp");
-            portletContext.setAttribute("errorMessageMap", e.getErrorsMap());
-            portletContext.setAttribute("department", department);
+            request.setAttribute("errorMessageMap", e.getErrorsMap());
+            request.setAttribute("department", department);
+            request.setAttribute("jspView", "/WEB-INF/jsp/saveDepartment.jsp");
         }
     }
 

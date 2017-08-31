@@ -29,7 +29,6 @@ public class ViewDepartmentCommand implements Controller {
             departmentId = Long.parseLong(departmentIdStr);
         }
         request.setAttribute("employeeList", employeeService.viewEmployeeByDepartmentId(departmentId));
-        PortletRequestDispatcher requestDispatcher = portletContext.getRequestDispatcher("/WEB-INF/jsp/aboutDepartment.jsp");
-        requestDispatcher.include(request, response);
+        request.setAttribute("jspView", "/WEB-INF/jsp/aboutDepartment.jsp");
     }
 }

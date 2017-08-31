@@ -27,7 +27,6 @@ public class ViewAllDepartmentCommand implements Controller {
     public <T extends PortletRequest, E extends PortletResponse> void execute(T request, E response, PortletContext portletContext) throws IOException, PortletException {
         List<Department> departmentList = departmentService.viewAllDepartment();
         request.setAttribute("departmentList", departmentList);
-        PortletRequestDispatcher requestDispatcher = portletContext.getRequestDispatcher("/WEB-INF/jsp/viewAllDepartment.jsp");
-        requestDispatcher.include(request, response);
+        request.setAttribute("jspView", "/WEB-INF/jsp/viewAllDepartment.jsp");
     }
 }
