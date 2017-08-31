@@ -1,5 +1,6 @@
 package ua.com.dao.impl;
 
+import org.hibernate.CacheMode;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -46,7 +47,9 @@ public abstract class CRUDOperationsDaoHibernateImpl<T, E extends Number> implem
     @Override
     public List<T> findAll() {
         String hql = "FROM " + genericClass.getSimpleName();
+
         Session session = sessionFactory.openSession();
+        session.setCacheMode(CacheMode.IGNORE);
         Query query = session.createQuery(hql);
         List<T> valueList = (List<T>) query.list();
         session.close();
@@ -56,6 +59,7 @@ public abstract class CRUDOperationsDaoHibernateImpl<T, E extends Number> implem
     @Override
     public T getById(E id) {
         Session session = sessionFactory.openSession();
+        session.setCacheMode(CacheMode.IGNORE);
         T value = (T) session.get(genericClass, id);
         session.close();
         return value;
@@ -64,15 +68,18 @@ public abstract class CRUDOperationsDaoHibernateImpl<T, E extends Number> implem
     @Override
     public void save(T entity) {
         Session session = sessionFactory.openSession();
+        session.setCacheMode(CacheMode.IGNORE);
         session.beginTransaction();
         session.saveOrUpdate(entity);
         session.getTransaction().commit();
         session.close();
+
     }
 
     @Override
     public void delete(T entity) {
         Session session = sessionFactory.openSession();
+        session.setCacheMode(CacheMode.IGNORE);
         session.beginTransaction();
         session.delete(entity);
         session.getTransaction().commit();

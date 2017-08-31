@@ -2,6 +2,8 @@ package ua.com.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import ua.com.dao.EmployeeDao;
 import ua.com.exception.ValidFieldException;
 import ua.com.model.Employee;
@@ -11,6 +13,7 @@ import ua.com.utils.validation.ValidationOval;
 import java.util.List;
 
 @Service
+@Transactional(isolation = Isolation.SERIALIZABLE)
 public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
@@ -20,15 +23,18 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeDao.getByDepartmentId(departmentId);
     }
 
+    @Transactional
     public void saveEmployee(Employee employee) throws ValidFieldException {
         ValidationOval.fieldsValidation(employee);
         employeeDao.save(employee);
     }
 
+    @Transactional
     public void deleteEmployee(Employee employee) {
         employeeDao.delete(employee);
     }
 
+    @Transactional
     public Employee getEmployeeById(Long employeeId) {
         return employeeDao.getById(employeeId);
     }
