@@ -171,9 +171,10 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc-portlet</artifactId>
-            <version>2.5</version>
+            <version>${spring.version}</version>
             <scope>provided</scope>
         </dependency>
+
 
     </dependencies>
 

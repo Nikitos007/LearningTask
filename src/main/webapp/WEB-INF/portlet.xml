@@ -8,7 +8,12 @@
     <portlet id="Portlet">
         <portlet-name>Portlet</portlet-name>
         <display-name>Portlet</display-name>
-        <portlet-class>ua.com.controllers.impl.MainPortlet</portlet-class>
+        <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
+        <init-param>
+            <name>contextConfigLocation</name>
+            <value>classpath:/springBean.xml</value>
+        </init-param>
+
         <expiration-cache>0</expiration-cache>
         <supports>
             <mime-type>text/html</mime-type>
