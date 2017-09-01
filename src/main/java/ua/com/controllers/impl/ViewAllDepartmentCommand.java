@@ -6,7 +6,10 @@ import ua.com.controllers.Controller;
 import ua.com.model.Department;
 import ua.com.services.DepartmentService;
 
-import javax.portlet.*;
+import javax.portlet.PortletContext;
+import javax.portlet.PortletException;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
 import java.io.IOException;
 import java.util.List;
 

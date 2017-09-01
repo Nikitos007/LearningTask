@@ -13,7 +13,6 @@ import ua.com.utils.validation.ValidationOval;
 import java.util.List;
 
 @Service
-@Transactional(isolation = Isolation.SERIALIZABLE)
 public class DepartmentServiceImpl implements DepartmentService {
 
     private final DepartmentDao departmentDao;

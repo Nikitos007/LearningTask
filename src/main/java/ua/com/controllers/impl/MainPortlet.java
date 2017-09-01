@@ -5,13 +5,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.web.portlet.context.PortletApplicationContextUtils;
 import ua.com.controllers.Controller;
-import ua.com.model.Department;
-import ua.com.model.Employee;
 
 import javax.portlet.*;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Map;
 
 @Component
 public class MainPortlet extends GenericPortlet {
@@ -35,13 +31,14 @@ public class MainPortlet extends GenericPortlet {
     @Override
     public void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {
         Long departmentId = (Long) getPortletContext().getAttribute("departmentId");
+        getPortletContext().removeAttribute("departmentId");
         request.setAttribute("departmentId", departmentId);
 
-        String jspView = (String)request.getAttribute("jspView");
+        String jspView = (String) request.getAttribute("jspView");
         if (jspView == null) {
             include(request, response);
         }
-        jspView = (String)request.getAttribute("jspView");
+        jspView = (String) request.getAttribute("jspView");
         getPortletContext().getRequestDispatcher(jspView).include(request, response);
     }
 
@@ -52,6 +49,7 @@ public class MainPortlet extends GenericPortlet {
         }
         if (action == null) {
             action = (String) getPortletContext().getAttribute("uri");
+            getPortletContext().removeAttribute("uri");
         }
         return action;
     }

@@ -7,7 +7,10 @@ import ua.com.model.Department;
 import ua.com.services.DepartmentService;
 import ua.com.utils.ParamUtils;
 
-import javax.portlet.*;
+import javax.portlet.PortletContext;
+import javax.portlet.PortletException;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletResponse;
 import java.io.IOException;
 
 @Component(value = "/controller/viewRegistrationDepartmentForm")

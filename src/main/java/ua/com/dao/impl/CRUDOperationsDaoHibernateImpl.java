@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import ua.com.dao.CRUDOperationsDao;
 import ua.com.utils.HibernateSessionFactory;
 
@@ -25,6 +24,7 @@ public abstract class CRUDOperationsDaoHibernateImpl<T, E extends Number> implem
     private static final Logger LOG = LoggerFactory.getLogger(CRUDOperationsDaoHibernateImpl.class);
 
     private Class<T> genericClass;
+
     private SessionFactory sessionFactory;
 
     @Autowired
@@ -47,7 +47,6 @@ public abstract class CRUDOperationsDaoHibernateImpl<T, E extends Number> implem
     @Override
     public List<T> findAll() {
         String hql = "FROM " + genericClass.getSimpleName();
-
         Session session = sessionFactory.openSession();
         session.setCacheMode(CacheMode.IGNORE);
         Query query = session.createQuery(hql);

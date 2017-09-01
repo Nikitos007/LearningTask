@@ -46,6 +46,7 @@ public class SaveEmployeeCommand implements Controller {
             request.setAttribute("errorMessageMap", e.getErrorsMap());
             request.setAttribute("employee", employee);
             request.setAttribute("departmentList", departmentService.viewAllDepartment());
+            portletContext.setAttribute("departmentId", employee.getDepartment().getId());
             request.setAttribute("jspView", "/WEB-INF/jsp/saveEmployee.jsp");
         }
     }

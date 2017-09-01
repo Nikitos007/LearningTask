@@ -5,8 +5,6 @@
 <liferay-portlet-app>
     <portlet>
         <portlet-name>Portlet</portlet-name>
-        <!--<requires-namespaced-parameters>false</requires-namespaced-parameters>-->
-        <!--<icon>/icon.png</icon>-->
     </portlet>
 
     <role-mapper>
