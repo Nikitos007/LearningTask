@@ -4,16 +4,16 @@
 <%@ page isELIgnored="false" %>
 
 <portlet:renderURL var="departments">
-    <portlet:param name="uri" value="/controller/viewAllDepartment"/>
+    <portlet:param name="action" value="department/viewDepartments"/>
 </portlet:renderURL>
 
 <portlet:renderURL var="newDepartment">
-    <portlet:param name="uri" value="/controller/viewRegistrationDepartmentForm"/>
+    <portlet:param name="action" value="department/viewDepartmentSaveForm"/>
     <portlet:param name="departmentId" value=" "/>
 </portlet:renderURL>
 
 <portlet:renderURL var="newEmployee">
-    <portlet:param name="uri" value="/controller/viewRegistrationEmployeeForm"/>
+    <portlet:param name="action" value="employee/viewEmployeeSaveForm"/>
     <portlet:param name="employeeId" value=" "/>
 </portlet:renderURL>
 

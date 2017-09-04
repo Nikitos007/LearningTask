@@ -38,7 +38,7 @@ public class SaveDepartmentCommand implements Controller {
             LOG.debug("Not valid fields for save department: {}", department);
             request.setAttribute("errorMessageMap", e.getErrorsMap());
             request.setAttribute("department", department);
-            request.setAttribute("jspView", "/WEB-INF/jsp/saveDepartment.jsp");
+            request.setAttribute("jspView", "/WEB-INF/jsp/saveDepartmentForm.jsp");
         }
     }
 

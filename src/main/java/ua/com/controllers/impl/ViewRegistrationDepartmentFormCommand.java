@@ -32,6 +32,6 @@ public class ViewRegistrationDepartmentFormCommand implements Controller {
             department.setName(department.getName());
             request.setAttribute("department", department);
         }
-        request.setAttribute("jspView", "/WEB-INF/jsp/saveDepartment.jsp");
+        request.setAttribute("jspView", "/WEB-INF/jsp/saveDepartmentForm.jsp");
     }
 }

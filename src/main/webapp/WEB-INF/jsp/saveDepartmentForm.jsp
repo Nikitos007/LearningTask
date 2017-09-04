@@ -4,7 +4,7 @@
 <%@ page isELIgnored="false" %>
 
 <portlet:actionURL var="saveDepartment">
-    <portlet:param name="uri" value="/controller/saveDepartment"/>
+    <portlet:param name="action" value="department/saveDepartment"/>
 </portlet:actionURL>
 
 <html>
@@ -20,7 +20,8 @@
     <h1 class="text-center">Create or Update Department</h1>
 
 
-    <form id="defaultForm" method="post" class="form-horizontal col-lg-offset-2" action="${saveDepartment}">
+    <form id="defaultForm" method="post" class="form-horizontal col-lg-offset-2" action="${saveDepartment}"
+          modelAttribute="department" name="department">
         <input type="hidden" name="<portlet:namespace/>departmentId"
                value="<c:out value="${department.id}"/>">
 

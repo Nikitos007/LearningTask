@@ -33,18 +33,17 @@
                             <c:forEach items="${departmentList}" var="department">
 
                                 <portlet:renderURL var="updateDepartment">
-                                    <portlet:param name="uri"
-                                                   value="/controller/viewRegistrationDepartmentForm"></portlet:param>
+                                    <portlet:param name="action" value="department/viewDepartmentSaveForm"></portlet:param>
                                     <portlet:param name="departmentId" value="${department.id}"/>
                                 </portlet:renderURL>
 
                                 <portlet:actionURL var="deleteDepartment">
-                                    <portlet:param name="uri" value="/controller/deleteDepartment"></portlet:param>
+                                    <portlet:param name="action" value="department/deleteDepartment"></portlet:param>
                                     <portlet:param name="departmentId" value="${department.id}"/>
                                 </portlet:actionURL>
 
                                 <portlet:renderURL var="viewEmployee">
-                                    <portlet:param name="uri" value="/controller/viewDepartment"></portlet:param>
+                                    <portlet:param name="action" value="employee/viewEmployees"></portlet:param>
                                     <portlet:param name="departmentId" value="${department.id}"/>
                                 </portlet:renderURL>
 
