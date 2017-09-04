@@ -7,7 +7,7 @@ public class ParamUtils {
     public static Long StringToLong(String value) {
         try {
             return Long.valueOf(value.trim());
-        } catch (NumberFormatException e) {
+        } catch (NullPointerException | NumberFormatException e) {
             return null;
         }
     }
@@ -15,7 +15,7 @@ public class ParamUtils {
     public static Integer StringToInteger(String employeeSalary) {
         try {
             return Integer.valueOf(employeeSalary.trim());
-        } catch (NumberFormatException e) {
+        } catch (NullPointerException | NumberFormatException e) {
             return null;
         }
     }
@@ -23,7 +23,7 @@ public class ParamUtils {
     public static Date verifyDate(String employeeHireDateStr) {
         try {
             return Date.valueOf(employeeHireDateStr.trim());
-        } catch (IllegalArgumentException e) {
+        } catch (NullPointerException | IllegalArgumentException e) {
             return null;
         }
     }

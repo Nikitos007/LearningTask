@@ -33,7 +33,8 @@
                             <c:forEach items="${departmentList}" var="department">
 
                                 <portlet:renderURL var="updateDepartment">
-                                    <portlet:param name="action" value="department/viewDepartmentSaveForm"></portlet:param>
+                                    <portlet:param name="action"
+                                                   value="department/viewDepartmentSaveForm"></portlet:param>
                                     <portlet:param name="departmentId" value="${department.id}"/>
                                 </portlet:renderURL>
 

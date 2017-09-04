@@ -22,13 +22,14 @@
 
     <form id="defaultForm" method="post" class="form-horizontal col-lg-offset-2" action="${saveDepartment}"
           modelAttribute="department" name="department">
-        <input type="hidden" name="<portlet:namespace/>departmentId"
+
+        <input type="hidden" name="<portlet:namespace/>id"
                value="<c:out value="${department.id}"/>">
 
         <div class="form-group">
             <label class="col-lg-3 control-label">Name</label>
             <div class="col-lg-5">
-                <input type="text" class="form-control" name="<portlet:namespace/>departmentName"
+                <input type="text" class="form-control" name="<portlet:namespace/>name"
                        value="<c:out value="${department.name}"/>"/>
                 <span name="name" class="text-danger">${errorMessageMap.name}</span>
             </div>

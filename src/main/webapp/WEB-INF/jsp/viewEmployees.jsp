@@ -43,21 +43,20 @@
                                     <td>${employee.getSalary()}</td>
                                     <td>
                                         <portlet:renderURL var="updateEmployee">
-                                            <portlet:param name="uri"
-                                                           value="/controller/viewRegistrationEmployeeForm"></portlet:param>
-                                            <portlet:param name="employeeId" value="${employee.getId()}"/>
-                                            <portlet:param name="departmentId"
-                                                           value="${employee.getDepartment().getId()}"/>
+                                            <portlet:param name="action"
+                                                           value="employee/viewEmployeeSaveForm"></portlet:param>
+                                            <portlet:param name="employeeId" value="${employee.id}"/>
+                                            <portlet:param name="departmentId" value="${employee.department.id}"/>
                                         </portlet:renderURL>
                                         <a href="${updateEmployee}">Update</a>
                                     </td>
                                     <td>
                                         <portlet:actionURL var="deleteDepartment">
-                                            <portlet:param name="uri"
-                                                           value="/controller/deleteEmployee"></portlet:param>
-                                            <portlet:param name="employeeId" value="${employee.getId()}"/>
+                                            <portlet:param name="action"
+                                                           value="employee/deleteEmployee"></portlet:param>
+                                            <portlet:param name="employeeId" value="${employee.id}"/>
                                             <portlet:param name="departmentId"
-                                                           value="${employee.getDepartment().getId()}"/>
+                                                           value="${employee.department.id}"/>
                                         </portlet:actionURL>
                                         <a href="${deleteDepartment}">Delete</a>
                                     </td>

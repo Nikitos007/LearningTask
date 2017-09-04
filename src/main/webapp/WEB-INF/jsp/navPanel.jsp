@@ -9,12 +9,10 @@
 
 <portlet:renderURL var="newDepartment">
     <portlet:param name="action" value="department/viewDepartmentSaveForm"/>
-    <portlet:param name="departmentId" value=" "/>
 </portlet:renderURL>
 
 <portlet:renderURL var="newEmployee">
     <portlet:param name="action" value="employee/viewEmployeeSaveForm"/>
-    <portlet:param name="employeeId" value=" "/>
 </portlet:renderURL>
 
 <div class="container-fluid">
