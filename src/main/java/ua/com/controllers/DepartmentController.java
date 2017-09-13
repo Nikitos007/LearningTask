@@ -42,7 +42,7 @@ public class DepartmentController {
         List<Department> departmentList = departmentService.viewAllDepartment();
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("departmentList", departmentList);
-        modelAndView.setViewName("viewAllDepartment");
+        modelAndView.setViewName("index");
         return modelAndView;
     }
 
