@@ -1,10 +1,12 @@
-package ua.com.model;
+package ua.com.models;
 
 import net.sf.oval.constraint.*;
-import ua.com.utils.validation.ValidationUniqueEmployeeEmail;
+        import org.springframework.format.annotation.DateTimeFormat;
+//        import ua.com.utils.validation.ValidationUniqueEmployeeEmail;
 
-import javax.persistence.*;
-import java.io.Serializable;
+        import javax.persistence.*;
+        import java.io.Serializable;
+        import java.util.Date;
 
 @Entity
 @Table(name = "tbl_employees")
@@ -13,7 +15,7 @@ public class Employee implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_employee")
-    private Long id;
+    private Long employeeId;
 
     @NotNull(message = "Can not be null")
     @NotEmpty(message = "Can not be empty")
@@ -31,15 +33,15 @@ public class Employee implements Serializable {
 
     @NotNull(message = "Can not be null")
     @NotEmpty(message = "Can not be empty")
-//    @Temporal(TemporalType.DATE)
-    @MatchPattern(pattern = "[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])", message = "Incorrect date (yyyy-MM-dd)")
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "hire_date")
-    private String hireDate;
+    private Date hireDate;
 
     @NotNull(message = "Can not be null")
     @NotEmpty(message = "Can not be empty")
     @Length(min = 2, max = 100, message = "Length should be between 2 and 100")
-    @CheckWith(value = ValidationUniqueEmployeeEmail.class, message = "This email has already exist")
+//    @CheckWith(value = ValidationUniqueEmployeeEmail.class, message = "This email has already exist")
     @MatchPattern(pattern = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}$", message = "Incorrect email")
     @Column(name = "email", length = 100)
     private String email;
@@ -55,13 +57,12 @@ public class Employee implements Serializable {
     @JoinColumn(name = "id_department")
     private Department department;
 
-
-    public Long getId() {
-        return id;
+    public Long getEmployeeId() {
+        return employeeId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setEmployeeId(Long employeeId) {
+        this.employeeId = employeeId;
     }
 
     public String getName() {
@@ -80,11 +81,11 @@ public class Employee implements Serializable {
         this.surname = surname;
     }
 
-    public String getHireDate() {
+    public Date getHireDate() {
         return hireDate;
     }
 
-    public void setHireDate(String hireDate) {
+    public void setHireDate(Date hireDate) {
         this.hireDate = hireDate;
     }
 
@@ -119,18 +120,18 @@ public class Employee implements Serializable {
 
         Employee employee = (Employee) o;
 
-        return id != null ? id.equals(employee.id) : employee.id == null;
+        return employeeId != null ? employeeId.equals(employee.employeeId) : employee.employeeId == null;
     }
 
     @Override
     public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+        return employeeId != null ? employeeId.hashCode() : 0;
     }
 
     @Override
     public String toString() {
         return "Employee{" +
-                "id=" + id +
+                "employeeId=" + employeeId +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", hireDate=" + hireDate +

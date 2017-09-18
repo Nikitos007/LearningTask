@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="1.0">
-    <persistence-unit name="departmentPersistenceUnit" transaction-type="RESOURCE_LOCAL">
-        <class>ua.com.model.Department</class>
-        <class>ua.com.model.Employee</class>
-    </persistence-unit>
-</persistence>
