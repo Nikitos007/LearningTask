@@ -1,0 +1,34 @@
+<service-builder package-path="ua.com.servicebuilder">
+    <author>Yevdokymenko Nikita</author>
+    <namespace>external</namespace>
+
+    <entity name="Department" table="tbl_departments" local-service="true" remote-service="false">
+        <column name="id" type="long" primary="true" id-type="increment"/>
+        <column name="name" type="String"/>
+        <order by="asc">
+            <order-column name="id"/>
+        </order>
+        <finder name="Name" return-type="Department">
+            <finder-column name="name"/>
+        </finder>
+    </entity>
+
+    <entity name="Employee" table="tbl_employees" local-service="true" remote-service="false">
+        <column name="id" type="long" primary="true" id-type="increment"/>
+        <column name="name" type="String"/>
+        <column name="surname" type="String"/>
+        <column name="hireDate" type="String"/>
+        <column name="email" type="String"/>
+        <column name="salary" type="int"/>
+        <column name="departmentId" type="long"/>
+        <order by="asc">
+            <order-column name="id"/>
+        </order>
+        <finder name="DepartmentId" return-type="Collection">
+            <finder-column name="departmentId"/>
+        </finder>
+        <finder name="Email" return-type="Employee">
+            <finder-column name="email"/>
+        </finder>
+    </entity>
+</service-builder>

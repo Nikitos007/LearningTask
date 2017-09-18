@@ -5,7 +5,7 @@ import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Component;
 
 
-@Component
+//@Component
 public class HibernateSessionFactory {
 
     private static SessionFactory sessionFactory;

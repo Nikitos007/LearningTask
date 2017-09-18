@@ -73,7 +73,7 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>${hibernate-version}</version>
-            <!--<scope>provided</scope>-->
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -226,6 +226,20 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>com.liferay.maven.plugins</groupId>
+                <artifactId>liferay-maven-plugin</artifactId>
+                <version>${liferay.maven.plugin.version}</version>
+                <configuration>
+                    <autoDeployDir>${liferay.deploy.dir}</autoDeployDir>
+                    <appServerDeployDir>${liferay.app.server.deploy.dir}</appServerDeployDir>
+                    <appServerLibGlobalDir>${liferay.app.server.lib.global.dir}</appServerLibGlobalDir>
+                    <appServerPortalDir>${liferay.app.server.portal.dir}</appServerPortalDir>
+                    <liferayVersion>${liferay.version}</liferayVersion>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 </project>
