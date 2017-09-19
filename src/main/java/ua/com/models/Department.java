@@ -13,7 +13,7 @@ import net.sf.oval.constraint.*;
 public class Department implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     @Column(name = "id_department")
     private Long departmentId;
 

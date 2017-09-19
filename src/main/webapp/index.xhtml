@@ -1,13 +1,85 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title>First JSF Application</title>
-</head>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+<h:head>
+    <title>Departments</title>
+</h:head>
 
-<body>
-<!--#{departmentController.showHello()}-->
 
-#{departmentController.findAll()}
-</body>
+<h:body>
+
+    <p:growl id="growl" showDetail="false" sticky="true" />
+
+    <h:form id="formMenu">
+        <p:tabMenu activeIndex="#{param.i}">
+            <p:menuitem value="Departments" icon="ui-icon-star" action="#{departmentController.findAll()}" >
+                <f:param name="i" value="0"/>
+            </p:menuitem>
+
+            <p:menuitem value="New department" icon="ui-icon-star" action="#{departmentController.viewDepartmentSaveForm()}">
+                <f:param name="i" value="1"/>
+            </p:menuitem>
+
+            <p:menuitem value="New employee" icon="ui-icon-star" action="#{employeeController.viewEmployeeSaveForm()}">
+                <f:param name="i" value="2"/>
+            </p:menuitem>
+        </p:tabMenu>
+    </h:form>
+
+
+
+
+
+    <p:separator/>
+    <p:separator/>
+
+
+
+
+
+    <p:dataTable value="#{departmentController.findAll()}" var="department" id="tableDepartments">
+        <p:column headerText="Department">
+            <h:outputText value="#{department.departmentName}"/>
+        </p:column>
+        <p:column headerText="Operations">
+            <h:form>
+                <p:commandButton value="edit" action="#{departmentController.setDepartment(department)}" update=":departmentSaveForm"/>
+                <p:commandButton value="remove" action="#{departmentController.delete(department)}" update=":tableDepartments, :growl"/>
+            </h:form>
+        </p:column>
+
+    </p:dataTable>
+
+
+
+
+
+
+    <p:separator/>
+    <p:separator/>
+
+
+
+
+
+
+    <h:form id="departmentSaveForm">
+        <p:focus/>
+        <p:panelGrid columns="1">
+            Name:
+            <p:inputText value="#{departmentController.department.departmentName}"/>
+            <p:commandButton value="save" action="#{departmentController.save()}" update="departmentSaveForm, :tableDepartments, :growl"/>
+        </p:panelGrid>
+
+    </h:form>
+
+
+
+
+
+</h:body>
+
 </html>
