@@ -12,11 +12,12 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.faces.view.ViewScoped;
+import javax.faces.bean.ViewScoped;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
-@ManagedBean(name = "departmentController")
+@ManagedBean
 @ViewScoped
 public class DepartmentController {
 
@@ -38,29 +39,27 @@ public class DepartmentController {
         this.departmentService = departmentService;
     }
 
+
     public List<Department> findAll() {
         return departmentService.findAll();
+    }
+
+    public void save() {
+       departmentService.save(department);
+       this.department = new Department();
+       FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Department saved!", null));
+    }
+
+    public void delete(Department department) {
+        departmentService.delete(department);
+        this.department = new Department();
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Department deleted!", null));
     }
 
     public void viewDepartmentSaveForm() {
 
     }
 
-    public void save() {
-       departmentService.save(department);
-       department = new Department();
-       FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Department saved!", null));
-    }
-
-    public void delete(Department department) {
-        departmentService.delete(department);
-        department = new Department();
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Department deleted!", null));
-    }
-
-    public void viewEmployees() {
-
-    }
 
 
 //
