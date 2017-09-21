@@ -7,7 +7,7 @@
          id="WebApp_ID" version="2.5">
 
     <welcome-file-list>
-        <welcome-file>faces/index.xhtml</welcome-file>
+        <welcome-file>faces/jsf/index.xhtml</welcome-file>
     </welcome-file-list>
 
     <servlet>

@@ -1,0 +1,162 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+<h:head>
+    <title>Departments</title>
+</h:head>
+
+
+<h:body>
+
+    <p:growl id="growl" showDetail="false" sticky="true"/>
+
+    <div style="width: 80%; margin-left: 10%">
+        <h:form>
+            <p:commandButton value="New department" action="#{departmentController.clear()}"
+                             update=":departmentSaveForm"
+                             oncomplete="PF('newDepartmentDialog').show()"/>
+            <p:commandButton value="New employee" action="#{employeeController.clear()}" update="employeeSaveForm"
+                             oncomplete="PF('newEmployeeDialog').show()"/>
+        </h:form>
+
+        <p:dialog widgetVar="newDepartmentDialog" modal="true" header="New department" showEffect="explode"
+                  hideEffect="puff">
+            <h:form id="departmentSaveForm">
+                <p:focus/>
+                <p:panelGrid columns="1" cellpadding="5">
+                    <p:row>
+                        <p:column> <p:outputLabel value="Name:" for="departmentName"/></p:column>
+                        <p:column> <p:inputText value="#{departmentController.department.departmentName}"
+                                                id="departmentName"/>
+
+                            <h:outputText value="#{departmentController.getError('departmentName')}"/>
+
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="2">
+                            <p:commandButton colspan="2" value="save" action="#{departmentController.save()}"
+                                             update="departmentSaveForm, :tableDepartments, :employeeSaveForm, :growl"
+
+
+                                             oncomplete="handleDialogSubmit('#{departmentController.getValidateErrors().size()}', 'newDepartmentDialog')"
+                            />
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog widgetVar="newEmployeeDialog" modal="true" header="New employee" showEffect="explode"
+                  hideEffect="puff">
+            <h:form id="employeeSaveForm">
+                <h:panelGrid columns="2" cellpadding="5">
+                    <p:outputLabel value="Name:" for="name"/>
+                    <p:inputText id="name" value="#{employeeController.employee.name}"/>
+
+                    <p:outputLabel value="Surname:" for="surname"/>
+                    <p:inputText id="surname" value="#{employeeController.employee.surname}"/>
+
+                    <p:outputLabel value="Email:" for="email"/>
+                    <p:inputText id="email" value="#{employeeController.employee.email}"/>
+
+                    <p:outputLabel value="Hire date:" for="hireDate"/>
+                    <p:inputText id="hireDate" value="#{employeeController.employee.hireDate}"/>
+
+                    <p:outputLabel value="Salary:" for="salary"/>
+                    <p:inputText id="salary" value="#{employeeController.employee.salary}"/>
+
+                    <p:outputLabel for="departmentSelect" value="Department: "/>
+                    <p:selectOneMenu id="departmentSelect" value="#{employeeController.selectedDepartment.departmentId}"
+                                     style="width:150px">
+                        <f:selectItems value="#{departmentController.findAll()}" var="department"
+                                       itemValue="#{department.departmentId}" itemLabel="#{department.departmentName}"/>
+                    </p:selectOneMenu>
+
+                    <p:commandButton value="save" action="#{employeeController.save()}"
+                                     update="employeeSaveForm, :tableEmployees, :growl"
+                                     oncomplete="PF('newEmployeeDialog').hide()"/>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+
+
+
+        <br/>
+
+
+        <h1>Departments</h1>
+        <p:dataTable value="#{departmentController.findAll()}" var="department" id="tableDepartments">
+
+            <p:column headerText="Department">
+                <h:outputText value="#{department.departmentName}"/>
+            </p:column>
+            <p:column headerText="Operations">
+                <h:form>
+                    <p:commandButton value="edit" action="#{departmentController.setDepartment(department)}"
+                                     update=":departmentSaveForm" oncomplete="PF('newDepartmentDialog').show()"/>
+
+
+                    <p:commandButton value="remove" action="#{departmentController.delete(department)}"
+                                     update=":tableDepartments, :growl"/>
+
+                    <p:commandButton value="employees"
+                                     action="#{employeeController.setSelectedDepartment(department)}"
+                                     update=":tableEmployees, :growl"/>
+                </h:form>
+            </p:column>
+        </p:dataTable>
+
+
+        <br/>
+        <h1>Employees from department</h1>
+        <p:dataTable value="#{employeeController.findByDepartmentId()}" var="employee" id="tableEmployees">
+            <p:column headerText="Name">
+                <h:outputText value="#{employee.name}"/>
+            </p:column>
+
+            <p:column headerText="Surame">
+                <h:outputText value="#{employee.surname}"/>
+            </p:column>
+
+            <p:column headerText="Email">
+                <h:outputText value="#{employee.email}"/>
+            </p:column>
+
+            <p:column headerText="Hire date">
+                <h:outputText value="#{employee.hireDate}"/>
+            </p:column>
+
+            <p:column headerText="Salary">
+                <h:outputText value="#{employee.salary}"/>
+            </p:column>
+
+            <p:column headerText="Operations">
+                <h:form>
+                    <p:commandButton value="edit" action="#{employeeController.setEmployee(employee)}"
+                                     update=":employeeSaveForm" oncomplete="PF('newEmployeeDialog').show()"/>
+
+                    <p:commandButton value="remove" action="#{employeeController.delete(employee)}"
+                                     update=":tableEmployees, :growl"/>
+                </h:form>
+            </p:column>
+        </p:dataTable>
+
+    </div>
+
+
+    <script type="text/javascript">
+        function handleDialogSubmit(presenceErrors, dialogName) {
+            if(presenceErrors == 0) {
+                PF(dialogName).hide();
+            }
+        }
+    </script>
+
+</h:body>
+
+
+</html>

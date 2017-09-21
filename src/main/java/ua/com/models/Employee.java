@@ -33,10 +33,8 @@ public class Employee implements Serializable {
 
     @NotNull(message = "Can not be null")
     @NotEmpty(message = "Can not be empty")
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "hire_date")
-    private Date hireDate;
+    private String hireDate;
 
     @NotNull(message = "Can not be null")
     @NotEmpty(message = "Can not be empty")
@@ -81,11 +79,11 @@ public class Employee implements Serializable {
         this.surname = surname;
     }
 
-    public Date getHireDate() {
+    public String getHireDate() {
         return hireDate;
     }
 
-    public void setHireDate(Date hireDate) {
+    public void setHireDate(String hireDate) {
         this.hireDate = hireDate;
     }
 

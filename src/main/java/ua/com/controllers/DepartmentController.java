@@ -2,19 +2,18 @@ package ua.com.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.annotation.SessionScope;
+import ua.com.exceptions.ValidateException;
 import ua.com.models.Department;
 import ua.com.services.DepartmentService;
 
-
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
 import javax.faces.bean.ViewScoped;
-import java.util.ArrayList;
+import javax.faces.context.FacesContext;
+import javax.persistence.Entity;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 @ManagedBean
@@ -44,10 +43,31 @@ public class DepartmentController {
         return departmentService.findAll();
     }
 
+
+    public Map<String, String> validateErrors = new HashMap<>();
+
+    public Map<String, String> getValidateErrors() {
+        return validateErrors;
+    }
+
+    public String getError(String key) {
+       return validateErrors.get(key);
+    }
+
     public void save() {
-       departmentService.save(department);
-       this.department = new Department();
-       FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Department saved!", null));
+        validateErrors.clear();
+        try {
+            departmentService.save(department);
+        } catch (ValidateException e) {
+            validateErrors = e.getErrorsMap();
+
+            for(Map.Entry<String, String> entry : e.getErrorsMap().entrySet()) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, entry.getValue(), null));
+            }
+            return;
+        }
+        this.department = new Department();
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Department saved!", null));
     }
 
     public void delete(Department department) {
@@ -56,27 +76,8 @@ public class DepartmentController {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Department deleted!", null));
     }
 
-    public void viewDepartmentSaveForm() {
-
+    public void clear() {
+        department = new Department();
     }
 
-
-
-//
-//    public void save(ActionEvent actionEvent) {
-//        addMessage("Data saved");
-//    }
-//
-//    public void update(ActionEvent actionEvent) {
-//        addMessage("Data updated");
-//    }
-//
-//    public void delete(ActionEvent actionEvent) {
-//        addMessage("Data deleted");
-//    }
-//
-//    public void addMessage(String summary) {
-//        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary,  null);
-//        FacesContext.getCurrentInstance().addMessage(null, message);
-//    }
 }

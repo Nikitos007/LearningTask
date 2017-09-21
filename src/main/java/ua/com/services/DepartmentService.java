@@ -2,8 +2,10 @@ package ua.com.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ua.com.exceptions.ValidateException;
 import ua.com.models.Department;
 import ua.com.repository.DepartmentRepository;
+import ua.com.utils.validations.ValidationOval;
 
 import java.util.List;
 
@@ -21,8 +23,8 @@ public class DepartmentService {
 
     }
 
-    public void save(Department department) {
-        //TODO validation ...
+    public void save(Department department) throws ValidateException {
+        ValidationOval.fieldsValidation(department);
         departmentRepository.save(department);
     }
 
