@@ -30,7 +30,11 @@
                     <p:row>
                         <p:column> <p:outputLabel value="Name:" for="departmentName"/></p:column>
                         <p:column> <p:inputText value="#{departmentController.department.departmentName}"
-                                                id="departmentName"/>
+                                                id="departmentName">
+
+                            <p:ajax event="focusout" update="departmentSaveForm" />
+
+                        </p:inputText>
 
                             <h:outputText value="#{departmentController.getError('departmentName')}"/>
 
@@ -38,12 +42,38 @@
                     </p:row>
                     <p:row>
                         <p:column colspan="2">
-                            <p:commandButton colspan="2" value="save" action="#{departmentController.save()}"
+
+                            <p:commandButton value="Save" id="saveButton"
                                              update="departmentSaveForm, :tableDepartments, :employeeSaveForm, :growl"
+                                             actionListener="#{departmentController.save()}"
+                                             oncomplete="alert('onComplete = ' + #{departmentController.sizeOfErrors})"
+                            >
+                                             <!--listener="handleDialogSubmit('#{departmentController.sizeOfErrors}', 'departmentSaveForm')"-->
+
+                            </p:commandButton>
+
+                            <p:commandButton value="Count" action="#{departmentController.save()}" update="departmentSaveForm, :tableDepartments, :employeeSaveForm, :growl"
+                                             oncomplete="alert('onComplete = ' + #{departmentController.sizeOfErrors})"/>
 
 
-                                             oncomplete="handleDialogSubmit('#{departmentController.getValidateErrors().size()}', 'newDepartmentDialog')"
-                            />
+                                             <!--oncomplete="alert('onComplete = ' + #{departmentController.sizeOfErrors})"-->
+                                             <!--onclick="alert('onClick = #{departmentController.sizeOfErrors}')"-->
+
+
+
+                            <!---->
+                            <!--<p:commandButton id="saveButton" colspan="2" value="save" action="#{departmentController.save()}"-->
+                                             <!--update="departmentSaveForm, :tableDepartments, :employeeSaveForm, :growl"-->
+
+
+
+
+                            <!--/>-->
+
+
+
+
+
                         </p:column>
                     </p:row>
                 </p:panelGrid>
@@ -110,8 +140,8 @@
             </p:column>
         </p:dataTable>
 
-
         <br/>
+
         <h1>Employees from department</h1>
         <p:dataTable value="#{employeeController.findByDepartmentId()}" var="employee" id="tableEmployees">
             <p:column headerText="Name">
@@ -150,7 +180,9 @@
 
     <script type="text/javascript">
         function handleDialogSubmit(presenceErrors, dialogName) {
-            if(presenceErrors == 0) {
+            console.log("OK");alert(presenceErrors);
+            if(presenceErrors == false) {
+                console.log("!presenceErrors  +  in IF");
                 PF(dialogName).hide();
             }
         }
