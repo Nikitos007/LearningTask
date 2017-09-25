@@ -19,22 +19,17 @@ public class DepartmentService {
         return departmentRepository.findAll();
     }
 
-    public void viewDepartmentSaveForm(Department department) {
-
+    public void validate(Department department) throws ValidateException {
+        ValidationOval.fieldsValidation(department);
     }
 
     public void save(Department department) throws ValidateException {
-        ValidationOval.fieldsValidation(department);
+        validate(department);
         departmentRepository.save(department);
     }
 
     public void delete(Department department) {
         departmentRepository.delete(department);
     }
-
-    public void viewEmployees() {
-
-    }
-
 
 }

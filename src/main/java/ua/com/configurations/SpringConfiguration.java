@@ -1,31 +1,24 @@
 package ua.com.configurations;
 
-import org.apache.commons.dbcp2.BasicDataSource;
-import org.hibernate.SessionFactory;
-//import org.hibernate.jpa.HibernatePersistenceProvider;
-import org.hibernate.jpa.HibernatePersistenceProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-//import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.orm.hibernate4.HibernateTransactionManager;
-import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import ua.com.models.Department;
-import ua.com.models.Employee;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
+
+//import org.hibernate.jpa.HibernatePersistenceProvider;
+//import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
 @ComponentScan(basePackages = {"ua.com", "net.sf.oval.integration.spring"})
@@ -68,7 +61,7 @@ public class SpringConfiguration {
 
     Properties additionalProperties() {
         Properties properties = new Properties();
-        properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");//create-drop
+        properties.setProperty("hibernate.hbm2ddl.auto", "update");//create-drop
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
         properties.setProperty("hibernate.enable_lazy_load_no_trans", "true");
         properties.setProperty("connection.useUnicode", "true");

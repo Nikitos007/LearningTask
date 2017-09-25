@@ -6,11 +6,11 @@
       xmlns:h="http://java.sun.com/jsf/html">
 <h:head>
     <title>Departments</title>
+    <script type="text/javascript" src="/js/main.js"></script>
 </h:head>
 
 
 <h:body>
-
     <p:growl id="growl" showDetail="false" sticky="true"/>
 
     <div style="width: 80%; margin-left: 10%">
@@ -18,7 +18,8 @@
             <p:commandButton value="New department" action="#{departmentController.clear()}"
                              update=":departmentSaveForm"
                              oncomplete="PF('newDepartmentDialog').show()"/>
-            <p:commandButton value="New employee" action="#{employeeController.clear()}" update="employeeSaveForm"
+            <p:commandButton value="New employee" action="#{employeeController.clear()}"
+                             update="employeeSaveForm"
                              oncomplete="PF('newEmployeeDialog').show()"/>
         </h:form>
 
@@ -29,75 +30,77 @@
                 <p:panelGrid columns="1" cellpadding="5">
                     <p:row>
                         <p:column> <p:outputLabel value="Name:" for="departmentName"/></p:column>
-                        <p:column> <p:inputText value="#{departmentController.department.departmentName}"
-                                                id="departmentName">
-
-                            <p:ajax event="focusout" update="departmentSaveForm" />
-
-                        </p:inputText>
-
-                            <h:outputText value="#{departmentController.getError('departmentName')}"/>
-
+                        <p:column>
+                            <p:inputText value="#{departmentController.department.departmentName}"
+                                         id="departmentName">
+                                <p:ajax event="keyup" update="saveDepartmentButton, errorDepartmentName"
+                                        listener="#{departmentController.validate()}"/>
+                            </p:inputText>
+                            <h:outputText id="errorDepartmentName"
+                                          value="#{departmentController.getError('departmentName')}"/>
                         </p:column>
                     </p:row>
                     <p:row>
                         <p:column colspan="2">
-
-                            <p:commandButton value="Save" id="saveButton"
+                            <p:commandButton value="Save" id="saveDepartmentButton"
+                                             action="#{departmentController.save()}"
                                              update="departmentSaveForm, :tableDepartments, :employeeSaveForm, :growl"
-                                             actionListener="#{departmentController.save()}"
-                                             oncomplete="alert('onComplete = ' + #{departmentController.sizeOfErrors})"
-                            >
-                                             <!--listener="handleDialogSubmit('#{departmentController.sizeOfErrors}', 'departmentSaveForm')"-->
-
-                            </p:commandButton>
-
-                            <p:commandButton value="Count" action="#{departmentController.save()}" update="departmentSaveForm, :tableDepartments, :employeeSaveForm, :growl"
-                                             oncomplete="alert('onComplete = ' + #{departmentController.sizeOfErrors})"/>
-
-
-                                             <!--oncomplete="alert('onComplete = ' + #{departmentController.sizeOfErrors})"-->
-                                             <!--onclick="alert('onClick = #{departmentController.sizeOfErrors}')"-->
-
-
-
-                            <!---->
-                            <!--<p:commandButton id="saveButton" colspan="2" value="save" action="#{departmentController.save()}"-->
-                                             <!--update="departmentSaveForm, :tableDepartments, :employeeSaveForm, :growl"-->
-
-
-
-
-                            <!--/>-->
-
-
-
-
-
+                                             oncomplete="handleDialogSubmit(#{departmentController.sizeOfErrors}, 'newDepartmentDialog')"
+                            />
                         </p:column>
                     </p:row>
                 </p:panelGrid>
             </h:form>
         </p:dialog>
 
+
         <p:dialog widgetVar="newEmployeeDialog" modal="true" header="New employee" showEffect="explode"
                   hideEffect="puff">
             <h:form id="employeeSaveForm">
-                <h:panelGrid columns="2" cellpadding="5">
+                <h:panelGrid columns="3" cellpadding="5">
+
                     <p:outputLabel value="Name:" for="name"/>
-                    <p:inputText id="name" value="#{employeeController.employee.name}"/>
+                    <p:inputText id="name" value="#{employeeController.employee.name}">
+                        <p:ajax event="keyup" update="saveEmployeeButton, errorEmployeeName"
+                                listener="#{employeeController.validate()}"/>
+                    </p:inputText>
+                    <h:outputText id="errorEmployeeName"
+                                  value="#{employeeController.getError('name')}"/>
+
 
                     <p:outputLabel value="Surname:" for="surname"/>
-                    <p:inputText id="surname" value="#{employeeController.employee.surname}"/>
+                    <p:inputText id="surname" value="#{employeeController.employee.surname}">
+                        <p:ajax event="keyup" update="saveEmployeeButton, errorEmployeeSurname"
+                                listener="#{employeeController.validate()}"/>
+                    </p:inputText>
+                    <h:outputText id="errorEmployeeSurname"
+                                  value="#{employeeController.getError('surname')}"/>
+
 
                     <p:outputLabel value="Email:" for="email"/>
-                    <p:inputText id="email" value="#{employeeController.employee.email}"/>
+                    <p:inputText id="email" value="#{employeeController.employee.email}">
+                        <p:ajax event="keyup" update="saveEmployeeButton, errorEmployeeEmail"
+                                listener="#{employeeController.validate()}"/>
+                    </p:inputText>
+                    <h:outputText id="errorEmployeeEmail"
+                                  value="#{employeeController.getError('email')}"/>
+
 
                     <p:outputLabel value="Hire date:" for="hireDate"/>
-                    <p:inputText id="hireDate" value="#{employeeController.employee.hireDate}"/>
+                    <p:inputText id="hireDate" value="#{employeeController.employee.hireDate}">
+                        <p:ajax event="keyup" update="saveEmployeeButton, errorEmployeeHireDate"
+                                listener="#{employeeController.validate()}"/>
+                    </p:inputText>
+                    <h:outputText id="errorEmployeeHireDate"
+                                  value="#{employeeController.getError('hireDate')}"/>
 
                     <p:outputLabel value="Salary:" for="salary"/>
-                    <p:inputText id="salary" value="#{employeeController.employee.salary}"/>
+                    <p:inputText id="salary" value="#{employeeController.employee.salary}">
+                        <p:ajax event="keyup" update="saveEmployeeButton, errorEmployeeSalary"
+                                listener="#{employeeController.validate()}"/>
+                    </p:inputText>
+                    <h:outputText id="errorEmployeeSalary"
+                                  value="#{employeeController.getError('salary')}"/>
 
                     <p:outputLabel for="departmentSelect" value="Department: "/>
                     <p:selectOneMenu id="departmentSelect" value="#{employeeController.selectedDepartment.departmentId}"
@@ -106,13 +109,15 @@
                                        itemValue="#{department.departmentId}" itemLabel="#{department.departmentName}"/>
                     </p:selectOneMenu>
 
-                    <p:commandButton value="save" action="#{employeeController.save()}"
-                                     update="employeeSaveForm, :tableEmployees, :growl"
-                                     oncomplete="PF('newEmployeeDialog').hide()"/>
+
+                    <p:commandButton value="Save" id="saveEmployeeButton"
+                                     action="#{employeeController.save()}"
+                                     update="errorEmployeeName, errorEmployeeSurname, errorEmployeeEmail, errorEmployeeHireDate, errorEmployeeSalary,
+                                     employeeSaveForm, :tableEmployees, :growl"
+                                     oncomplete="handleDialogSubmit(#{employeeController.sizeOfErrors}, 'newEmployeeDialog')"/>
                 </h:panelGrid>
             </h:form>
         </p:dialog>
-
 
 
         <br/>
@@ -164,6 +169,11 @@
                 <h:outputText value="#{employee.salary}"/>
             </p:column>
 
+            <p:column headerText="DepartmentId">
+                <h:outputText
+                        value="#{employee.getDepartment().departmentName}  id = #{employee.getDepartment().departmentId}"/>
+            </p:column>
+
             <p:column headerText="Operations">
                 <h:form>
                     <p:commandButton value="edit" action="#{employeeController.setEmployee(employee)}"
@@ -177,16 +187,6 @@
 
     </div>
 
-
-    <script type="text/javascript">
-        function handleDialogSubmit(presenceErrors, dialogName) {
-            console.log("OK");alert(presenceErrors);
-            if(presenceErrors == false) {
-                console.log("!presenceErrors  +  in IF");
-                PF(dialogName).hide();
-            }
-        }
-    </script>
 
 </h:body>
 
