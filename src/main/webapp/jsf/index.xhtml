@@ -11,7 +11,7 @@
 
 
 <h:body>
-    <p:growl id="growl" showDetail="false" sticky="true"/>
+    <p:growl id="growl" showDetail="false" life="1000"/>
 
     <div style="width: 80%; margin-left: 10%">
         <h:form>
@@ -112,8 +112,7 @@
 
                     <p:commandButton value="Save" id="saveEmployeeButton"
                                      action="#{employeeController.save()}"
-                                     update="errorEmployeeName, errorEmployeeSurname, errorEmployeeEmail, errorEmployeeHireDate, errorEmployeeSalary,
-                                     employeeSaveForm, :tableEmployees, :growl"
+                                     update="employeeSaveForm, :tableEmployees, :growl"
                                      oncomplete="handleDialogSubmit(#{employeeController.sizeOfErrors}, 'newEmployeeDialog')"/>
                 </h:panelGrid>
             </h:form>
