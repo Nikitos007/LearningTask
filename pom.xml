@@ -17,7 +17,7 @@
         <spring.version>3.0.7.RELEASE</spring.version>
 
 
-        <liferay.tomcat.dir>/home/user/JAVA/liferay-portal-6.2-ce-ga5/tomcat-7.0.62</liferay.tomcat.dir>
+        <liferay.tomcat.dir>/home/user/JAVA/liferay-portal-6.2/tomcat-7.0.62</liferay.tomcat.dir>
         <liferay.deploy.dir>${liferay.tomcat.dir}/../deploy</liferay.deploy.dir>
         <liferay.app.server.deploy.dir>${liferay.tomcat.dir}/webapps</liferay.app.server.deploy.dir>
         <liferay.app.server.lib.global.dir>${liferay.tomcat.dir}/lib/ext</liferay.app.server.lib.global.dir>
@@ -202,6 +202,8 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.1.0</version>
             </plugin>
+
+
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.0.2</version>

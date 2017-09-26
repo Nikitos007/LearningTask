@@ -1,0 +1,58 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <context:component-scan base-package="ua.com"/>
+
+    <bean class="ua.com.controllers.impl.MainPortlet"/>
+
+    <bean class="org.springframework.web.portlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
+
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+
+    <bean id="anotherDataSource"
+          class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy">
+        <property name="targetDataSource" ref="anotherDataSourceWrapper"/>
+    </bean>
+    <bean id="anotherDataSourceImpl"
+          class="com.liferay.portal.dao.jdbc.spring.DataSourceFactoryBean">
+        <property name="propertyPrefix" value="jdbc.external."/>
+    </bean>
+    <bean id="anotherDataSourceWrapper" class="com.liferay.portal.dao.jdbc.util.DataSourceWrapper">
+        <constructor-arg ref="anotherDataSourceImpl"/>
+    </bean>
+    <bean class="com.liferay.portal.dao.jdbc.util.DataSourceSwapper">
+        <property name="liferayDataSourceWrapper" ref="anotherDataSourceWrapper"/>
+    </bean>
+    <bean id="anotherHibernateSessionFactory" class="com.liferay.portal.kernel.spring.util.SpringFactoryUtil"
+          factory-method="newBean">
+        <constructor-arg value="com.liferay.portal.spring.hibernate.PortletHibernateConfiguration"/>
+        <constructor-arg>
+            <map>
+                <entry key="dataSource" value-ref="anotherDataSource"/>
+            </map>
+        </constructor-arg>
+    </bean>
+    <bean id="anotherSessionFactory" class="com.liferay.portal.kernel.spring.util.SpringFactoryUtil"
+          factory-method="newBean">
+        <constructor-arg
+                value="com.liferay.portal.dao.orm.hibernate.PortletSessionFactoryImpl"/>
+        <constructor-arg>
+            <map>
+                <entry key="dataSource" value-ref="anotherDataSource"/>
+                <entry key="sessionFactoryClassLoader" value-ref="portletClassLoader"/>
+                <entry key="sessionFactoryImplementor" value-ref="anotherHibernateSessionFactory"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+</beans>

@@ -1,10 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN"
+        "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+
 <service-builder package-path="ua.com.servicebuilder">
     <author>Yevdokymenko Nikita</author>
-    <namespace>external</namespace>
+    <namespace>Portlet</namespace>
 
-    <entity name="Department" table="tbl_departments" local-service="true" remote-service="false">
-        <column name="id" type="long" primary="true" id-type="increment"/>
-        <column name="name" type="String"/>
+    <entity name="Department" table="tbl_departments" local-service="true" remote-service="false"
+            data-source="anotherDataSource" session-factory="anotherSessionFactory">
+        <column name="id" type="long" primary="true" id-type="increment" db-name="id_department"/>
+        <column name="name" type="String" db-name="name"/>
         <order by="asc">
             <order-column name="id"/>
         </order>
@@ -13,14 +18,15 @@
         </finder>
     </entity>
 
-    <entity name="Employee" table="tbl_employees" local-service="true" remote-service="false">
-        <column name="id" type="long" primary="true" id-type="increment"/>
-        <column name="name" type="String"/>
-        <column name="surname" type="String"/>
-        <column name="hireDate" type="String"/>
-        <column name="email" type="String"/>
-        <column name="salary" type="int"/>
-        <column name="departmentId" type="long"/>
+    <entity name="Employee" table="tbl_employees" local-service="true" remote-service="false"
+            data-source="anotherDataSource" session-factory="anotherSessionFactory">
+        <column name="id" type="long" primary="true" id-type="increment" db-name="id_employee"/>
+        <column name="name" type="String" db-name="name"/>
+        <column name="surname" type="String" db-name="surname"/>
+        <column name="hireDate" type="String" db-name="hire_date"/>
+        <column name="email" type="String" db-name="email"/>
+        <column name="salary" type="int" db-name="salary"/>
+        <column name="departmentId" type="long" db-name="id_department"/>
         <order by="asc">
             <order-column name="id"/>
         </order>
