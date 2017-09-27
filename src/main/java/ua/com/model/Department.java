@@ -25,6 +25,7 @@ public class Department implements Serializable {
     @Column(name = "name", length = 100)
     private String departmentName;
 
+    @com.fasterxml.jackson.annotation.JsonIgnore
     @OneToMany(mappedBy = "department", cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
     List<Employee> employeeList = new ArrayList<>();
 

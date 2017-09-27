@@ -4,11 +4,11 @@
 <head>
     <title>Title</title>
     <link href="<c:url value="/css/bootstrap.css"/>" rel="stylesheet">
-    <script src="jquery-3.2.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="/js/main.js"></script>
 </head>
 
-<body onload="controller('/')">
+<body>
 
 <c:import url="navPanel.jsp"/>
 

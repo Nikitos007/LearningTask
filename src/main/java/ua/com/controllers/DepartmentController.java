@@ -1,9 +1,10 @@
 package ua.com.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.exception.ValidFieldException;
 import ua.com.model.Department;
@@ -14,7 +15,7 @@ import java.util.List;
 /**
  * Created on 10.08.17.
  */
-@Controller
+@RestController
 @RequestMapping({"/", "/department"})
 public class DepartmentController {
 
@@ -37,13 +38,21 @@ public class DepartmentController {
         return "redirect:/";
     }
 
+
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView viewAll() {
+    public ModelAndView viewIndexPage() {
         List<Department> departmentList = departmentService.viewAllDepartment();
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("departmentList", departmentList);
         modelAndView.setViewName("index");
         return modelAndView;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/viewAll", method = RequestMethod.GET, produces = "application/json")
+    public List<Department> viewAll() {
+        List<Department> departmentList = departmentService.viewAllDepartment();
+        return departmentList;
     }
 
     @RequestMapping(value = "/viewForm", method = RequestMethod.GET)
