@@ -1,10 +1,7 @@
 package ua.com.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.exception.ValidFieldException;
 import ua.com.model.Department;
@@ -55,8 +52,9 @@ public class DepartmentController {
         return departmentList;
     }
 
-    @RequestMapping(value = "/viewForm", method = RequestMethod.GET)
-    public ModelAndView viewForm(Department department) {
+    @ResponseBody
+    @RequestMapping(value = "/viewForm", method = RequestMethod.GET, produces = "application/json")
+    public ModelAndView viewForm(@RequestBody Department department) {
         ModelAndView modelAndView = new ModelAndView();
         if (department.getDepartmentId() != null) {
             Department departmenDb = departmentService.getDepartmentById(department.getDepartmentId());

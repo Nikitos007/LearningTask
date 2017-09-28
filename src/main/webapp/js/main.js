@@ -1,50 +1,31 @@
-function drowTable() {
-    var content = "<table>"
-    for (i = 0; i < 3; i++) {
-        content += '<tr><td>' + 'result ' + i + '</td></tr>';
-    }
-    content += "</table>"
-
-    $('#here_table').append(content);
-}
-
-    // var table = $('<table></table>').addClass('foo');
-    // for(i=0; i<3; i++){
-    //     var row = $('<tr></tr>').addClass('bar').text('result ' + i);
-    //     table.append(row);
-    // }
-    // $('#here_table').append(table);
-
-
-// var controller = function (action) {
-// console.log(action + " 555");
-//     // sendRequest();
-//
-//     $('#wrapper').innerHTML = "<h1>DASDAS</h1>";
-//
-//
+// var table = $('<table></table>').addClass('foo');
+// for(i=0; i<3; i++){
+//     var row = $('<tr></tr>').addClass('bar').text('result ' + i);
+//     table.append(row);
 // }
+// $('#here_table').append(table);
 
 
-function ajaxService() {
-
+function MainService() {
     this.sendRequest = function sendRequest(typeReq, urlReq, dataReq, dataTypeReq, successReq) {
-        alert("sendRequest... typeReq: " + typeReq + " urlReq: " + urlReq + " dataReq: " + dataReq + " dataTypeReq: " + dataTypeReq);
         $.ajax({
             type: typeReq,
             url: urlReq,
             data: dataReq,
-            success: function (res) {
-                alert("res= " + res)
-            }
+            dataType: dataTypeReq,
+            contentType: "application/json; charset=utf-8",
+            success: successReq
         });
     }
 
+    this.drawTable = function drawTable(columns) {
 
+
+    }
 }
 
 function DepartmentService() {
-    ajaxService.call(this);
+    MainService.call(this);
     var doAjax = this.sendRequest;
 
 
@@ -52,13 +33,54 @@ function DepartmentService() {
         doAjax("GET", "department/viewAll", "", "json", drawAllDepartments);
 
         function drawAllDepartments(result) {
-            alert("drawAllDepartments from server " + result);
-        }
+            mytable = $('<table></table>').attr({class: "table table-hover"}).append($('<tbody></tbody>'));
+            var rows = result.length;
+            var cols = 2;
+            var tr = [];
 
+            var thead = $('<thead></thead>');
+            rowHead = $('<tr></tr>');
+            $('<td></td>').text('#').appendTo(rowHead);
+            $('<td></td>').text('Department').appendTo(rowHead);
+            $('<td></td>').text('Update').appendTo(rowHead);
+            $('<td></td>').text('Delete').appendTo(rowHead);
+            $('<td></td>').text('Employees').appendTo(rowHead);
+            rowHead.appendTo(thead);
+            thead.appendTo(mytable);
+
+            for (var i = 0; i < rows; i++) {
+                var row = $('<tr></tr>').appendTo(mytable);
+                $('<td></td>').text(i).appendTo(row);
+                $('<td></td>').text(result[i].departmentName).appendTo(row);
+
+                $('<td></td>').attr("onclick", "controller.doAction('department/viewDepartmentSaveForm',  '" + JSON.stringify(result[i]) + "'  )").text('Update').appendTo(row);
+
+            }
+            var div = $('<div></div>').attr({class: "col-lg-12 text-center"}).append(mytable);
+            $('#wrapper').append(div);
+
+
+        }
     }
 
+
     this.viewDepartmentSaveForm = function viewDepartmentSaveForm() {
+        var department = JSON.parse(arguments[0]);
+
+
+        alert("id = " + department.departmentId)
+        alert("name = " + department.departmentName);
+
+
+        doAjax("GET", "department/viewForm", department, "json", drawSaveForm);
+
         alert("viewDepartmentSaveForm");
+
+
+        function drawSaveForm() {
+
+        }
+
     }
 
     this.saveDepartment = function saveDepartment() {
@@ -111,9 +133,17 @@ function Controller() {
     actionMap.set("department/saveDepartment", departmentService.saveDepartment);
     actionMap.set("department/deleteDepartment", departmentService.deleteDepartment);
 
-    this.doAction = function (action) {
-        var method = actionMap.get(action);
-        method();
+    this.doAction = function () {
+
+        var method = actionMap.get(arguments[0]);
+
+        if (arguments[1] != undefined) {
+            alert(arguments[1]);
+            alert("arguments[1].departmentName = " + arguments[1].departmentName);
+            method(arguments[1]);
+        } else {
+            method();
+        }
     }
 
 

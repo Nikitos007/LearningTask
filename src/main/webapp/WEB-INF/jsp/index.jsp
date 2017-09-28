@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page isELIgnored="false" %>
 <html>
 <head>
     <title>Title</title>
@@ -8,12 +9,11 @@
     <script src="/js/main.js"></script>
 </head>
 
-<body>
+<body onload="controller.doAction('department/viewDepartments')">
 
 <c:import url="navPanel.jsp"/>
 
-
-<div id="wrapper"></div>
+<div class="container" id="wrapper"></div>
 
 </body>
 </html>

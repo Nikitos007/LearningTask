@@ -17,6 +17,7 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-lg-12 text-center">
+
                     <table class="table table table-hover">
                         <tbody>
                         <thead>
