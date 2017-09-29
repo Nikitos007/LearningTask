@@ -29,10 +29,18 @@ public class DepartmentController {
         return "redirect:/";
     }
 
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String save(Department department) throws ValidFieldException {
-        departmentService.saveDepartment(department);
-        return "redirect:/";
+
+    @RequestMapping(value = "/save", method = RequestMethod.POST, consumes = "application/json")
+    public void save(@RequestBody Department department) {
+        try {
+            if (department.getDepartmentId() == 0) {
+                department.setDepartmentId(null);
+            }
+            departmentService.saveDepartment(department);
+        } catch (ValidFieldException e) {
+            //TODO validation on backend
+        }
+
     }
 
 
@@ -53,14 +61,26 @@ public class DepartmentController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/viewForm", method = RequestMethod.GET, produces = "application/json")
-    public ModelAndView viewForm(@RequestBody Department department) {
-        ModelAndView modelAndView = new ModelAndView();
+    @RequestMapping(value = "/viewForm", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+    public Department viewForm(@RequestBody Department department) {
         if (department.getDepartmentId() != null) {
             Department departmenDb = departmentService.getDepartmentById(department.getDepartmentId());
-            modelAndView.addObject("department", departmenDb);
+            return departmenDb;
         }
-        modelAndView.setViewName("saveDepartment");
-        return modelAndView;
+
+        return new Department();
+
+
+//        List<Department> departmentList = departmentService.viewAllDepartment();
+//        return departmentList;
+
+
+//        ModelAndView modelAndView = new ModelAndView();
+//        if (department.getDepartmentId() != null) {
+//            Department departmenDb = departmentService.getDepartmentById(department.getDepartmentId());
+//            modelAndView.addObject("department", departmenDb);
+//        }
+//        modelAndView.setViewName("saveDepartment");
+//        return modelAndView;
     }
 }

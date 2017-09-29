@@ -17,12 +17,8 @@ function MainService() {
             success: successReq
         });
     }
-
-    this.drawTable = function drawTable(columns) {
-
-
-    }
 }
+
 
 function DepartmentService() {
     MainService.call(this);
@@ -57,35 +53,73 @@ function DepartmentService() {
 
             }
             var div = $('<div></div>').attr({class: "col-lg-12 text-center"}).append(mytable);
+
+            $('#wrapper').empty();
             $('#wrapper').append(div);
 
 
         }
     }
 
-
     this.viewDepartmentSaveForm = function viewDepartmentSaveForm() {
-        var department = JSON.parse(arguments[0]);
-
-
-        alert("id = " + department.departmentId)
-        alert("name = " + department.departmentName);
-
-
-        doAjax("GET", "department/viewForm", department, "json", drawSaveForm);
-
-        alert("viewDepartmentSaveForm");
-
-
-        function drawSaveForm() {
-
+        var departmentJson = arguments[0];
+        if (departmentJson == undefined) {
+            departmentJson = {
+                "departmentId": null,
+                "departmentName": null
+            };
+            departmentJson = JSON.stringify(departmentJson);
         }
+        doAjax("POST", "department/viewForm", departmentJson, "json", drawSaveForm);
+
+        function drawSaveForm(result) {
+            var header = $('<h1></h1>').attr({class: "text-center"}).text("Save department");
+            var saveForm = $('<form></form>').attr({class: "form-horizontal col-lg-offset-2"});
+            var hiddenDepartmentId = $('<input/>').attr({
+                type: "hidden",
+                id: "departmentId",
+                value: result.departmentId
+            });
+            var inputDepartmentName = $('<div></div>').attr({class: "form-group"});
+            inputDepartmentName.append($('<label></label>').attr({for: "departmentName"}).text("Name:"));
+            inputDepartmentName.append($('<input/>').attr({
+                type: "text",
+                class: "form-control",
+                id: "departmentName",
+                value: result.departmentName
+            }));
+            var saveButton = $('<div></div>').attr({class: "form-group"});
+            saveButton.append($('<div></div>').attr({class: "col-lg-9 col-lg-offset-3"}).append($('<button></button>').attr({
+                type: "button",
+                class: "btn btn-primary"
+            }).attr("onclick", "controller.doAction('department/saveDepartment')").text("Save")));
+
+            hiddenDepartmentId.appendTo(saveForm);
+            inputDepartmentName.appendTo(saveForm);
+            saveButton.appendTo(saveForm);
+
+            $('#wrapper').empty();
+            $('#wrapper').append(header);
+            $('#wrapper').append(saveForm);
+        }
+
 
     }
 
     this.saveDepartment = function saveDepartment() {
-        alert("saveDepartment");
+        var departmentId = $('#departmentId').val();
+        var departmentName = $('#departmentName').val();
+        var json = {
+            "departmentId": +departmentId,
+            "departmentName": departmentName
+        };
+        alert(JSON.stringify(json));
+        doAjax("POST", "department/save", JSON.stringify(json), "application/json", function () {
+            alert("saveDepartment");
+        });
+        controller.doAction('department/viewDepartments');
     }
+
 
     this.deleteDepartment = function deleteDepartment() {
         alert("deleteDepartment");
@@ -133,13 +167,14 @@ function Controller() {
     actionMap.set("department/saveDepartment", departmentService.saveDepartment);
     actionMap.set("department/deleteDepartment", departmentService.deleteDepartment);
 
-    this.doAction = function () {
 
+    this.doAction = function () {
         var method = actionMap.get(arguments[0]);
+        if (method == undefined) {
+            method = actionMap.get("department/viewDepartments");
+        }
 
         if (arguments[1] != undefined) {
-            alert(arguments[1]);
-            alert("arguments[1].departmentName = " + arguments[1].departmentName);
             method(arguments[1]);
         } else {
             method();

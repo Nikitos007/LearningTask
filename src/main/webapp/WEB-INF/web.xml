@@ -13,6 +13,7 @@
         <url-pattern>*.js</url-pattern>
         <url-pattern>*.css</url-pattern>
         <url-pattern>*.jpg</url-pattern>
+        <url-pattern>*.ico</url-pattern>
     </servlet-mapping>
 
 </web-app>

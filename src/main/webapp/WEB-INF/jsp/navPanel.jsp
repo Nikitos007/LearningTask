@@ -10,9 +10,12 @@
                 <div class="col-lg-6 col-lg-offset-3">
                     <div class="collapse navbar-collapse">
                         <ul class="nav navbar-nav">
-                            <li><a href="/"> Departments </a></li>
-                            <li><a href="/department/viewForm?departmentId="> New Department</a></li>
-                            <li><a href="/employee/viewForm?employeeId="> New Employee</a></li>
+                            <li><a href="#" onclick="controller.doAction('department/viewDepartments')">
+                                Departments </a></li>
+                            <li><a href="#" onclick="controller.doAction('department/viewDepartmentSaveForm')"> New
+                                Department</a></li>
+                            <li><a href="#" onclick="controller.doAction('department/viewEmployeeSaveForm')"> New
+                                Employee</a></li>
                         </ul>
                     </div>
                 </div>

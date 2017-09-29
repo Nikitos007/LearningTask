@@ -18,6 +18,7 @@
     <form id="defaultForm" method="post" class="form-horizontal col-lg-offset-2" action="/department/save">
         <input type="hidden" name="departmentId"
                value="<c:out value="${param.departmentId == null ? department.departmentId : param.departmentId}"/>">
+
         <div class="form-group">
             <label class="col-lg-3 control-label">Name</label>
             <div class="col-lg-5">
@@ -26,12 +27,14 @@
                 <span name="departmentName" class="text-danger">${errorMessageMap.departmentName}</span>
             </div>
         </div>
+
         <div class="form-group">
             <div class="col-lg-9 col-lg-offset-3">
                 <button type="submit" class="btn btn-primary">Save</button>
             </div>
         </div>
     </form>
+
 </div>
 
 </body>
