@@ -1,5 +1,6 @@
 package ua.com.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import net.sf.oval.constraint.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import ua.com.utils.validation.ValidationUniqueEmployeeEmail;
@@ -51,8 +52,10 @@ public class Employee implements Serializable {
     @Column(name = "salary")
     private Integer salary;
 
+
     @NotNull(message = "Can not be null")
     @NotEmpty(message = "Can not be empty")
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_department")
     private Department department;

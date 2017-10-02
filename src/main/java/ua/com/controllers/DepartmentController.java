@@ -23,12 +23,10 @@ public class DepartmentController {
         this.departmentService = departmentService;
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    public String delete(Department department) {
+    @RequestMapping(value = "/delete", method = RequestMethod.POST, consumes = "application/json")
+    public void delete(@RequestBody Department department) {
         departmentService.delete(department);
-        return "redirect:/";
     }
-
 
     @RequestMapping(value = "/save", method = RequestMethod.POST, consumes = "application/json")
     public void save(@RequestBody Department department) {
@@ -56,6 +54,11 @@ public class DepartmentController {
     @ResponseBody
     @RequestMapping(value = "/viewAll", method = RequestMethod.GET, produces = "application/json")
     public List<Department> viewAll() {
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         List<Department> departmentList = departmentService.viewAllDepartment();
         return departmentList;
     }
@@ -69,18 +72,5 @@ public class DepartmentController {
         }
 
         return new Department();
-
-
-//        List<Department> departmentList = departmentService.viewAllDepartment();
-//        return departmentList;
-
-
-//        ModelAndView modelAndView = new ModelAndView();
-//        if (department.getDepartmentId() != null) {
-//            Department departmenDb = departmentService.getDepartmentById(department.getDepartmentId());
-//            modelAndView.addObject("department", departmenDb);
-//        }
-//        modelAndView.setViewName("saveDepartment");
-//        return modelAndView;
     }
 }

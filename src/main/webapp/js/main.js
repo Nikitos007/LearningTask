@@ -1,10 +1,3 @@
-// var table = $('<table></table>').addClass('foo');
-// for(i=0; i<3; i++){
-//     var row = $('<tr></tr>').addClass('bar').text('result ' + i);
-//     table.append(row);
-// }
-// $('#here_table').append(table);
-
 
 function MainService() {
     this.sendRequest = function sendRequest(typeReq, urlReq, dataReq, dataTypeReq, successReq) {
@@ -24,41 +17,36 @@ function DepartmentService() {
     MainService.call(this);
     var doAjax = this.sendRequest;
 
-
     this.viewDepartments = function viewDepartments() {
         doAjax("GET", "department/viewAll", "", "json", drawAllDepartments);
 
         function drawAllDepartments(result) {
-            mytable = $('<table></table>').attr({class: "table table-hover"}).append($('<tbody></tbody>'));
+            mytable = $('<table></table>').attr({class: "table table-hover text-center"}).append($('<tbody></tbody>'));
             var rows = result.length;
-            var cols = 2;
-            var tr = [];
-
             var thead = $('<thead></thead>');
-            rowHead = $('<tr></tr>');
+            var rowHead = $('<tr></tr>');
             $('<td></td>').text('#').appendTo(rowHead);
             $('<td></td>').text('Department').appendTo(rowHead);
             $('<td></td>').text('Update').appendTo(rowHead);
             $('<td></td>').text('Delete').appendTo(rowHead);
             $('<td></td>').text('Employees').appendTo(rowHead);
-            rowHead.appendTo(thead);
-            thead.appendTo(mytable);
-
             for (var i = 0; i < rows; i++) {
                 var row = $('<tr></tr>').appendTo(mytable);
                 $('<td></td>').text(i).appendTo(row);
                 $('<td></td>').text(result[i].departmentName).appendTo(row);
-
-                $('<td></td>').attr("onclick", "controller.doAction('department/viewDepartmentSaveForm',  '" + JSON.stringify(result[i]) + "'  )").text('Update').appendTo(row);
-
+                $('<td></td>').attr("onclick", "controller.doAction('department/viewDepartmentSaveForm',  '" + JSON.stringify(result[i]) + "'  )").text('Update').attr('onmouseenter', "this.style.cursor = 'pointer'").appendTo(row);
+                $('<td></td>').attr("onclick", "controller.doAction('department/deleteDepartment',  '" + JSON.stringify(result[i]) + "'  )").text('Delete').attr('onmouseenter', "this.style.cursor = 'pointer'").appendTo(row);
+                $('<td></td>').attr("onclick", "controller.doAction('employee/viewEmployeesByDepartment',  '" + JSON.stringify(result[i]) + "'  )").text('Employees').attr('onmouseenter', "this.style.cursor = 'pointer'").appendTo(row);
             }
+            rowHead.appendTo(thead);
+            thead.appendTo(mytable);
             var div = $('<div></div>').attr({class: "col-lg-12 text-center"}).append(mytable);
 
             $('#wrapper').empty();
+            $('#wrapper').append($('<h1>Departments</h1>').attr({class: "text-center"}));
             $('#wrapper').append(div);
-
-
         }
+
     }
 
     this.viewDepartmentSaveForm = function viewDepartmentSaveForm() {
@@ -73,7 +61,6 @@ function DepartmentService() {
         doAjax("POST", "department/viewForm", departmentJson, "json", drawSaveForm);
 
         function drawSaveForm(result) {
-            var header = $('<h1></h1>').attr({class: "text-center"}).text("Save department");
             var saveForm = $('<form></form>').attr({class: "form-horizontal col-lg-offset-2"});
             var hiddenDepartmentId = $('<input/>').attr({
                 type: "hidden",
@@ -99,10 +86,9 @@ function DepartmentService() {
             saveButton.appendTo(saveForm);
 
             $('#wrapper').empty();
-            $('#wrapper').append(header);
+            $('#wrapper').append($('<h1>Save department</h1>').attr({class: "text-center"}));
             $('#wrapper').append(saveForm);
         }
-
 
     }
 
@@ -113,41 +99,187 @@ function DepartmentService() {
             "departmentId": +departmentId,
             "departmentName": departmentName
         };
-        alert(JSON.stringify(json));
         doAjax("POST", "department/save", JSON.stringify(json), "application/json", function () {
-            alert("saveDepartment");
         });
         controller.doAction('department/viewDepartments');
     }
 
-
     this.deleteDepartment = function deleteDepartment() {
-        alert("deleteDepartment");
+        var departmentJson = arguments[0];
+        doAjax("POST", "department/delete", departmentJson, "application/json", function () {
+        });
+        controller.doAction('department/viewDepartments');
     }
 
     function validateDepartmentSaveForm() {
 
     }
 
-
 }
 
 function EmployeeService() {
+    MainService.call(this);
+    var doAjax = this.sendRequest;
+    var departmentJson;
 
-    function viewEmployeesByDepartment() {
+    this.viewEmployeesByDepartment = function viewEmployeesByDepartment() {
+        if (arguments[0] != undefined) {
+            departmentJson = arguments[0];
+        }
+        doAjax("POST", "employee/viewEmployeesByDepartment", departmentJson, "json", drawEmployeesByDepartment);
+
+        function drawEmployeesByDepartment(result) {
+            mytable = $('<table></table>').attr({class: "table table-hover text-center"}).append($('<tbody></tbody>'));
+            var rows = result.length;
+            var thead = $('<thead></thead>');
+            var rowHead = $('<tr></tr>');
+            $('<td></td>').text('#').appendTo(rowHead);
+            $('<td></td>').text('Name').appendTo(rowHead);
+            $('<td></td>').text('Surname').appendTo(rowHead);
+            $('<td></td>').text('Email').appendTo(rowHead);
+            $('<td></td>').text('Hire date').appendTo(rowHead);
+            $('<td></td>').text('Salary').appendTo(rowHead);
+            $('<td></td>').text('Update').appendTo(rowHead);
+            $('<td></td>').text('Delete').appendTo(rowHead);
+            for (var i = 0; i < rows; i++) {
+                var row = $('<tr></tr>').appendTo(mytable);
+                $('<td></td>').text(i).appendTo(row);
+                $('<td></td>').text(result[i].name).appendTo(row);
+                $('<td></td>').text(result[i].surname).appendTo(row);
+                $('<td></td>').text(result[i].email).appendTo(row);
+                $('<td></td>').text(result[i].hireDate).appendTo(row);
+                $('<td></td>').text(result[i].salary).appendTo(row);
+                $('<td></td>').attr("onclick", "controller.doAction('department/viewDepartmentSaveForm',  '" + JSON.stringify(result[i]) + "'  )").text('Update').attr('onmouseenter', "this.style.cursor = 'pointer'").appendTo(row);
+                $('<td></td>').attr("onclick", "controller.doAction('employee/deleteEmployee',  '" + JSON.stringify(result[i]) + "'  )").text('Delete').attr('onmouseenter', "this.style.cursor = 'pointer'").appendTo(row);
+            }
+            rowHead.appendTo(thead);
+            thead.appendTo(mytable);
+            var div = $('<div></div>').attr({class: "col-lg-12 text-center"}).append(mytable);
+
+            $('#wrapper').empty();
+            $('#wrapper').append($('<h1></h1>').attr({class: "text-center"}).text("Employees of " + JSON.parse(departmentJson).departmentName));
+            $('#wrapper').append(div);
+        }
 
     }
 
-    function viewEmployeeSaveForm() {
+    this.viewEmployeeSaveForm = function viewEmployeeSaveForm() {
+        var employeeJson = arguments[0];
+        if (employeeJson == undefined) {
+            employeeJson = {
+                "employeeId": null,
+                "name": null,
+                "surname": null,
+                "hireDate": null,
+                "email": null,
+                "salary": null,
+            };
+            employeeJson = JSON.stringify(employeeJson);
+        }
+        doAjax("POST", "employee/viewForm", employeeJson, "json", drawSaveForm);
+
+        function drawSaveForm(result) {
+
+
+            console.log(result.employee.name);
+            console.log(result.employee.surname);
+            console.log(result.employee.email);
+
+
+            console.log(result.departmentList[0].departmentName);
+
+            alert("drawSaveForm");
+
+
+            var saveForm = $('<form></form>').attr({class: "form-horizontal col-lg-offset-2"});
+            var employeeId = $('<input/>').attr({
+                type: "hidden",
+                id: "employeeId",
+                value: result.employeeId
+            });
+
+            var inputEmployeeName = $('<div></div>').attr({class: "form-group"});
+            inputEmployeeName.append($('<label></label>').attr({for: "name"}).text("Name:"));
+            inputEmployeeName.append($('<input/>').attr({
+                type: "text",
+                class: "form-control",
+                id: "name",
+                value: result.name
+            }));
+
+            var inputEmployeeSurname = $('<div></div>').attr({class: "form-group"});
+            inputEmployeeSurname.append($('<label></label>').attr({for: "surname"}).text("Surname:"));
+            inputEmployeeSurname.append($('<input/>').attr({
+                type: "text",
+                class: "form-control",
+                id: "surname",
+                value: result.surname
+            }));
+
+            var inputEmployeeEmail = $('<div></div>').attr({class: "form-group"});
+            inputEmployeeEmail.append($('<label></label>').attr({for: "email"}).text("Email:"));
+            inputEmployeeEmail.append($('<input/>').attr({
+                type: "text",
+                class: "form-control",
+                id: "email",
+                value: result.email
+            }));
+
+            var inputEmployeeHireDate = $('<div></div>').attr({class: "form-group"});
+            inputEmployeeHireDate.append($('<label></label>').attr({for: "hireDate"}).text("Hire date:"));
+            inputEmployeeHireDate.append($('<input/>').attr({
+                type: "text",
+                class: "form-control",
+                id: "hireDate",
+                value: result.hireDate
+            }));
+
+            var inputEmployeeSalary = $('<div></div>').attr({class: "form-group"});
+            inputEmployeeSalary.append($('<label></label>').attr({for: "salary"}).text("Salary:"));
+            inputEmployeeSalary.append($('<input/>').attr({
+                type: "text",
+                class: "form-control",
+                id: "salary",
+                value: result.salary
+            }));
+
+
+//TODO add department id....
+
+
+            var saveButton = $('<div></div>').attr({class: "form-group"});
+            saveButton.append($('<div></div>').attr({class: "col-lg-9 col-lg-offset-3"}).append($('<button></button>').attr({
+                type: "button",
+                class: "btn btn-primary"
+            }).attr("onclick", "controller.doAction('employee/save')").text("Save")));
+
+
+            employeeId.appendTo(saveForm);
+            inputEmployeeName.appendTo(saveForm);
+            inputEmployeeSurname.appendTo(saveForm);
+            inputEmployeeEmail.appendTo(saveForm);
+            inputEmployeeHireDate.appendTo(saveForm);
+            inputEmployeeSalary.appendTo(saveForm);
+            saveButton.appendTo(saveForm);
+
+
+            $('#wrapper').empty();
+            $('#wrapper').append($('<h1>Save employee</h1>').attr({class: "text-center"}));
+            $('#wrapper').append(saveForm);
+        }
 
     }
+
 
     function saveEmployee() {
 
     }
 
-    function deleteEmployee() {
-
+    this.deleteEmployee = function deleteEmployee() {
+        var employeeJson = arguments[0];
+        doAjax("POST", "employee/delete", employeeJson, "json", function () {
+        });
+        controller.doAction("employee/viewEmployeesByDepartment");
     }
 
     function validateEmployeeSaveForm() {
@@ -166,6 +298,11 @@ function Controller() {
     actionMap.set("department/viewDepartmentSaveForm", departmentService.viewDepartmentSaveForm);
     actionMap.set("department/saveDepartment", departmentService.saveDepartment);
     actionMap.set("department/deleteDepartment", departmentService.deleteDepartment);
+
+    actionMap.set("employee/viewEmployeesByDepartment", employeeService.viewEmployeesByDepartment);
+    actionMap.set("employee/viewEmployeeSaveForm", employeeService.viewEmployeeSaveForm);
+    actionMap.set("employee/saveEmployee", employeeService.saveEmployee);
+    actionMap.set("employee/deleteEmployee", employeeService.deleteEmployee);
 
 
     this.doAction = function () {

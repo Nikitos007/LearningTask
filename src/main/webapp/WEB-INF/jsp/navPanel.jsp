@@ -14,7 +14,7 @@
                                 Departments </a></li>
                             <li><a href="#" onclick="controller.doAction('department/viewDepartmentSaveForm')"> New
                                 Department</a></li>
-                            <li><a href="#" onclick="controller.doAction('department/viewEmployeeSaveForm')"> New
+                            <li><a href="#" onclick="controller.doAction('employee/viewEmployeeSaveForm')"> New
                                 Employee</a></li>
                         </ul>
                     </div>

@@ -1,23 +1,20 @@
 package ua.com.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import ua.com.exception.ValidFieldException;
 import ua.com.model.Department;
 import ua.com.model.Employee;
 import ua.com.services.DepartmentService;
 import ua.com.services.EmployeeService;
+import ua.com.wrappers.SaveEmployeeWrapper;
 
 import java.util.List;
 
 /**
  * Created on 10.08.17.
  */
-@Controller
+@RestController
 @RequestMapping("/employee")
 public class EmployeeController {
 
@@ -30,10 +27,10 @@ public class EmployeeController {
         this.departmentService = departmentService;
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    public String delete(Employee employee, @RequestParam(value = "departmentId") Long departmentId) {
+    @RequestMapping(value = "/delete", method = RequestMethod.POST, consumes = "application/json")
+    public void delete(@RequestBody Employee employee) {
+        System.out.println();
         employeeService.deleteEmployee(employee);
-        return "redirect:/employee/viewEmployee?departmentId=" + departmentId;
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
@@ -42,21 +39,40 @@ public class EmployeeController {
         return "redirect:/employee/viewEmployee?departmentId=" + employee.getDepartment().getDepartmentId();
     }
 
-    @RequestMapping(value = "/viewEmployee", method = RequestMethod.GET)
-    public String viewEmployee(Model model, @RequestParam(value = "departmentId") Long departmentId) {
-        model.addAttribute("employeeList", employeeService.viewEmployeeByDepartmentId(departmentId));
-        return "employeeByDepartment";
+
+    @ResponseBody
+    @RequestMapping(value = "/viewEmployeesByDepartment", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+    public List<Employee> viewEmployee(@RequestBody Department department) {
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        List<Employee> employeeList = employeeService.viewEmployeeByDepartmentId(department.getDepartmentId());
+        return employeeList;
     }
 
-    @RequestMapping(value = "/viewForm", method = RequestMethod.GET)
-    public String viewForm(Model model, Employee employeeRequest) {
-        if (employeeRequest.getEmployeeId() != null) {
-            Employee employee = employeeService.getEmployeeById(employeeRequest.getEmployeeId());
-            model.addAttribute("employee", employee);
+    @RequestMapping(value = "/viewForm", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+    public SaveEmployeeWrapper viewForm(@RequestBody Employee employee) {
+        SaveEmployeeWrapper saveEmployeeWrapper = new SaveEmployeeWrapper();
+        Employee employeeDb = new Employee();
+        if (employee.getEmployeeId() != null) {
+            employeeDb = employeeService.getEmployeeById(employee.getEmployeeId());
         }
+        saveEmployeeWrapper.setEmployee(employeeDb);
         List<Department> departmentList = departmentService.viewAllDepartment();
-        model.addAttribute("departmentList", departmentList);
-        return "saveEmployee";
+        saveEmployeeWrapper.setDepartmentList(departmentList);
+        return saveEmployeeWrapper;
+
+
+//        if (employeeRequest.getEmployeeId() != null) {
+//            Employee employee = employeeService.getEmployeeById(employeeRequest.getEmployeeId());
+//            model.addAttribute("employee", employee);
+//        }
+//        List<Department> departmentList = departmentService.viewAllDepartment();
+//        model.addAttribute("departmentList", departmentList);
+//        return "saveEmployee";
+
     }
 
 }
