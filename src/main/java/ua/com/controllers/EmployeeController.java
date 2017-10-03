@@ -8,6 +8,7 @@ import ua.com.model.Employee;
 import ua.com.services.DepartmentService;
 import ua.com.services.EmployeeService;
 import ua.com.wrappers.SaveEmployeeWrapper;
+import ua.com.wrappers.ViewSaveEmployeeFormWrapper;
 
 import java.util.List;
 
@@ -29,14 +30,16 @@ public class EmployeeController {
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST, consumes = "application/json")
     public void delete(@RequestBody Employee employee) {
-        System.out.println();
         employeeService.deleteEmployee(employee);
     }
 
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String save(Employee employee) throws ValidFieldException {
+    @RequestMapping(value = "/save", method = RequestMethod.POST, consumes = "application/json")
+    public void save(@RequestBody SaveEmployeeWrapper saveEmployeeWrapper) throws ValidFieldException {
+        Department department = new Department();
+        department.setDepartmentId(saveEmployeeWrapper.getDepartmentId());
+        Employee employee = saveEmployeeWrapper.getEmployee();
+        employee.setDepartment(department);
         employeeService.saveEmployee(employee);
-        return "redirect:/employee/viewEmployee?departmentId=" + employee.getDepartment().getDepartmentId();
     }
 
 
@@ -53,16 +56,17 @@ public class EmployeeController {
     }
 
     @RequestMapping(value = "/viewForm", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-    public SaveEmployeeWrapper viewForm(@RequestBody Employee employee) {
-        SaveEmployeeWrapper saveEmployeeWrapper = new SaveEmployeeWrapper();
+    public ViewSaveEmployeeFormWrapper viewForm(@RequestBody Employee employee) {
+        ViewSaveEmployeeFormWrapper viewSaveEmployeeFormWrapper = new ViewSaveEmployeeFormWrapper();
         Employee employeeDb = new Employee();
         if (employee.getEmployeeId() != null) {
             employeeDb = employeeService.getEmployeeById(employee.getEmployeeId());
         }
-        saveEmployeeWrapper.setEmployee(employeeDb);
+        viewSaveEmployeeFormWrapper.setEmployee(employeeDb);
+        viewSaveEmployeeFormWrapper.setDepartment(employeeDb.getDepartment());
         List<Department> departmentList = departmentService.viewAllDepartment();
-        saveEmployeeWrapper.setDepartmentList(departmentList);
-        return saveEmployeeWrapper;
+        viewSaveEmployeeFormWrapper.setDepartmentList(departmentList);
+        return viewSaveEmployeeFormWrapper;
 
 
 //        if (employeeRequest.getEmployeeId() != null) {

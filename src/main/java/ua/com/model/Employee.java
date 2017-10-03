@@ -52,11 +52,10 @@ public class Employee implements Serializable {
     @Column(name = "salary")
     private Integer salary;
 
-
+    @JsonIgnore
     @NotNull(message = "Can not be null")
     @NotEmpty(message = "Can not be empty")
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_department")
     private Department department;
 
@@ -131,16 +130,16 @@ public class Employee implements Serializable {
         return employeeId != null ? employeeId.hashCode() : 0;
     }
 
-    @Override
-    public String toString() {
-        return "Employee{" +
-                "employeeId=" + employeeId +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", hireDate=" + hireDate +
-                ", email='" + email + '\'' +
-                ", salary=" + salary +
-                ", department=" + department +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "Employee{" +
+//                "employeeId=" + employeeId +
+//                ", name='" + name + '\'' +
+//                ", surname='" + surname + '\'' +
+//                ", hireDate=" + hireDate +
+//                ", email='" + email + '\'' +
+//                ", salary=" + salary +
+//                ", department=" + department +
+//                '}';
+//    }
 }

@@ -1,14 +1,14 @@
 package ua.com.wrappers;
 
-import ua.com.model.Department;
 import ua.com.model.Employee;
 
-import java.util.List;
-
+/**
+ * Created on 03.10.17.
+ */
 public class SaveEmployeeWrapper {
 
     private Employee employee;
-    private List<Department> departmentList;
+    private Long departmentId;
 
     public Employee getEmployee() {
         return employee;
@@ -18,12 +18,11 @@ public class SaveEmployeeWrapper {
         this.employee = employee;
     }
 
-    public List<Department> getDepartmentList() {
-        return departmentList;
+    public Long getDepartmentId() {
+        return departmentId;
     }
 
-    public void setDepartmentList(List<Department> departmentList) {
-        this.departmentList = departmentList;
+    public void setDepartmentId(Long departmentId) {
+        this.departmentId = departmentId;
     }
-
 }

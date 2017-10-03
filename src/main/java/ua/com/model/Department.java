@@ -27,7 +27,7 @@ public class Department implements Serializable {
     private String departmentName;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "department", cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "department", cascade = CascadeType.REFRESH)
     List<Employee> employeeList = new ArrayList<>();
 
     public Long getDepartmentId() {
@@ -69,12 +69,12 @@ public class Department implements Serializable {
         return departmentId != null ? departmentId.hashCode() : 0;
     }
 
-    @Override
-    public String toString() {
-        return "Department{" +
-                "departmentId=" + departmentId +
-                ", departmentName='" + departmentName + '\'' +
-                ", employeeList=" + employeeList +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "Department{" +
+//                "departmentId=" + departmentId +
+//                ", departmentName='" + departmentName + '\'' +
+//                ", employeeList=" + employeeList +
+//                '}';
+//    }
 }

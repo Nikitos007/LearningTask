@@ -1,4 +1,3 @@
-
 function MainService() {
     this.sendRequest = function sendRequest(typeReq, urlReq, dataReq, dataTypeReq, successReq) {
         $.ajax({
@@ -60,6 +59,7 @@ function DepartmentService() {
         }
         doAjax("POST", "department/viewForm", departmentJson, "json", drawSaveForm);
 
+
         function drawSaveForm(result) {
             var saveForm = $('<form></form>').attr({class: "form-horizontal col-lg-offset-2"});
             var hiddenDepartmentId = $('<input/>').attr({
@@ -117,6 +117,7 @@ function DepartmentService() {
 
 }
 
+
 function EmployeeService() {
     MainService.call(this);
     var doAjax = this.sendRequest;
@@ -149,7 +150,7 @@ function EmployeeService() {
                 $('<td></td>').text(result[i].email).appendTo(row);
                 $('<td></td>').text(result[i].hireDate).appendTo(row);
                 $('<td></td>').text(result[i].salary).appendTo(row);
-                $('<td></td>').attr("onclick", "controller.doAction('department/viewDepartmentSaveForm',  '" + JSON.stringify(result[i]) + "'  )").text('Update').attr('onmouseenter', "this.style.cursor = 'pointer'").appendTo(row);
+                $('<td></td>').attr("onclick", "controller.doAction('employee/viewEmployeeSaveForm',  '" + JSON.stringify(result[i]) + "'  )").text('Update').attr('onmouseenter', "this.style.cursor = 'pointer'").appendTo(row);
                 $('<td></td>').attr("onclick", "controller.doAction('employee/deleteEmployee',  '" + JSON.stringify(result[i]) + "'  )").text('Delete').attr('onmouseenter', "this.style.cursor = 'pointer'").appendTo(row);
             }
             rowHead.appendTo(thead);
@@ -180,22 +181,12 @@ function EmployeeService() {
 
         function drawSaveForm(result) {
 
-
-            console.log(result.employee.name);
-            console.log(result.employee.surname);
-            console.log(result.employee.email);
-
-
-            console.log(result.departmentList[0].departmentName);
-
-            alert("drawSaveForm");
-
-
+            departmentJson = result.department;
             var saveForm = $('<form></form>').attr({class: "form-horizontal col-lg-offset-2"});
             var employeeId = $('<input/>').attr({
                 type: "hidden",
                 id: "employeeId",
-                value: result.employeeId
+                value: result.employee.employeeId
             });
 
             var inputEmployeeName = $('<div></div>').attr({class: "form-group"});
@@ -204,7 +195,7 @@ function EmployeeService() {
                 type: "text",
                 class: "form-control",
                 id: "name",
-                value: result.name
+                value: result.employee.name
             }));
 
             var inputEmployeeSurname = $('<div></div>').attr({class: "form-group"});
@@ -213,7 +204,7 @@ function EmployeeService() {
                 type: "text",
                 class: "form-control",
                 id: "surname",
-                value: result.surname
+                value: result.employee.surname
             }));
 
             var inputEmployeeEmail = $('<div></div>').attr({class: "form-group"});
@@ -222,7 +213,7 @@ function EmployeeService() {
                 type: "text",
                 class: "form-control",
                 id: "email",
-                value: result.email
+                value: result.employee.email
             }));
 
             var inputEmployeeHireDate = $('<div></div>').attr({class: "form-group"});
@@ -231,7 +222,7 @@ function EmployeeService() {
                 type: "text",
                 class: "form-control",
                 id: "hireDate",
-                value: result.hireDate
+                value: result.employee.hireDate
             }));
 
             var inputEmployeeSalary = $('<div></div>').attr({class: "form-group"});
@@ -240,19 +231,28 @@ function EmployeeService() {
                 type: "text",
                 class: "form-control",
                 id: "salary",
-                value: result.salary
+                value: result.employee.salary
             }));
 
-
-//TODO add department id....
-
+            var selectDepartment = $('<div></div>').attr({class: "form-group"});
+            selectDepartment.append($('<label></label>').attr({for: "selectDepartment"}).text("Department:"));
+            var select = $('<select></select>').attr({class: "form-control", id: "departmentId"});
+            for (var i = 0; i < result.departmentList.length; i++) {
+                if (departmentJson != undefined && result.departmentList[i].departmentId == departmentJson.departmentId) {
+                    $('<option></option>').attr('selected', 'selected').attr({
+                        value: result.departmentList[i].departmentId
+                    }).text(result.departmentList[i].departmentName).appendTo(select);
+                } else {
+                    $('<option></option>').attr({value: result.departmentList[i].departmentId}).text(result.departmentList[i].departmentName).appendTo(select);
+                }
+            }
+            select.appendTo(selectDepartment);
 
             var saveButton = $('<div></div>').attr({class: "form-group"});
             saveButton.append($('<div></div>').attr({class: "col-lg-9 col-lg-offset-3"}).append($('<button></button>').attr({
                 type: "button",
                 class: "btn btn-primary"
-            }).attr("onclick", "controller.doAction('employee/save')").text("Save")));
-
+            }).attr("onclick", "controller.doAction('employee/saveEmployee')").text("Save")));
 
             employeeId.appendTo(saveForm);
             inputEmployeeName.appendTo(saveForm);
@@ -260,8 +260,8 @@ function EmployeeService() {
             inputEmployeeEmail.appendTo(saveForm);
             inputEmployeeHireDate.appendTo(saveForm);
             inputEmployeeSalary.appendTo(saveForm);
+            selectDepartment.appendTo(saveForm);
             saveButton.appendTo(saveForm);
-
 
             $('#wrapper').empty();
             $('#wrapper').append($('<h1>Save employee</h1>').attr({class: "text-center"}));
@@ -271,8 +271,30 @@ function EmployeeService() {
     }
 
 
-    function saveEmployee() {
+    this.saveEmployee = function saveEmployee() {
+        var employeeId = $('#employeeId').val();
+        employeeId = (employeeId.trim() == "") ? undefined : employeeId;
+        var name = $('#name').val();
+        var surname = $('#surname').val();
+        var hireDate = $('#hireDate').val();
+        var email = $('#email').val();
+        var salary = $('#salary').val();
+        var departmentId = $('#departmentId').val();
+        var json = {
+            "employee": {
+                "employeeId": +employeeId,
+                "name": name,
+                "surname": surname,
+                "hireDate": hireDate,
+                "email": email,
+                "salary": +salary
+            },
+            "departmentId": +departmentId
+        };
+        doAjax("POST", "employee/save", JSON.stringify(json), "json", function () {
+        });
 
+        controller.doAction('employee/viewEmployeesByDepartment', JSON.stringify({departmentId: +departmentId}));
     }
 
     this.deleteEmployee = function deleteEmployee() {
