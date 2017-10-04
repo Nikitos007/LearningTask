@@ -16,4 +16,6 @@ public interface DepartmentService {
     Department getDepartmentById(Long departmentId);
 
     void saveDepartment(Department department) throws ValidFieldException;
+
+    void validateByOval(Department department) throws ValidFieldException;
 }

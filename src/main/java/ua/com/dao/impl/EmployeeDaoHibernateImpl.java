@@ -28,21 +28,23 @@ public class EmployeeDaoHibernateImpl extends CRUDOperations<Employee, Long> imp
     public List<Employee> getByDepartmentId(Long departmentId) {
         List<Employee> employeeList = new ArrayList<>();
         String hql = "FROM Employee WHERE id_department = :departmentId";
-        Session session = sessionFactory.openSession();
+//        Session session = sessionFactory.openSession();
+        Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery(hql);
         query.setParameter("departmentId", departmentId);
         employeeList = query.list();
-        session.close();
+//        session.close();
         return employeeList;
     }
 
     @Override
     public Employee getByEmail(String email) {
-        Session session = sessionFactory.openSession();
+//        Session session = sessionFactory.openSession();
+        Session session = sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(Employee.class);
         criteria.add(Restrictions.eq("email", email));
         Employee employeeResult = (Employee) criteria.uniqueResult();
-        session.close();
+//        session.close();
         return employeeResult;
     }
 }

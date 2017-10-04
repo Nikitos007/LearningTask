@@ -8,13 +8,12 @@ import ua.com.model.Employee;
 import ua.com.services.DepartmentService;
 import ua.com.services.EmployeeService;
 import ua.com.wrappers.SaveEmployeeWrapper;
+import ua.com.wrappers.ValidateWrapper;
 import ua.com.wrappers.ViewSaveEmployeeFormWrapper;
 
 import java.util.List;
 
-/**
- * Created on 10.08.17.
- */
+
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
@@ -33,24 +32,28 @@ public class EmployeeController {
         employeeService.deleteEmployee(employee);
     }
 
-    @RequestMapping(value = "/save", method = RequestMethod.POST, consumes = "application/json")
-    public void save(@RequestBody SaveEmployeeWrapper saveEmployeeWrapper) throws ValidFieldException {
+    @RequestMapping(value = "/save", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+    public ValidateWrapper save(@RequestBody SaveEmployeeWrapper saveEmployeeWrapper) {
         Department department = new Department();
         department.setDepartmentId(saveEmployeeWrapper.getDepartmentId());
         Employee employee = saveEmployeeWrapper.getEmployee();
         employee.setDepartment(department);
-        employeeService.saveEmployee(employee);
+        try {
+            employeeService.saveEmployee(employee);
+            return new ValidateWrapper();
+        } catch (ValidFieldException e) {
+            return new ValidateWrapper(e.getErrorsMap());
+        }
     }
-
 
     @ResponseBody
     @RequestMapping(value = "/viewEmployeesByDepartment", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
     public List<Employee> viewEmployee(@RequestBody Department department) {
-        try {
-            Thread.sleep(300);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(300);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
         List<Employee> employeeList = employeeService.viewEmployeeByDepartmentId(department.getDepartmentId());
         return employeeList;
     }
@@ -67,16 +70,6 @@ public class EmployeeController {
         List<Department> departmentList = departmentService.viewAllDepartment();
         viewSaveEmployeeFormWrapper.setDepartmentList(departmentList);
         return viewSaveEmployeeFormWrapper;
-
-
-//        if (employeeRequest.getEmployeeId() != null) {
-//            Employee employee = employeeService.getEmployeeById(employeeRequest.getEmployeeId());
-//            model.addAttribute("employee", employee);
-//        }
-//        List<Department> departmentList = departmentService.viewAllDepartment();
-//        model.addAttribute("departmentList", departmentList);
-//        return "saveEmployee";
-
     }
 
 }

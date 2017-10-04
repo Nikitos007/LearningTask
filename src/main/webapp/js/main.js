@@ -40,7 +40,6 @@ function DepartmentService() {
             rowHead.appendTo(thead);
             thead.appendTo(mytable);
             var div = $('<div></div>').attr({class: "col-lg-12 text-center"}).append(mytable);
-
             $('#wrapper').empty();
             $('#wrapper').append($('<h1>Departments</h1>').attr({class: "text-center"}));
             $('#wrapper').append(div);
@@ -59,7 +58,6 @@ function DepartmentService() {
         }
         doAjax("POST", "department/viewForm", departmentJson, "json", drawSaveForm);
 
-
         function drawSaveForm(result) {
             var saveForm = $('<form></form>').attr({class: "form-horizontal col-lg-offset-2"});
             var hiddenDepartmentId = $('<input/>').attr({
@@ -75,6 +73,7 @@ function DepartmentService() {
                 id: "departmentName",
                 value: result.departmentName
             }));
+            inputDepartmentName.append($('<span></span>').attr({id: "errorDepartmentName", class: "text-danger"}));
             var saveButton = $('<div></div>').attr({class: "form-group"});
             saveButton.append($('<div></div>').attr({class: "col-lg-9 col-lg-offset-3"}).append($('<button></button>').attr({
                 type: "button",
@@ -94,24 +93,30 @@ function DepartmentService() {
 
     this.saveDepartment = function saveDepartment() {
         var departmentId = $('#departmentId').val();
+        departmentId = (departmentId.trim() == "") ? undefined : departmentId;
         var departmentName = $('#departmentName').val();
         var json = {
             "departmentId": +departmentId,
             "departmentName": departmentName
         };
-        doAjax("POST", "department/save", JSON.stringify(json), "application/json", function () {
-        });
-        controller.doAction('department/viewDepartments');
+        doAjax("POST", "department/save", JSON.stringify(json), "json", drawValidateException);
+
+        function drawValidateException(result) {
+            var errors = result.errors;
+            if (errors != null) {
+                $('#errorDepartmentName').text(result.errors.departmentName);
+            } else {
+                controller.doAction('department/viewDepartments');
+            }
+        }
+
     }
 
     this.deleteDepartment = function deleteDepartment() {
         var departmentJson = arguments[0];
-        doAjax("POST", "department/delete", departmentJson, "application/json", function () {
+        doAjax("POST", "department/delete", departmentJson, "json", function () {
+            controller.doAction('department/viewDepartments');
         });
-        controller.doAction('department/viewDepartments');
-    }
-
-    function validateDepartmentSaveForm() {
 
     }
 
@@ -124,9 +129,7 @@ function EmployeeService() {
     var departmentJson;
 
     this.viewEmployeesByDepartment = function viewEmployeesByDepartment() {
-        if (arguments[0] != undefined) {
-            departmentJson = arguments[0];
-        }
+        departmentJson = arguments[0];
         doAjax("POST", "employee/viewEmployeesByDepartment", departmentJson, "json", drawEmployeesByDepartment);
 
         function drawEmployeesByDepartment(result) {
@@ -155,11 +158,10 @@ function EmployeeService() {
             }
             rowHead.appendTo(thead);
             thead.appendTo(mytable);
-            var div = $('<div></div>').attr({class: "col-lg-12 text-center"}).append(mytable);
 
             $('#wrapper').empty();
             $('#wrapper').append($('<h1></h1>').attr({class: "text-center"}).text("Employees of " + JSON.parse(departmentJson).departmentName));
-            $('#wrapper').append(div);
+            $('#wrapper').append(mytable);
         }
 
     }
@@ -173,14 +175,13 @@ function EmployeeService() {
                 "surname": null,
                 "hireDate": null,
                 "email": null,
-                "salary": null,
+                "salary": null
             };
             employeeJson = JSON.stringify(employeeJson);
         }
         doAjax("POST", "employee/viewForm", employeeJson, "json", drawSaveForm);
 
         function drawSaveForm(result) {
-
             departmentJson = result.department;
             var saveForm = $('<form></form>').attr({class: "form-horizontal col-lg-offset-2"});
             var employeeId = $('<input/>').attr({
@@ -188,7 +189,6 @@ function EmployeeService() {
                 id: "employeeId",
                 value: result.employee.employeeId
             });
-
             var inputEmployeeName = $('<div></div>').attr({class: "form-group"});
             inputEmployeeName.append($('<label></label>').attr({for: "name"}).text("Name:"));
             inputEmployeeName.append($('<input/>').attr({
@@ -197,7 +197,7 @@ function EmployeeService() {
                 id: "name",
                 value: result.employee.name
             }));
-
+            inputEmployeeName.append($('<span></span>').attr({id: "errorName", class: "text-danger"}));
             var inputEmployeeSurname = $('<div></div>').attr({class: "form-group"});
             inputEmployeeSurname.append($('<label></label>').attr({for: "surname"}).text("Surname:"));
             inputEmployeeSurname.append($('<input/>').attr({
@@ -206,7 +206,7 @@ function EmployeeService() {
                 id: "surname",
                 value: result.employee.surname
             }));
-
+            inputEmployeeSurname.append($('<span></span>').attr({id: "errorSurname", class: "text-danger"}));
             var inputEmployeeEmail = $('<div></div>').attr({class: "form-group"});
             inputEmployeeEmail.append($('<label></label>').attr({for: "email"}).text("Email:"));
             inputEmployeeEmail.append($('<input/>').attr({
@@ -215,25 +215,25 @@ function EmployeeService() {
                 id: "email",
                 value: result.employee.email
             }));
-
+            inputEmployeeEmail.append($('<span></span>').attr({id: "errorEmail", class: "text-danger"}));
             var inputEmployeeHireDate = $('<div></div>').attr({class: "form-group"});
             inputEmployeeHireDate.append($('<label></label>').attr({for: "hireDate"}).text("Hire date:"));
             inputEmployeeHireDate.append($('<input/>').attr({
-                type: "text",
+                type: "date",
                 class: "form-control",
                 id: "hireDate",
                 value: result.employee.hireDate
             }));
-
+            inputEmployeeHireDate.append($('<span></span>').attr({id: "errorHireDate", class: "text-danger"}));
             var inputEmployeeSalary = $('<div></div>').attr({class: "form-group"});
             inputEmployeeSalary.append($('<label></label>').attr({for: "salary"}).text("Salary:"));
             inputEmployeeSalary.append($('<input/>').attr({
-                type: "text",
+                type: "number",
                 class: "form-control",
                 id: "salary",
                 value: result.employee.salary
             }));
-
+            inputEmployeeSalary.append($('<span></span>').attr({id: "errorSalary", class: "text-danger"}));
             var selectDepartment = $('<div></div>').attr({class: "form-group"});
             selectDepartment.append($('<label></label>').attr({for: "selectDepartment"}).text("Department:"));
             var select = $('<select></select>').attr({class: "form-control", id: "departmentId"});
@@ -279,7 +279,15 @@ function EmployeeService() {
         var hireDate = $('#hireDate').val();
         var email = $('#email').val();
         var salary = $('#salary').val();
+        salary = (salary.trim() == "") ? undefined : salary;
         var departmentId = $('#departmentId').val();
+        var departmentName = $('#departmentId option:selected').text();
+
+        departmentJson = JSON.stringify({
+            "departmentId": +departmentId,
+            "departmentName": departmentName
+        });
+
         var json = {
             "employee": {
                 "employeeId": +employeeId,
@@ -291,20 +299,33 @@ function EmployeeService() {
             },
             "departmentId": +departmentId
         };
-        doAjax("POST", "employee/save", JSON.stringify(json), "json", function () {
-        });
+        doAjax("POST", "employee/save", JSON.stringify(json), "json", drawValidateException);
 
-        controller.doAction('employee/viewEmployeesByDepartment', JSON.stringify({departmentId: +departmentId}));
+        function drawValidateException(result) {
+            var errors = result.errors;
+            if (errors != null) {
+                var errorName = result.errors.name;
+                var errorSurname = result.errors.surname;
+                var errorEmail = result.errors.email;
+                var errorHireDate = result.errors.hireDate;
+                var errorSalary = result.errors.salary;
+                (errorName == undefined) ? $('#errorName').empty() : $('#errorName').text(errorName);
+                (errorSurname == undefined) ? $('#errorSurname').empty() : $('#errorSurname').text(errorSurname);
+                (errorEmail == undefined) ? $('#errorEmail').empty() : $('#errorEmail').text(errorEmail);
+                (errorHireDate == undefined) ? $('#errorHireDate').empty() : $('#errorHireDate').text(errorHireDate);
+                (errorSalary == undefined) ? $('#errorSalary').empty() : $('#errorSalary').text(errorSalary);
+            } else {
+                controller.doAction('employee/viewEmployeesByDepartment', departmentJson);
+            }
+        }
+
     }
 
     this.deleteEmployee = function deleteEmployee() {
         var employeeJson = arguments[0];
         doAjax("POST", "employee/delete", employeeJson, "json", function () {
+            controller.doAction("employee/viewEmployeesByDepartment");
         });
-        controller.doAction("employee/viewEmployeesByDepartment");
-    }
-
-    function validateEmployeeSaveForm() {
 
     }
 
@@ -320,7 +341,6 @@ function Controller() {
     actionMap.set("department/viewDepartmentSaveForm", departmentService.viewDepartmentSaveForm);
     actionMap.set("department/saveDepartment", departmentService.saveDepartment);
     actionMap.set("department/deleteDepartment", departmentService.deleteDepartment);
-
     actionMap.set("employee/viewEmployeesByDepartment", employeeService.viewEmployeesByDepartment);
     actionMap.set("employee/viewEmployeeSaveForm", employeeService.viewEmployeeSaveForm);
     actionMap.set("employee/saveEmployee", employeeService.saveEmployee);
@@ -332,7 +352,6 @@ function Controller() {
         if (method == undefined) {
             method = actionMap.get("department/viewDepartments");
         }
-
         if (arguments[1] != undefined) {
             method(arguments[1]);
         } else {
@@ -340,9 +359,7 @@ function Controller() {
         }
     }
 
-
 }
-
 
 var controller = new Controller();
 

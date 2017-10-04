@@ -34,7 +34,13 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Transactional
     public void saveDepartment(Department department) throws ValidFieldException {
-        ValidationOval.fieldsValidation(department);
+        validateByOval(department);
         departmentDao.save(department);
     }
+
+    @Transactional
+    public void validateByOval(Department department) throws ValidFieldException {
+        ValidationOval.fieldsValidation(department);
+    }
+
 }
