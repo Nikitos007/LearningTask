@@ -28,8 +28,9 @@ public class EmployeeController {
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST, consumes = "application/json")
-    public void delete(@RequestBody Employee employee) {
+    public boolean delete(@RequestBody Employee employee) {
         employeeService.deleteEmployee(employee);
+        return true;
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
@@ -49,11 +50,6 @@ public class EmployeeController {
     @ResponseBody
     @RequestMapping(value = "/viewEmployeesByDepartment", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
     public List<Employee> viewEmployee(@RequestBody Department department) {
-//        try {
-//            Thread.sleep(300);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
         List<Employee> employeeList = employeeService.viewEmployeeByDepartmentId(department.getDepartmentId());
         return employeeList;
     }

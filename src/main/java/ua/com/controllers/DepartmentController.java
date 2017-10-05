@@ -24,20 +24,10 @@ public class DepartmentController {
 
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST, consumes = "application/json")
-    public void delete(@RequestBody Department department) {
+    public boolean delete(@RequestBody Department department) {
         departmentService.delete(department);
+        return true;
     }
-
-
-//    @RequestMapping(value = "/validate", method = RequestMethod.POST, consumes ="application/json", produces = "application/json")
-//    public ValidateWrapper validate(@RequestBody Department department) {
-//        try {
-//            departmentService.validateByOval(department);
-//            return null;
-//        } catch (ValidFieldException e) {
-//            return new ValidateWrapper(e.getErrorsMap());
-//        }
-//    }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST, consumes = "application/json")
     public ValidateWrapper save(@RequestBody Department department) {
@@ -52,11 +42,6 @@ public class DepartmentController {
     @ResponseBody
     @RequestMapping(value = "/viewAll", method = RequestMethod.GET, produces = "application/json")
     public List<Department> viewAll() {
-//        try {
-//            Thread.sleep(300);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
         List<Department> departmentList = departmentService.viewAllDepartment();
         return departmentList;
     }

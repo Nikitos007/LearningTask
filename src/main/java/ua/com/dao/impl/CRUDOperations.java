@@ -1,6 +1,6 @@
 package ua.com.dao.impl;
 
-import org.hibernate.Query;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -11,11 +11,10 @@ import ua.com.dao.CRUDOperationsDao;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created on 07.08.17.
- */
+
 @Repository
 public abstract class CRUDOperations<T, E extends Number> implements CRUDOperationsDao<T, E> {
 
@@ -37,36 +36,27 @@ public abstract class CRUDOperations<T, E extends Number> implements CRUDOperati
         }
     }
 
-
     @Override
     public List<T> findAll() {
-        String hql = "FROM " + genericClass.getSimpleName();
-//        Session session = sessionFactory.openSession();
+        List<T> list = new ArrayList<T>();
         Session session = sessionFactory.getCurrentSession();
-//
-        Query query = session.createQuery(hql);
-        session.flush();
-        session.clear();
-        List<T> valueList = (List<T>) query.list();
-//        session.close();
-        return valueList;
+        Criteria criteria = session.createCriteria(genericClass);
+        for (final Object o : criteria.list()) {
+            list.add((T) o);
+        }
+        return list;
     }
 
     @Override
     public T getById(E id) {
-//        Session session = sessionFactory.openSession();
         Session session = sessionFactory.getCurrentSession();
-        session.flush();
-//        session.clear();
         T value = (T) session.get(genericClass, id);
-//        session.close();
         return value;
     }
 
     @Override
     public void save(T entity) {
         Session session = sessionFactory.getCurrentSession();
-        session.flush();
         session.clear();
         session.saveOrUpdate(entity);
     }
@@ -75,7 +65,6 @@ public abstract class CRUDOperations<T, E extends Number> implements CRUDOperati
     public void delete(T entity) {
         Session session = sessionFactory.getCurrentSession();
         session.delete(entity);
-
     }
 
 }

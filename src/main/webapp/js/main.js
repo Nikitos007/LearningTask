@@ -114,7 +114,7 @@ function DepartmentService() {
 
     this.deleteDepartment = function deleteDepartment() {
         var departmentJson = arguments[0];
-        doAjax("POST", "department/delete", departmentJson, "json", function () {
+        doAjax("POST", "department/delete", departmentJson, "json", function (result) {
             controller.doAction('department/viewDepartments');
         });
 
@@ -323,7 +323,7 @@ function EmployeeService() {
 
     this.deleteEmployee = function deleteEmployee() {
         var employeeJson = arguments[0];
-        doAjax("POST", "employee/delete", employeeJson, "json", function () {
+        doAjax("POST", "employee/delete", employeeJson, "json", function (result) {
             controller.doAction("employee/viewEmployeesByDepartment");
         });
 
@@ -346,7 +346,6 @@ function Controller() {
     actionMap.set("employee/saveEmployee", employeeService.saveEmployee);
     actionMap.set("employee/deleteEmployee", employeeService.deleteEmployee);
 
-
     this.doAction = function () {
         var method = actionMap.get(arguments[0]);
         if (method == undefined) {
@@ -358,8 +357,8 @@ function Controller() {
             method();
         }
     }
-
 }
+
 
 var controller = new Controller();
 
