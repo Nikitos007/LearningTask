@@ -1,1 +1,1 @@
-# LearningTask
+# JS ES6 (ECMAScript 2015)

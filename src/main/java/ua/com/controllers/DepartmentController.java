@@ -22,11 +22,21 @@ public class DepartmentController {
         this.departmentService = departmentService;
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/viewAll", method = RequestMethod.GET, produces = "application/json")
+    public List<Department> viewAll() {
+        List<Department> departmentList = departmentService.viewAllDepartment();
+        return departmentList;
+    }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.POST, consumes = "application/json")
-    public boolean delete(@RequestBody Department department) {
-        departmentService.delete(department);
-        return true;
+    @ResponseBody
+    @RequestMapping(value = "/viewSaveForm", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+    public Department viewForm(@RequestBody Department department) {
+        if (department.getDepartmentId() != null) {
+            Department departmenDb = departmentService.getDepartmentById(department.getDepartmentId());
+            return departmenDb;
+        }
+        return new Department();
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST, consumes = "application/json")
@@ -39,21 +49,10 @@ public class DepartmentController {
         }
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/viewAll", method = RequestMethod.GET, produces = "application/json")
-    public List<Department> viewAll() {
-        List<Department> departmentList = departmentService.viewAllDepartment();
-        return departmentList;
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "/viewForm", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-    public Department viewForm(@RequestBody Department department) {
-        if (department.getDepartmentId() != null) {
-            Department departmenDb = departmentService.getDepartmentById(department.getDepartmentId());
-            return departmenDb;
-        }
-        return new Department();
+    @RequestMapping(value = "/delete", method = RequestMethod.POST, consumes = "application/json")
+    public boolean delete(@RequestBody Department department) {
+        departmentService.delete(department);
+        return true;
     }
 
     @RequestMapping(method = RequestMethod.GET)

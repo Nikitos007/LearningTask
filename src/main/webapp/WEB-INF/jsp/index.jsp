@@ -9,7 +9,7 @@
     <script src="/js/main.js"></script>
 </head>
 
-<body onload="controller.doAction('department/viewDepartments')">
+<body onload="controller.doAction('department/viewAll')">
 
 <c:import url="navPanel.jsp"/>
 
