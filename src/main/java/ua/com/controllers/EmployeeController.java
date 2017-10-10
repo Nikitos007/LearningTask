@@ -27,10 +27,25 @@ public class EmployeeController {
         this.departmentService = departmentService;
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.POST, consumes = "application/json")
-    public boolean delete(@RequestBody Employee employee) {
-        employeeService.deleteEmployee(employee);
-        return true;
+    @ResponseBody
+    @RequestMapping(value = "/viewEmployeesByDepartment", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+    public List<Employee> viewEmployee(@RequestBody Department department) {
+        List<Employee> employeeList = employeeService.viewEmployeeByDepartmentId(department.getDepartmentId());
+        return employeeList;
+    }
+
+    @RequestMapping(value = "/viewSaveForm", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+    public ViewSaveEmployeeFormWrapper viewForm(@RequestBody Employee employee) {
+        ViewSaveEmployeeFormWrapper viewSaveEmployeeFormWrapper = new ViewSaveEmployeeFormWrapper();
+        Employee employeeDb = new Employee();
+        if (employee.getEmployeeId() != null) {
+            employeeDb = employeeService.getEmployeeById(employee.getEmployeeId());
+        }
+        viewSaveEmployeeFormWrapper.setEmployee(employeeDb);
+        viewSaveEmployeeFormWrapper.setDepartment(employeeDb.getDepartment());
+        List<Department> departmentList = departmentService.viewAllDepartment();
+        viewSaveEmployeeFormWrapper.setDepartmentList(departmentList);
+        return viewSaveEmployeeFormWrapper;
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
@@ -47,25 +62,10 @@ public class EmployeeController {
         }
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/viewEmployeesByDepartment", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-    public List<Employee> viewEmployee(@RequestBody Department department) {
-        List<Employee> employeeList = employeeService.viewEmployeeByDepartmentId(department.getDepartmentId());
-        return employeeList;
-    }
-
-    @RequestMapping(value = "/viewForm", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-    public ViewSaveEmployeeFormWrapper viewForm(@RequestBody Employee employee) {
-        ViewSaveEmployeeFormWrapper viewSaveEmployeeFormWrapper = new ViewSaveEmployeeFormWrapper();
-        Employee employeeDb = new Employee();
-        if (employee.getEmployeeId() != null) {
-            employeeDb = employeeService.getEmployeeById(employee.getEmployeeId());
-        }
-        viewSaveEmployeeFormWrapper.setEmployee(employeeDb);
-        viewSaveEmployeeFormWrapper.setDepartment(employeeDb.getDepartment());
-        List<Department> departmentList = departmentService.viewAllDepartment();
-        viewSaveEmployeeFormWrapper.setDepartmentList(departmentList);
-        return viewSaveEmployeeFormWrapper;
+    @RequestMapping(value = "/delete", method = RequestMethod.POST, consumes = "application/json")
+    public boolean delete(@RequestBody Employee employee) {
+        employeeService.deleteEmployee(employee);
+        return true;
     }
 
 }
