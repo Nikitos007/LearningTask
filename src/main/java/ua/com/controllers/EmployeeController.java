@@ -8,7 +8,6 @@ import ua.com.model.Employee;
 import ua.com.services.DepartmentService;
 import ua.com.services.EmployeeService;
 import ua.com.wrappers.SaveEmployeeWrapper;
-import ua.com.wrappers.ValidateWrapper;
 import ua.com.wrappers.ViewSaveEmployeeFormWrapper;
 
 import java.util.List;
@@ -49,20 +48,20 @@ public class EmployeeController {
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-    public ValidateWrapper save(@RequestBody SaveEmployeeWrapper saveEmployeeWrapper) {
+    public Boolean save(@RequestBody SaveEmployeeWrapper saveEmployeeWrapper) {
         Department department = new Department();
         department.setDepartmentId(saveEmployeeWrapper.getDepartmentId());
         Employee employee = saveEmployeeWrapper.getEmployee();
         employee.setDepartment(department);
         try {
             employeeService.saveEmployee(employee);
-            return new ValidateWrapper();
+            return true;
         } catch (ValidFieldException e) {
-            return new ValidateWrapper(e.getErrorsMap());
+            return null;
         }
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.POST, consumes = "application/json")
+    @RequestMapping(value = "/delete", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
     public boolean delete(@RequestBody Employee employee) {
         employeeService.deleteEmployee(employee);
         return true;

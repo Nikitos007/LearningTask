@@ -56,6 +56,7 @@ class DepartmentService extends MainService {
     }
 
     viewSaveForm() {
+
         var departmentJson = arguments[0];
         if (departmentJson == undefined) {
             departmentJson = {
@@ -69,7 +70,10 @@ class DepartmentService extends MainService {
         ;
 
         function drawSaveForm(result) {
-            var saveForm = $('<form></form>').attr({class: "form-horizontal col-lg-offset-2"});
+            var saveForm = $('<form></form>').attr({
+                class: "form-horizontal col-lg-offset-2",
+                id: "departmentSaveForm"
+            });
             var hiddenDepartmentId = $('<input/>').attr({
                 type: "hidden",
                 id: "departmentId",
@@ -81,12 +85,13 @@ class DepartmentService extends MainService {
                 type: "text",
                 class: "form-control",
                 id: "departmentName",
+                name: "departmentName",
                 value: result.departmentName
             }));
             inputDepartmentName.append($('<span></span>').attr({id: "errorDepartmentName", class: "text-danger"}));
             var saveButton = $('<div></div>').attr({class: "form-group"});
             saveButton.append($('<div></div>').attr({class: "col-lg-9 col-lg-offset-3"}).append($('<button></button>').attr({
-                type: "button",
+                type: "submit",
                 class: "btn btn-primary"
             }).attr("onclick", "controller.doAction('department/save')").text("Save")));
 
@@ -97,25 +102,93 @@ class DepartmentService extends MainService {
             $('#wrapper').empty();
             $('#wrapper').append($('<h1>Save department</h1>').attr({class: "text-center"}));
             $('#wrapper').append(saveForm);
+
+            $(function () {
+                //save();
+            })
+
+
         }
 
     }
 
     save() {
-        var departmentId = $('#departmentId').val();
-        departmentId = (departmentId.trim() == "") ? undefined : departmentId;
-        var departmentName = $('#departmentName').val();
-        var departmentJson = {
-            "departmentId": +departmentId,
-            "departmentName": departmentName
-        };
-        var options = super.getAjaxOptions("POST", "department/save", departmentJson);
-        super.doAjax(options).then(function (result) {
-            controller.doAction('department/viewAll')
-        }).catch(error = > console.error("Error: DepartmentService -> save: " + error)
-    )
-        ;
+        var getAjaxOptions = super.getAjaxOptions;
+        var doAjax = super.doAjax;
+
+        var getDepartmentJson = function () {
+            let departmentId = $('#departmentId').val();
+            departmentId = (departmentId.trim() == "") ? undefined : departmentId;
+            let departmentName = $('#departmentName').val();
+            let departmentJson = {
+                "departmentId": +departmentId,
+                "departmentName": departmentName
+            };
+            return departmentJson;
+        }
+
+        $.validator.addMethod("onlyChars", function (value, element) {
+                return /^[a-zA-Z\s]+$/.test(value);
+            },
+            "Please don't insert numbers and specified chars");
+
+        $.validator.addMethod("checkUniqueName", function (value, element) {
+            let departmentJson = getDepartmentJson();
+            var options = getAjaxOptions("POST", "department/uniqueName", departmentJson);
+            return doAjax(options).then(function (result) {
+                    return result;
+                }).catch(error = > console.error("DepartmentService -> save: " + error)
+            )
+            ;
+        }, "This name has already exist");
+
+        $('#departmentSaveForm').validate({
+            rules: {
+                departmentName: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 100,
+                    onlyChars: true,
+                    checkUniqueName: true
+                }
+            },
+            messages: {
+                departmentName: {
+                    required: "Please enter a department's name",
+                    minlength: "Min length is 3 letters",
+                    maxlength: "Max length is 100 letters"
+                }
+            },
+            submitHandler: function () {
+
+                let departmentJson = getDepartmentJson();
+
+
+                var options = getAjaxOptions("POST", "department/save", departmentJson);
+                doAjax(options).then(function (result) {
+                    controller.doAction('department/viewAll')
+                }).catch(function (error) {
+                    console.error("Error: DepartmentService -> save: " + error);
+                    $('#wrapper').empty();
+                    $('#wrapper').append($('<h1></h1>').attr({class: "text-center"}).text("404 Not found"));
+                });
+            }
+        });
+
+
+        // if (valid) {
+        //     var options = super.getAjaxOptions("POST", "department/save", departmentJson);
+        //     super.doAjax(options).then(function (result) {
+        //         controller.doAction('department/viewAll')
+        //     }).catch(function (error) {
+        //         console.error("Error: DepartmentService -> save: " + error);
+        //         $('#wrapper').empty();
+        //         $('#wrapper').append($('<h1></h1>').attr({class: "text-center"}).text("404 Not found"));
+        //     });
+        // }
     }
+
+
 
     delete() {
         var departmentJson = arguments[0];
@@ -126,27 +199,19 @@ class DepartmentService extends MainService {
     )
         ;
     }
+
+
 }
 
+var departmentJson;
 
 class EmployeeService extends MainService {
 
-    constructor(departmentId, departmentName) {
-        super();
-        this.departmentId = departmentId;
-        this.departmentName = departmentName;
-    }
-
-
     viewEmployeesByDepartment() {
-
-
-        console.log("arguments[0] = " + JSON.stringify(arguments[0]));
-        this.departmentName = arguments[0].departmentName;
-
-        // this.departmentJson = JSON.stringify(arguments[0]);
-
-        var options = super.getAjaxOptions("POST", "employee/viewEmployeesByDepartment", this.departmentJson);
+        if (arguments[0]) {
+            departmentJson = arguments[0];
+        }
+        var options = super.getAjaxOptions("POST", "employee/viewEmployeesByDepartment", departmentJson);
         super.doAjax(options).then(drawEmployeesByDepartment).catch(error = > console.error("EmployeeService -> viewEmployeesByDepartment: " + error)
     )
         ;
@@ -179,10 +244,9 @@ class EmployeeService extends MainService {
             thead.appendTo(mytable);
 
             $('#wrapper').empty();
-            $('#wrapper').append($('<h1></h1>').attr({class: "text-center"}).text("Employees of " + JSON.parse(this.departmentJson).departmentName));
+            $('#wrapper').append($('<h1></h1>').attr({class: "text-center"}).text("Employees of " + departmentJson.departmentName));
             $('#wrapper').append(mytable);
         }
-
 
     }
 
@@ -204,7 +268,7 @@ class EmployeeService extends MainService {
         ;
 
         function drawSaveForm(result) {
-            // departmentJson = result.department;
+            var departmentJson = result.department;
             var saveForm = $('<form></form>').attr({class: "form-horizontal col-lg-offset-2"});
             var employeeId = $('<input/>').attr({
                 type: "hidden",
@@ -274,7 +338,7 @@ class EmployeeService extends MainService {
             saveButton.append($('<div></div>').attr({class: "col-lg-9 col-lg-offset-3"}).append($('<button></button>').attr({
                 type: "button",
                 class: "btn btn-primary"
-            }).attr("onclick", "controller.doAction('employee/saveEmployee')").text("Save")));
+            }).attr("onclick", "controller.doAction('employee/save')").text("Save")));
 
             employeeId.appendTo(saveForm);
             inputEmployeeName.appendTo(saveForm);
@@ -293,13 +357,51 @@ class EmployeeService extends MainService {
     }
 
     save() {
-        super.ajax();
-        console.log("EmployeeService --- save");
+        var employeeId = $('#employeeId').val();
+        employeeId = (employeeId.trim() == "") ? undefined : employeeId;
+        var name = $('#name').val();
+        var surname = $('#surname').val();
+        var hireDate = $('#hireDate').val();
+        var email = $('#email').val();
+        var salary = $('#salary').val();
+        salary = (salary.trim() == "") ? undefined : salary;
+        var departmentId = $('#departmentId').val();
+        var departmentName = $('#departmentId option:selected').text();
+
+        departmentJson = JSON.stringify({
+            "departmentId": +departmentId,
+            "departmentName": departmentName
+        });
+
+        var json = {
+            "employee": {
+                "employeeId": +employeeId,
+                "name": name,
+                "surname": surname,
+                "hireDate": hireDate,
+                "email": email,
+                "salary": +salary
+            },
+            "departmentId": +departmentId
+        };
+        var options = super.getAjaxOptions("POST", "employee/save", json);
+        super.doAjax(options).then(function (result) {
+            controller.doAction("employee/viewEmployeesByDepartment", departmentJson);
+        }).catch(function (error) {
+            console.error("EmployeeService -> save: " + error);
+            $('#wrapper').empty();
+            $('#wrapper').append($('<h1></h1>').attr({class: "text-center"}).text("404 Not found"));
+        });
     }
 
     delete() {
-        super.ajax();
-        console.log("EmployeeService --- delete");
+        var employeeJson = arguments[0];
+        var options = super.getAjaxOptions("POST", "employee/delete", employeeJson);
+        super.doAjax(options).then(function (result) {
+            controller.doAction("employee/viewEmployeesByDepartment");
+        }).catch(error = > console.error("EmployeeService -> delete: " + error)
+    )
+        ;
     }
 }
 
@@ -308,7 +410,7 @@ class Controller {
 
     constructor() {
         this.departmentService = new DepartmentService();
-        this.employeeService = new EmployeeService(null, null);
+        this.employeeService = new EmployeeService();
         this.actionsMap = new Map();
         this.actionsMap.set("department/viewAll", this.departmentService.viewAll);
         this.actionsMap.set("department/viewSaveForm", this.departmentService.viewSaveForm);
@@ -333,3 +435,4 @@ class Controller {
 
 
 let controller = new Controller();
+

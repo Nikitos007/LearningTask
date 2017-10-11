@@ -6,7 +6,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ua.com.exception.ValidFieldException;
 import ua.com.model.Department;
 import ua.com.services.DepartmentService;
-import ua.com.wrappers.ValidateWrapper;
+import ua.com.utils.validation.ValidationUniqueDepartmentName;
 
 import java.util.List;
 
@@ -39,14 +39,21 @@ public class DepartmentController {
         return new Department();
     }
 
+    @Autowired
+    ValidationUniqueDepartmentName uniqueDepartmentName;
+
+    @RequestMapping(value = "uniqueName", method = RequestMethod.POST, consumes = "application/json")
+    public Boolean checkUniqueName(@RequestBody Department department) {
+        return uniqueDepartmentName.isSatisfied(department, department);
+    }
+
     @RequestMapping(value = "/save", method = RequestMethod.POST, consumes = "application/json")
-    public ValidateWrapper save(@RequestBody Department department) {
+    public Boolean save(@RequestBody Department department) {
         try {
             departmentService.saveDepartment(department);
-            return new ValidateWrapper();
+            return true;
         } catch (ValidFieldException e) {
-            return new ValidateWrapper(e.getErrorsMap());
-            //TODO Validations... back to frontend
+            return null;
         }
     }
 
