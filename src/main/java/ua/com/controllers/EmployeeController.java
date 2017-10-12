@@ -7,6 +7,7 @@ import ua.com.model.Department;
 import ua.com.model.Employee;
 import ua.com.services.DepartmentService;
 import ua.com.services.EmployeeService;
+import ua.com.utils.validation.ValidationUniqueEmployeeEmail;
 import ua.com.wrappers.SaveEmployeeWrapper;
 import ua.com.wrappers.ViewSaveEmployeeFormWrapper;
 
@@ -21,6 +22,9 @@ public class EmployeeController {
     private final DepartmentService departmentService;
 
     @Autowired
+    private ValidationUniqueEmployeeEmail uniqueEmployeeEmail;
+
+    @Autowired
     public EmployeeController(EmployeeService employeeService, DepartmentService departmentService) {
         this.employeeService = employeeService;
         this.departmentService = departmentService;
@@ -31,6 +35,12 @@ public class EmployeeController {
     public List<Employee> viewEmployee(@RequestBody Department department) {
         List<Employee> employeeList = employeeService.viewEmployeeByDepartmentId(department.getDepartmentId());
         return employeeList;
+    }
+
+    @RequestMapping(value = "/uniqueEmail", method = RequestMethod.POST, consumes = "application/json")
+    public Boolean checkUniqueName(@RequestBody Employee employee) {
+        boolean isInique = uniqueEmployeeEmail.isSatisfied(employee, employee);
+        return isInique;
     }
 
     @RequestMapping(value = "/viewSaveForm", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")

@@ -24,7 +24,7 @@ class MainService {
 class DepartmentService extends MainService {
     viewAll() {
         var options = super.getAjaxOptions("GET", "department/viewAll", "");
-        super.doAjax(options).then(drawAllDepartments).catch(error = > console.error("Error: DepartmentService -> viewAll: " + error)
+        super.doAjax(options).then(drawAllDepartments).catch(error => console.error("Error: DepartmentService -> viewAll: " + error)
     )
         ;
 
@@ -65,7 +65,7 @@ class DepartmentService extends MainService {
             };
         }
         var options = super.getAjaxOptions("POST", "department/viewSaveForm", departmentJson);
-        super.doAjax(options).then(drawSaveForm).catch(error = > console.error("Error: DepartmentService -> viewSaveForm: " + error)
+        super.doAjax(options).then(drawSaveForm).catch(error => console.error("Error: DepartmentService -> viewSaveForm: " + error)
     )
         ;
 
@@ -104,9 +104,8 @@ class DepartmentService extends MainService {
             $('#wrapper').append(saveForm);
 
             $(function () {
-                //save();
+                controller.doAction("department/save");
             })
-
 
         }
 
@@ -127,20 +126,28 @@ class DepartmentService extends MainService {
             return departmentJson;
         }
 
+
         $.validator.addMethod("onlyChars", function (value, element) {
                 return /^[a-zA-Z\s]+$/.test(value);
             },
             "Please don't insert numbers and specified chars");
 
         $.validator.addMethod("checkUniqueName", function (value, element) {
-            let departmentJson = getDepartmentJson();
-            var options = getAjaxOptions("POST", "department/uniqueName", departmentJson);
-            return doAjax(options).then(function (result) {
-                    return result;
-                }).catch(error = > console.error("DepartmentService -> save: " + error)
-            )
-            ;
+            let isUniqueName;
+            $.ajax({
+                async: false,
+                type: "POST",
+                url: "department/uniqueName",
+                data: JSON.stringify(getDepartmentJson()),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (result) {
+                    isUniqueName = result;
+                }
+            });
+            return isUniqueName;
         }, "This name has already exist");
+
 
         $('#departmentSaveForm').validate({
             rules: {
@@ -160,11 +167,8 @@ class DepartmentService extends MainService {
                 }
             },
             submitHandler: function () {
-
                 let departmentJson = getDepartmentJson();
-
-
-                var options = getAjaxOptions("POST", "department/save", departmentJson);
+                let options = getAjaxOptions("POST", "department/save", departmentJson);
                 doAjax(options).then(function (result) {
                     controller.doAction('department/viewAll')
                 }).catch(function (error) {
@@ -175,19 +179,7 @@ class DepartmentService extends MainService {
             }
         });
 
-
-        // if (valid) {
-        //     var options = super.getAjaxOptions("POST", "department/save", departmentJson);
-        //     super.doAjax(options).then(function (result) {
-        //         controller.doAction('department/viewAll')
-        //     }).catch(function (error) {
-        //         console.error("Error: DepartmentService -> save: " + error);
-        //         $('#wrapper').empty();
-        //         $('#wrapper').append($('<h1></h1>').attr({class: "text-center"}).text("404 Not found"));
-        //     });
-        // }
     }
-
 
 
     delete() {
@@ -195,13 +187,14 @@ class DepartmentService extends MainService {
         var options = super.getAjaxOptions("POST", "department/delete", departmentJson);
         super.doAjax(options).then(function (result) {
             controller.doAction('department/viewAll')
-        }).catch(error = > console.error("Error: DepartmentService -> delete: " + error)
+        }).catch(error => console.error("Error: DepartmentService -> delete: " + error)
     )
         ;
     }
 
 
 }
+
 
 var departmentJson;
 
@@ -212,7 +205,7 @@ class EmployeeService extends MainService {
             departmentJson = arguments[0];
         }
         var options = super.getAjaxOptions("POST", "employee/viewEmployeesByDepartment", departmentJson);
-        super.doAjax(options).then(drawEmployeesByDepartment).catch(error = > console.error("EmployeeService -> viewEmployeesByDepartment: " + error)
+        super.doAjax(options).then(drawEmployeesByDepartment).catch(error => console.error("EmployeeService -> viewEmployeesByDepartment: " + error)
     )
         ;
 
@@ -263,13 +256,13 @@ class EmployeeService extends MainService {
             };
         }
         var options = super.getAjaxOptions("POST", "employee/viewSaveForm", employeeJson);
-        super.doAjax(options).then(drawSaveForm).catch(error = > console.error("EmployeeService -> viewSaveForm: " + error)
+        super.doAjax(options).then(drawSaveForm).catch(error => console.error("EmployeeService -> viewSaveForm: " + error)
     )
         ;
 
         function drawSaveForm(result) {
             var departmentJson = result.department;
-            var saveForm = $('<form></form>').attr({class: "form-horizontal col-lg-offset-2"});
+            var saveForm = $('<form></form>').attr({class: "form-horizontal col-lg-offset-2", id: "employeeSaveForm"});
             var employeeId = $('<input/>').attr({
                 type: "hidden",
                 id: "employeeId",
@@ -281,6 +274,7 @@ class EmployeeService extends MainService {
                 type: "text",
                 class: "form-control",
                 id: "name",
+                name: "name",
                 value: result.employee.name
             }));
             inputEmployeeName.append($('<span></span>').attr({id: "errorName", class: "text-danger"}));
@@ -290,6 +284,7 @@ class EmployeeService extends MainService {
                 type: "text",
                 class: "form-control",
                 id: "surname",
+                name: "surname",
                 value: result.employee.surname
             }));
             inputEmployeeSurname.append($('<span></span>').attr({id: "errorSurname", class: "text-danger"}));
@@ -299,6 +294,7 @@ class EmployeeService extends MainService {
                 type: "text",
                 class: "form-control",
                 id: "email",
+                name: "email",
                 value: result.employee.email
             }));
             inputEmployeeEmail.append($('<span></span>').attr({id: "errorEmail", class: "text-danger"}));
@@ -308,6 +304,7 @@ class EmployeeService extends MainService {
                 type: "date",
                 class: "form-control",
                 id: "hireDate",
+                name: "hireDate",
                 value: result.employee.hireDate
             }));
             inputEmployeeHireDate.append($('<span></span>').attr({id: "errorHireDate", class: "text-danger"}));
@@ -317,6 +314,7 @@ class EmployeeService extends MainService {
                 type: "number",
                 class: "form-control",
                 id: "salary",
+                name: "salary",
                 value: result.employee.salary
             }));
             inputEmployeeSalary.append($('<span></span>').attr({id: "errorSalary", class: "text-danger"}));
@@ -352,46 +350,156 @@ class EmployeeService extends MainService {
             $('#wrapper').empty();
             $('#wrapper').append($('<h1>Save employee</h1>').attr({class: "text-center"}));
             $('#wrapper').append(saveForm);
+
+            $(function () {
+                controller.doAction("employee/save");
+            })
         }
 
     }
 
     save() {
-        var employeeId = $('#employeeId').val();
-        employeeId = (employeeId.trim() == "") ? undefined : employeeId;
-        var name = $('#name').val();
-        var surname = $('#surname').val();
-        var hireDate = $('#hireDate').val();
-        var email = $('#email').val();
-        var salary = $('#salary').val();
-        salary = (salary.trim() == "") ? undefined : salary;
-        var departmentId = $('#departmentId').val();
-        var departmentName = $('#departmentId option:selected').text();
+        let getAjaxOptions = super.getAjaxOptions;
+        let doAjax = super.doAjax;
 
-        departmentJson = JSON.stringify({
-            "departmentId": +departmentId,
-            "departmentName": departmentName
-        });
+        let getEmployeeJson = function () {
+            let employeeId = $('#employeeId').val();
+            employeeId = (employeeId.trim() === '') ? undefined : employeeId;
+            let name = $('#name').val();
+            let surname = $('#surname').val();
+            let hireDate = $('#hireDate').val();
+            let email = $('#email').val();
+            let salary = $('#salary').val();
+            salary = (salary.trim() === '') ? undefined : salary;
+            let departmentId = $('#departmentId').val();
+            let departmentName = $('#departmentId option:selected').text();
 
-        var json = {
-            "employee": {
+            departmentJson = JSON.stringify({
+                "departmentId": +departmentId,
+                "departmentName": departmentName
+            });
+
+            return {
+                "employee": {
                 "employeeId": +employeeId,
-                "name": name,
-                "surname": surname,
-                "hireDate": hireDate,
-                "email": email,
-                "salary": +salary
+                    "name": name,
+                    "surname": surname,
+                    "hireDate": hireDate,
+                    "email": email,
+                    "salary": +salary
             },
-            "departmentId": +departmentId
-        };
-        var options = super.getAjaxOptions("POST", "employee/save", json);
-        super.doAjax(options).then(function (result) {
-            controller.doAction("employee/viewEmployeesByDepartment", departmentJson);
-        }).catch(function (error) {
-            console.error("EmployeeService -> save: " + error);
-            $('#wrapper').empty();
-            $('#wrapper').append($('<h1></h1>').attr({class: "text-center"}).text("404 Not found"));
+                "departmentId": +departmentId
+            };
+        }
+
+
+        $.validator.addMethod("datePattern", function (value, element) {
+                return /^([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))$/.test(value);
+            },
+            "Please enter date in format (yyyy-mm-dd)");
+
+
+        $.validator.addMethod("onlyDigits", function (value, element) {
+                return /^\d+$/.test(value);
+            },
+            "Please enter only digits");
+
+
+        $.validator.addMethod("onlyChars", function (value, element) {
+                return /^[a-zA-Z\s]+$/.test(value);
+            },
+            "Please use only chars");
+
+        $.validator.addMethod("checkUniqueEmail", function (value, element) {
+            let isUniqueEmail;
+            $.ajax({
+                async: false,
+                type: "POST",
+                url: "employee/uniqueEmail",
+                data: JSON.stringify(getEmployeeJson()),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (result) {
+                    isUniqueEmail = result;
+                }
+            });
+            return isUniqueEmail;
+        }, "This email has already exist");
+
+
+        $('#employeeSaveForm').validate({
+            rules: {
+                name: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 100,
+                    onlyChars: true
+                },
+                surname: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 100,
+                    onlyChars: true
+                },
+                email: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 100,
+                    checkUniqueEmail: true
+                },
+                hireDate: {
+                    required: true,
+                    datePattern: true
+                },
+                salary: {
+                    required: true,
+                    onlyDigits: true
+                }
+
+            },
+            messages: {
+                name: {
+                    required: "Please enter an employee's name",
+                    minlength: "Min length is 3 letters",
+                    maxlength: "Max length is 100 letters"
+                },
+                surname: {
+                    required: "Please enter an employee's surname",
+                    minlength: "Min length is 3 letters",
+                    maxlength: "Max length is 100 letters"
+                },
+                email: {
+                    required: "Please enter an email",
+                    minlength: "Min length is 3 letters",
+                    maxlength: "Max length is 100 letters"
+                },
+                hireDate: {
+                    required: "Please enter a hireDate"
+                },
+                salary: {
+                    required: "Please enter a salary"
+                }
+            },
+            submitHandler: function () {
+
+                var options = getAjaxOptions("POST", "employee/save", getEmployeeJson());
+                doAjax(options).then(function (result) {
+                    controller.doAction("employee/viewEmployeesByDepartment", departmentJson);
+                }).catch(function (error) {
+                    console.error("EmployeeService -> save: " + error);
+                    $('#wrapper').empty();
+                    $('#wrapper').append($('<h1></h1>').attr({class: "text-center"}).text("404 Not found"));
+                });
+
+            }
         });
+
+
+
+
+
+
+
     }
 
     delete() {
@@ -399,7 +507,7 @@ class EmployeeService extends MainService {
         var options = super.getAjaxOptions("POST", "employee/delete", employeeJson);
         super.doAjax(options).then(function (result) {
             controller.doAction("employee/viewEmployeesByDepartment");
-        }).catch(error = > console.error("EmployeeService -> delete: " + error)
+        }).catch(error => console.error("EmployeeService -> delete: " + error)
     )
         ;
     }

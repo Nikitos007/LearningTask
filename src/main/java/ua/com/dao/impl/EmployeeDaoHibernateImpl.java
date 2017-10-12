@@ -39,12 +39,12 @@ public class EmployeeDaoHibernateImpl extends CRUDOperations<Employee, Long> imp
 
     @Override
     public Employee getByEmail(String email) {
-//        Session session = sessionFactory.openSession();
-        Session session = sessionFactory.getCurrentSession();
+        Session session = sessionFactory.openSession();
+//        Session session = sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(Employee.class);
         criteria.add(Restrictions.eq("email", email));
         Employee employeeResult = (Employee) criteria.uniqueResult();
-//        session.close();
+        session.close();
         return employeeResult;
     }
 }

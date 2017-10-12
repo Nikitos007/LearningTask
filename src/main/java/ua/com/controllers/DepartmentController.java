@@ -42,7 +42,7 @@ public class DepartmentController {
     @Autowired
     ValidationUniqueDepartmentName uniqueDepartmentName;
 
-    @RequestMapping(value = "uniqueName", method = RequestMethod.POST, consumes = "application/json")
+    @RequestMapping(value = "/uniqueName", method = RequestMethod.POST, consumes = "application/json")
     public Boolean checkUniqueName(@RequestBody Department department) {
         return uniqueDepartmentName.isSatisfied(department, department);
     }
