@@ -43,7 +43,7 @@ public class Employee implements Serializable {
     @NotEmpty(message = "Can not be empty")
     @Length(min = 2, max = 100, message = "Length should be between 2 and 100")
     @CheckWith(value = ValidationUniqueEmployeeEmail.class, message = "This email has already exist")
-    @MatchPattern(pattern = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}$", message = "Incorrect email")
+    @MatchPattern(pattern = "^\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$", message = "Incorrect email")
     @Column(name = "email", length = 100)
     private String email;
 

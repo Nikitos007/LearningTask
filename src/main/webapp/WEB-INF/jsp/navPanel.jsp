@@ -10,11 +10,11 @@
                 <div class="col-lg-6 col-lg-offset-3">
                     <div class="collapse navbar-collapse">
                         <ul class="nav navbar-nav">
-                            <li><a href="#" onclick="controller.doAction('department/viewAll')">
+                            <li><a href="#" onclick="department.controller.doAction('department/viewAll')">
                                 Departments </a></li>
-                            <li><a href="#" onclick="controller.doAction('department/viewSaveForm')"> New
+                            <li><a href="#" onclick="department.controller.doAction('department/viewSaveForm')"> New
                                 Department</a></li>
-                            <li><a href="#" onclick="controller.doAction('employee/viewSaveForm')"> New
+                            <li><a href="#" onclick="department.controller.doAction('employee/viewSaveForm')"> New
                                 Employee</a></li>
                         </ul>
                     </div>
