@@ -49,16 +49,6 @@ export default class EmployeeService extends MainService {
 
     viewSaveForm() {
         let employeeJson = arguments[0];
-        if (employeeJson == undefined) {
-            employeeJson = {
-                "employeeId": null,
-                "name": null,
-                "surname": null,
-                "hireDate": null,
-                "email": null,
-                "salary": null
-            };
-        }
         let options = super.getAjaxOptions("POST", "employee/viewSaveForm", employeeJson);
         super.doAjax(options).then(drawSaveForm).catch(error => console.error("EmployeeService -> viewSaveForm: " + error));
 

@@ -18,7 +18,6 @@ export default class Controller {
         this.actionsMap.set("employee/delete", this.employeeService.delete);
     }
 
-
     doAction() {
         let action = this.actionsMap.get(arguments[0]);
         if (action == undefined) {
@@ -26,6 +25,7 @@ export default class Controller {
         }
         action(arguments[1]);
     }
+
 }
 
 

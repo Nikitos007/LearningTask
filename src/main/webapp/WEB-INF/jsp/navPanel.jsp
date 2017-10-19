@@ -12,10 +12,8 @@
                         <ul class="nav navbar-nav">
                             <li><a href="#" onclick="department.controller.doAction('department/viewAll')">
                                 Departments </a></li>
-                            <li><a href="#" onclick="department.controller.doAction('department/viewSaveForm')"> New
-                                Department</a></li>
-                            <li><a href="#" onclick="department.controller.doAction('employee/viewSaveForm')"> New
-                                Employee</a></li>
+                            <li id="newDepartment"></li>
+                            <li id="newEmployee"></li>
                         </ul>
                     </div>
                 </div>
@@ -25,7 +23,24 @@
 </div>
 
 
-
+<script>
+    var departmentJson = JSON.stringify({
+        "departmentId": null,
+        "departmentName": null
+    });
+    var employeeJson = JSON.stringify({
+        "employeeId": null,
+        "name": null,
+        "surname": null,
+        "hireDate": null,
+        "email": null,
+        "salary": null
+    });
+    var newDepartment = $('<a href="#">New Department</a>').attr('onclick', 'department.controller.doAction("department/viewSaveForm", ' + departmentJson + ')');
+    var newEmployee = $('<a href="#">New Employee</a>').attr('onclick', 'department.controller.doAction("employee/viewSaveForm", ' + employeeJson + ')');
+    $('#newDepartment').append(newDepartment);
+    $('#newEmployee').append(newEmployee);
+</script>
 
 
 
