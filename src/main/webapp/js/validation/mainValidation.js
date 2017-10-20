@@ -1,45 +1,11 @@
-'use strict';
-
-
-let departmentToSave;
-
-export default class Validation {
+export default class mainValidation {
 
     constructor() {
         this.onlyChars();
-        this.checkUniqueName();
+        this.onlyDate();
+        this.onlyDigits();
+        this.onlyEmail();
     }
-
-    getDepartmentToSave() {
-        return departmentToSave;
-    }
-
-    departmentValidate(saveDepartment, formId) {
-        $('#departmentSaveForm').validate({
-            rules: {
-                departmentName: {
-                    required: true,
-                    minlength: 3,
-                    maxlength: 100,
-                    onlyChars: true,
-                    checkUniqueName: true
-                }
-            },
-            messages: {
-                departmentName: {
-                    required: "Please enter a department's name",
-                    minlength: "Min length is 3 letters",
-                    maxlength: "Max length is 100 letters"
-                }
-            },
-            submitHandler: function () {
-                saveDepartment()
-            }
-        });
-
-
-    }
-
 
     onlyChars() {
         return $.validator.addMethod("onlyChars", function (value, element) {
@@ -49,39 +15,42 @@ export default class Validation {
             "Please enter only chars");
     }
 
-    checkUniqueName() {
-        let t = this.departmentToSave;
-
-        return $.validator.addMethod("checkUniqueName", function (value, element) {
-            let isUniqueName;
-
-            departmentJson = () => {
-                let departmentId = $('#departmentId').val();
-                departmentId = (departmentId != undefined && departmentId.trim() == "") ? undefined : departmentId;
-                let departmentName = $('#departmentName').val();
-                let departmentJson = {
-                    "departmentId": +departmentId,
-                    "departmentName": departmentName
-                };
-                return departmentJson;
-            }
-
-            departmentToSave = departmentJson();
-            $.ajax({
-                async: false,
-                type: "POST",
-                url: "department/uniqueName",
-                data: JSON.stringify(departmentToSave),
-                dataType: "json",
-                contentType: "application/json; charset=utf-8",
-                success: function (result) {
-                    isUniqueName = result;
-                }
-            });
-
-            return isUniqueName;
-        }, "This name has already exist");
+    onlyDate() {
+        return $.validator.addMethod("datePattern", function (value, element) {
+                return /^([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))$/.test(value);
+            },
+            "Please enter date in format (yyyy-mm-dd)");
     }
 
+    onlyDigits() {
+        return $.validator.addMethod("onlyDigits", function (value, element) {
+                return /^\d+$/.test(value);
+            },
+            "Please enter only digits");
+    }
+
+    onlyEmail() {
+        return $.validator.addMethod("checkEmail", function (value, element) {
+                var regex = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+                return regex.test(value);
+            },
+            "Please enter email");
+    }
+
+    checkUnique(url, data) {
+        let isUnique;
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: url,
+            data: JSON.stringify(data),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+                isUnique = result;
+            }
+        });
+        return isUnique;
+    }
 
 }

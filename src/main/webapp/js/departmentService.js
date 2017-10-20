@@ -1,7 +1,7 @@
 'use strict';
 
 import MainService from "./mainService";
-import Validation from "./validation/validation";
+import Validation from "./validation/departmentValidation";
 
 
 export default class DepartmentService extends MainService {
@@ -9,11 +9,9 @@ export default class DepartmentService extends MainService {
     constructor() {
         super();
         this.validator = new Validation();
-        this.departmentValidator = this.validator.departmentValidate;
-
+        this.departmentValidator = this.validator.validateDepartment;
         this.viewSaveForm = this.viewSaveForm.bind(this);
         this.save = this.save.bind(this);
-
     }
 
     viewAll() {
@@ -51,15 +49,14 @@ export default class DepartmentService extends MainService {
         let departmentJson = arguments[0];
         let options = super.getAjaxOptions("POST", "department/viewSaveForm", departmentJson);
         super.doAjax(options).then(drawSaveForm).catch(error => console.error("Error: DepartmentService -> viewSaveForm: " + error));
-
         let validator = this.departmentValidator;
         let saveDepartment = this.save;
-
+        const DEPARTMENT_SAVE_FORM = 'departmentSaveForm';
 
         function drawSaveForm(result) {
             let saveForm = $('<form></form>').attr({
                 class: "form-horizontal col-lg-offset-2",
-                id: "departmentSaveForm"
+                id: DEPARTMENT_SAVE_FORM
             });
             let hiddenDepartmentId = $('<input/>').attr({
                 type: "hidden",
@@ -75,13 +72,11 @@ export default class DepartmentService extends MainService {
                 name: "departmentName",
                 value: result.departmentName
             }));
-            inputDepartmentName.append($('<span></span>').attr({id: "errorDepartmentName", class: "text-danger"}));
             let saveButton = $('<div></div>').attr({class: "form-group"});
             saveButton.append($('<div></div>').attr({class: "col-lg-9 col-lg-offset-3"}).append($('<button></button>').attr({
                 type: "submit",
                 class: "btn btn-primary"
             }).text("Save")));
-            // }).attr("onclick", "department.controller.doAction('department/save')").text("Save")));
 
             hiddenDepartmentId.appendTo(saveForm);
             inputDepartmentName.appendTo(saveForm);
@@ -94,13 +89,11 @@ export default class DepartmentService extends MainService {
             $(() => {
                 validator(() => {
                     return saveDepartment();
-                }, 'departmentSaveForm')
+                }, DEPARTMENT_SAVE_FORM)
             });
         }
 
-
     }
-
 
     save() {
         let options = super.getAjaxOptions("POST", "department/save", this.validator.getDepartmentToSave());
@@ -108,51 +101,11 @@ export default class DepartmentService extends MainService {
             department.controller.doAction('department/viewAll')
         }).catch(function (error) {
             console.error("Error: DepartmentService -> save: " + error);
-            $('#wrapper').empty();
-            $('#wrapper').append($('<h1></h1>').attr({class: "text-center"}).text("404 Not found"));
+            let wrapper = $('#wrapper');
+            wrapper.empty();
+            wrapper.append($('<h1></h1>').attr({class: "text-center"}).text("404 Not found"));
         });
-
-
-        // let getAjaxOptions = super.getAjaxOptions;
-        // let doAjax = super.doAjax;
-
-        // let getDepartmentJson = function () {
-        //     let departmentId = $('#departmentId').val();
-        //     departmentId = (departmentId.trim() == "") ? undefined : departmentId;
-        //     let departmentName = $('#departmentName').val();
-        //     let departmentJson = {
-        //         "departmentId": +departmentId,
-        //         "departmentName": departmentName
-        //     };
-        //     return departmentJson;
-        // };
-
-
-        // let departmentJson = getDepartmentJson();
-
-
-        // let saveValidDepartment = function () {
-        //      let options = getAjaxOptions("POST", "department/save", departmentJson);
-        //      doAjax(options).then(function (result) {
-        //          department.controller.doAction('department/viewAll')
-        //      }).catch(function (error) {
-        //          console.error("Error: DepartmentService -> save: " + error);
-        //          $('#wrapper').empty();
-        //          $('#wrapper').append($('<h1></h1>').attr({class: "text-center"}).text("404 Not found"));
-        //      });
-        //  };
-
-        // let validation = new Validation();
-        // validation.departmentValidate(saveValidDepartment, departmentJson);
-
-
-
-
-
-
-
     }
-
 
     delete() {
         let departmentJson = arguments[0];
@@ -161,6 +114,5 @@ export default class DepartmentService extends MainService {
             department.controller.doAction('department/viewAll')
         }).catch(error => console.error("Error: DepartmentService -> delete: " + error));
     }
-
 
 }
